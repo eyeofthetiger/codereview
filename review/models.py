@@ -87,22 +87,22 @@ class AssignedReview(models.Model):
 
 class Comment(models.Model):
 	""" A Commment made by a User on a particular SubmissionFile """
-    commenter = models.ForeignKey(User)
-    commented_file = models.ForeignKey(SubmissionFile)
-    comment = models.TextField()
-    selected_text = models.TextField()
+	commenter = models.ForeignKey(User)
+	commented_file = models.ForeignKey(SubmissionFile)
+	comment = models.TextField()
+	selected_text = models.TextField()
 
 class CommentRange(models.Model):
 	""" The range of a given Comment, to be used by Javascript to highlight 
 		the correct	area of the HTML.
 	"""
-    comment = models.ForeignKey(Comment)
-    start = models.TextField()
-    end = models.TextField()
-    startOffset = models.PositiveIntegerField()
-    endOffset = models.PositiveIntegerField()
+	comment = models.ForeignKey(Comment)
+	start = models.TextField()
+	end = models.TextField()
+	startOffset = models.PositiveIntegerField()
+	endOffset = models.PositiveIntegerField()
 
 class CommentTag(models.Model):
 	""" A tag for a given Comment. """
-    comment = models.ForeignKey(Comment)
-    tag = models.TextField()
+	comment = models.ForeignKey(Comment)
+	tag = models.TextField()
