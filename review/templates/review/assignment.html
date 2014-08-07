@@ -1,0 +1,11 @@
+<a href={% url 'index' %}>Back</a>
+<h2>{{ assignment.name }}</h2>
+<p>{{ assignment.description }}</p>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <p><input type="submit" value="Upload" /></p>
+</form>

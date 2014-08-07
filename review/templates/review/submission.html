@@ -1,0 +1,10 @@
+{% if submission %}
+    <h1>{{ submission.assignment }}</h1>
+    <ul>
+	    {% for file in files %}
+	        <li><a href="/review/{{ submission.id }}/{{ file.id }}/">{{ file }}</a></li>
+	    {% endfor %}
+    </ul>
+{% else %}
+    <p>Something went wrong</p>
+{% endif %}
