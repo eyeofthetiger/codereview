@@ -8,6 +8,10 @@ class UserAccount(models.Model):
 	institution_user_id = models.CharField(max_length=140)
 	is_admin = models.BooleanField()
 
+	def __unicode__(self):
+		return self.user.first_name + " " + self.user.last_name + " - " + \
+		self.institution_user_id
+
 class Course(models.Model):
 	""" The course that this application is being used for. """
 	course_name = models.CharField(max_length=140)
