@@ -50,6 +50,10 @@ class Assignment(models.Model):
 		""" Returns true if due date has passed, false otherwise. """
 		pass
 
+	# def open_date_passed(self):
+	# 	""" Returns true if the open date is before the current date. """
+	# 	return True
+
 class Submission(models.Model):
 	""" An assignment submitted by a user. """
 	user = models.ForeignKey(User)

@@ -12,17 +12,18 @@ def index(request):
 	""" Displays the appropriate dashboard for the current user. """
 
 	# Get fake user for testing
-	user = User.objects.get(username='test')
+	user = User.objects.get(username='s4108532')
 
 	# if teacher:
 	# 	go to teacher page
 
 	# Get fake course for testing. This assumes that only a single course can be active at a time.
 	course = Course.objects.get(id=1)
-
-	assignments = Assignment.objects.filter(course=course)
+	# Get all assignments with an open date prior to the current time.
+	assignments = Assignment.objects.filter(open_date__lte=timezone.now())
 
 	context = {
+		"title": course,
 		"course": course,
 		"user": user,
 		"assignments": assignments,

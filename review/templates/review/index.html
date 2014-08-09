@@ -1,14 +1,17 @@
-<h1>{{ course }}</h1>
-<hr/>
-<h2>Assignments</h2>
-<ul>
-	{% for assignment in assignments %}
-	  <li>
-	  	{% if assignment.due_date_passed %}
-	  		{{ assignment }} - Closed - Due date: {{ assignment.due_date }}
-	  	{% else %}
-	  		<a href="{% url 'assignment' assignment.id %}">{{ assignment }} - Open - {{ assignment.due_date }}</a>
-	  	{% endif %}
-	  </li>
-	{% endfor %}
-</ul>
+{% extends "review/base.html" %}
+{% block content %}
+	<h1>{{ course }}</h1>
+	<hr/>
+	<h2>Assignments</h2>
+	<ul>
+		{% for assignment in assignments %}
+		  <li>
+		  	{% if assignment.due_date_passed %}
+		  		{{ assignment }} - Closed - Due date: {{ assignment.due_date }}
+		  	{% else %}
+		  		<a href="{% url 'assignment' assignment.id %}">{{ assignment }} - Open - {{ assignment.due_date }}</a>
+		  	{% endif %}
+		  </li>
+		{% endfor %}
+	</ul>
+{% endblock %}
