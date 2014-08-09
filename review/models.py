@@ -4,7 +4,8 @@ from django.db import models
 class UserAccount(models.Model):
 	""" A User of the application. This extends the default Django User class"""
 	user = models.OneToOneField(User)
-	user_id = models.CharField(max_length=140)
+	#Different from Django's User's user_id field
+	institution_user_id = models.CharField(max_length=140)
 	is_admin = models.BooleanField()
 
 class Course(models.Model):
@@ -34,6 +35,8 @@ class Assignment(models.Model):
 	number_of_peer_reviews = models.IntegerField()
 	review_open_date = models.DateTimeField()
 	review_due_date = models.DateTimeField()
+	weighting = models.IntegerField()
+	has_tests = models.BooleanField()
 	test_required = models.BooleanField()
 
 	def __unicode__(self):
@@ -52,14 +55,13 @@ class Submission(models.Model):
 	has_been_submitted = models.BooleanField()
 	unviewed_reviews = models.IntegerField()
 
-	def get_upload_path(self, submission):
+	# def get_upload_path(self, submission):
 	""" Returns a unique file path for the submission. This is
 		constructed from the User's unique_id, the Assignment's 
 		assignment_id, and the upload time. The format is as follows:
 
 		~/Submissions/{user_id}/{assignment_id}/{datetime}/
 	"""
-	pass
 
 	def __unicode__(self):
 		return str(self.id)
@@ -82,7 +84,7 @@ class AssignedReview(models.Model):
 	has_been_reviewed = models.BooleanField()
 
 	def __unicode__(self):
-		return str(self.assigned_user) + " to review " + 
+		return str(self.assigned_user) + " to review " + \
 		str(self.assigned_submission)
 
 class Comment(models.Model):
@@ -94,7 +96,7 @@ class Comment(models.Model):
 
 class CommentRange(models.Model):
 	""" The range of a given Comment, to be used by Javascript to highlight 
-		the correct	area of the HTML.
+		the correct area of the HTML.
 	"""
 	comment = models.ForeignKey(Comment)
 	start = models.TextField()
