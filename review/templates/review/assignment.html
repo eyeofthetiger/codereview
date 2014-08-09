@@ -1,11 +1,21 @@
-<a href={% url 'index' %}>Back</a>
-<h2>{{ assignment.name }}</h2>
-<p>{{ assignment.description }}</p>
+{% extends "review/base.html" %}
+{% block content %}
+	<a href="/">Back</a>
+	<h1>{{ assignment.name }}</h1>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form }}
-    <p><input type="submit" value="Upload" /></p>
-</form>
+	<h2>Step 1 - Upload</h2>
+
+	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+	    {% csrf_token %}
+	    {{ form }}
+	    <p><input type="submit" value="Upload" /></p>
+	</form>
+
+	<hr>
+	<h2>Step 2 - Test</h2>
+
+	<hr>
+	<h2>Step 3 - Submit</h2>
+{% endblock %}
