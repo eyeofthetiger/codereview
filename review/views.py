@@ -20,7 +20,7 @@ def index(request):
 	# Get fake course for testing. This assumes that only a single course can be active at a time.
 	course = Course.objects.get(id=1)
 	# Get all assignments with an open date prior to the current time.
-	assignments = Assignment.objects.filter(open_date__lte=timezone.now())
+	assignments = Assignment.objects.filter(open_date__lte=timezone.now()).order_by('due_date')
 
 	context = {
 		"title": course,
@@ -31,9 +31,9 @@ def index(request):
 
 	return render(request, 'review/index.html', context)
 
-def assignment(request, assignment_id):
+def assignment(request, assignment_pk):
 	""" Displays an assignment and upload form."""
-	assignment = get_object_or_404(Assignment, pk=assignment_id)
+	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 	if request.method == 'POST':
 		form = UploadForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -42,23 +42,29 @@ def assignment(request, assignment_id):
 			submission.save()
 			upload = SubmissionFile(submission=submission, submission_file=request.FILES['file'])
 			upload.save()
-			return HttpResponseRedirect('/assignment/', assignment_id)
+			return HttpResponseRedirect('/assignment/', assignment_pk)
 	else:
 		form = UploadForm()
 	return render(request, 'review/assignment.html', 
 		{'assignment': assignment, 'form': form})
 
-def submission(request, submission_id):
+def assignment_description(request, assignment_pk):
+	""" Display the description of an assignment. """
+	assignment = get_object_or_404(Assignment, pk=assignment_pk)
+	return render(request, 'review/assignment_description.html', 
+		{'title': assignment, 'assignment': assignment})
+
+def submission(request, submission_pk):
 	""" Displays a submission for an assignment. """
-	submission = get_object_or_404(Submission, pk=submission_id)
+	submission = get_object_or_404(Submission, pk=submission_pk)
 	files = SubmissionFile.objects.filter(submission=submission)
 	return render(request, 'review/submission.html', 
 		{'submission': submission, 'files': files})
 
-def view_file(request, assignment_id, submission_id, submission_file_id):
+def view_file(request, assignment_pk, submission_pk, submission_file_pk):
 	""" Displays a particular file within an assignment submission. """
-	submission = get_object_or_404(Submission, pk=submission_id)
-	submission_file = get_object_or_404(SubmissionFile, pk=submission_file_id)
+	submission = get_object_or_404(Submission, pk=submission_pk)
+	submission_file = get_object_or_404(SubmissionFile, pk=submission_file_pk)
 	with open(submission_file.get_path(), 'r') as f:
 		file_contents = f.readlines()
 	file_contents = "".join(file_contents)

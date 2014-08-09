@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -48,11 +50,7 @@ class Assignment(models.Model):
 
 	def due_date_passed(self):
 		""" Returns true if due date has passed, false otherwise. """
-		pass
-
-	# def open_date_passed(self):
-	# 	""" Returns true if the open date is before the current date. """
-	# 	return True
+		return self.due_date < timezone.now()
 
 class Submission(models.Model):
 	""" An assignment submitted by a user. """

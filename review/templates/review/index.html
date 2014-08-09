@@ -6,11 +6,12 @@
 	<ul>
 		{% for assignment in assignments %}
 		  <li>
-		  	{% if assignment.due_date_passed %}
+		  	{% if assignment.due_date_passed == True %}
 		  		{{ assignment }} - Closed - Due date: {{ assignment.due_date }}
 		  	{% else %}
 		  		<a href="{% url 'assignment' assignment.id %}">{{ assignment }} - Open - {{ assignment.due_date }}</a>
 		  	{% endif %}
+		  	<a href="{% url 'assignment_description' assignment.id %}"> View Description</a>
 		  </li>
 		{% endfor %}
 	</ul>
