@@ -1,6 +1,7 @@
 import os.path
 from os import listdir
 import json
+from zipfile import ZipFile, is_zipfile
 
 from django.utils import timezone
 
@@ -64,14 +65,14 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 			submission.upload_path = directory
 			submission.save()
 
-			#if zip do whatever
-			#else
-			path = os.path.join(directory, request.FILES['file'].name)
-			with open(path, "w") as f:
-				f.write(request.FILES['file'].read())
-			upload = SubmissionFile(submission=submission, file_path=path)
-			upload.save()
-			uploaded_file = request.FILES['file'].name
+			if request.FILES['file'].name.endswith('.zip'):
+				if is_zipfile(request.FILES['file']):
+					uploaded_file = save_zip(request.FILES['file'], submission)
+				else:
+					# TODO: Deal with broken zip files
+					pass
+			else:
+				uploaded_file = save_file(request.FILES['file'], submission)
 
 	else:
 		upload_form = UploadForm()
@@ -90,7 +91,7 @@ def submission(request, assignment_pk):
 	""" Displays a submission for an assignment. """
 	user = User.objects.get(username='s4108532')
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
-	submission = Submission.objects.filter(user=user, assignment=assignment, has_been_submitted=True).order_by('upload_date')[0]
+	submission = Submission.objects.filter(user=user, assignment=assignment, has_been_submitted=True).order_by('-upload_date')[0]
 	files = SubmissionFile.objects.filter(submission=submission)
 	dir_json = json.dumps({'core':{"multiple" : False,'data':get_directory_contents(submission.upload_path)}})
 	return render(request, 'review/submission.html', 
@@ -143,3 +144,40 @@ def get_file_contents(path):
 	with open(path, 'r') as f:
 		file_contents = f.readlines()
 	return "".join(file_contents)
+
+def save_file(upload, submission):
+	""" Receives an uploaded file, and a Submission object. Writes the
+		uploaded file to the correct path and stores a new SubmissionFile object
+		in the database. Returns the filename.
+	"""
+	path = os.path.join(submission.upload_path, upload.name)
+	with open(path, "w") as f:
+		f.write(upload.read())
+	submission_file = SubmissionFile(submission=submission, file_path=upload.name)
+	submission_file.save()
+	return upload.name
+
+def save_zip(zip_file, submission):
+	""" Receives a zip file. Extracts all valid files and creates a 
+		SubmissionFile for each in the database. Returns the zip file name. 
+	"""
+	with ZipFile(zip_file, 'r') as zip_object:
+		for f in [x for x in zip_object.namelist() if is_valid_file(x)]:
+			zip_object.extract(f, path=submission.upload_path)
+			submission_file = SubmissionFile(submission=submission, file_path=f)
+			submission_file.save()
+	return zip_file.name
+
+def is_valid_file(file_path):
+	""" Returns false if it is an invalid file (e.g. *.pyc), or in an invalid
+		folder (e.g. /.git/). Returns true otherwise.
+	"""
+	invalid_dirs = ['__MACOSX','.git']
+	file_path = os.path.normpath(file_path) #Normalise path
+	path_list = file_path.split(os.sep)
+	if file_path.endswith(".DS_Store") or file_path.endswith(".pyc"):
+		return False
+	if len([x for x in invalid_dirs if x in path_list]) > 0:
+		return False
+	return True
+
