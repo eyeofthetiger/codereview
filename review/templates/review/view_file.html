@@ -1,22 +1,8 @@
-{% load staticfiles %}
-<html>
-	<head>
-		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-		<script src='{% static "review/annotator-full.min.js" %}'></script>
-		<link rel="stylesheet" href='{% static "review/annotator.min.css" %}'>
-	</head>
-	<body>
-		{% if submission %}
-		    <h1>{{ submission.assignment }}</h1>
-		    <h3>{{ submission_file }}</h3>
-		    <pre id="content">
-		    	{{ file_contents }}
-		    </pre>
-		{% else %}
-		    <p>Something went wrong</p>
-		{% endif %}
-		<script type="text/javascript">
-			jQuery(function ($) {$('#content').annotator();});
-		</script>
-	</body>
-</html>
+{% extends "review/base.html" %}
+{% block content %}
+  <h1>{{ submission.assignment }}</h1>
+  <h3>{{ submission_file }}</h3>
+  <pre id="content">
+  	{{ file_contents }}
+  </pre>
+{% endblock %}

@@ -1,10 +1,47 @@
-{% if submission %}
-    <h1>{{ submission.assignment }}</h1>
-    <ul>
-	    {% for file in files %}
-	        <li><a href="/review/{{ submission.id }}/{{ file.id }}/">{{ file }}</a></li>
-	    {% endfor %}
-    </ul>
-{% else %}
-    <p>Something went wrong</p>
-{% endif %}
+{% extends "review/base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+	<link rel="stylesheet" href="{% static 'review/jstree.min.css' %}" />
+{% endblock %}
+
+{% block js %}
+	<script src="{% static 'review/jstree.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+	<a href="/">Back</a>
+	<div id="filetree"></div>
+	<pre id="filecontents"></pre>
+
+	<script type="text/javascript">
+		var fileStructure = {{ file_structure|safe }};
+		$(document).ready( function() {
+		  $(function () { 
+		  	$('#filetree').on('changed.jstree', function (e, data) {
+				    var node = data.instance.get_node(data.selected);
+				    var path = "";
+				    for(var i=node.parents.length-1; i >= 0; i--){
+				    	path += node.parents[i];
+				    	path += '/';
+				    }
+				    path += node.id;
+
+				    data = {
+				    	path: path,
+				    	submission_id: {{ submission.id }},
+				    	csrfmiddlewaretoken: '{{ csrf_token }}'
+				    };
+
+				    $.ajax({
+			        type: "POST",
+			        url: "/app/get_submission_file/",
+			        data: data,
+			        success: function(data) {
+            		$('#filecontents').html(data.file_contents);
+        			}   
+     				}); 
+				  }).jstree(fileStructure)});
+		});
+	</script>
+{% endblock %}

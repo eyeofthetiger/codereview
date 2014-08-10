@@ -2,7 +2,7 @@
 {% block content %}
 	<h1>{{ course }}</h1>
 	<hr/>
-	<h2>Assignments</h2>
+	<h2>My Assignments</h2>
 	<ul>
 		{% for assignment in assignments %}
 		  <li>
@@ -12,6 +12,20 @@
 		  		<a href="{% url 'assignment' assignment.id %}">{{ assignment }} - Open - {{ assignment.due_date }}</a>
 		  	{% endif %}
 		  	<a href="{% url 'assignment_description' assignment.id %}"> View Description</a>
+		  	{% if assignment.id in submissions.keys %}
+		  		<a href="{% url 'submission' assignment.id %}">View submission</a>
+		  	{% endif %}
+		  </li>
+		{% endfor %}
+	</ul>
+	<hr/>
+	<h2>Code Review</h2>
+	<ul>
+		{% for review in assigned_reviews %}
+		  <li>
+		  	<a href="{% url 'review_submission' review.assigned_submission.id %}">
+		  		{{ review.assigned_submission.assignment }}
+		  	</a>
 		  </li>
 		{% endfor %}
 	</ul>

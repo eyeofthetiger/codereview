@@ -9,13 +9,33 @@
 
 	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
 	    {% csrf_token %}
-	    {{ form }}
+	    {{ upload_form }}
 	    <p><input type="submit" value="Upload" /></p>
 	</form>
+
+	{% if upload %}
+		<p>{{ upload }} has been uploaded.</p>
+	{% endif %}
 
 	<hr>
 	<h2>Step 2 - Test</h2>
 
+	{% if upload %}
+		<button>Start</button>
+	{% else %}
+		<p>Unavailable. Upload something.</p>
+	{% endif %}
+
 	<hr>
 	<h2>Step 3 - Submit</h2>
+
+	{% if upload %}
+		<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<input type="submit" name="submit" value="Submit" />
+		</form>
+	{% else %}
+		<p>Unavailable. Upload something.</p>
+	{% endif %}
+
 {% endblock %}
