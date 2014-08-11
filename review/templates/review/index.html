@@ -1,4 +1,5 @@
 {% extends "review/base.html" %}
+{% load get_item %}
 {% block content %}
 	<h1>{{ course }}</h1>
 	<hr/>
@@ -13,7 +14,7 @@
 		  	{% endif %}
 		  	<a href="{% url 'assignment_description' assignment.id %}"> View Description</a>
 		  	{% if assignment.id in submissions.keys %}
-		  		<a href="{% url 'submission' assignment.id %}">View submission</a>
+		  		<a href="{% url 'submission' submissions|get_item:assignment.id  %}">View submission</a>
 		  	{% endif %}
 		  </li>
 		{% endfor %}
@@ -23,7 +24,7 @@
 	<ul>
 		{% for review in assigned_reviews %}
 		  <li>
-		  	<a href="{% url 'review_submission' review.assigned_submission.id %}">
+		  	<a href="{% url 'submission' review.assigned_submission.id %}">
 		  		{{ review.assigned_submission.assignment }}
 		  	</a>
 		  </li>

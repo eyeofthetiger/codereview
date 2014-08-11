@@ -52,6 +52,12 @@ class Assignment(models.Model):
 		""" Returns true if due date has passed, false otherwise. """
 		return self.due_date < timezone.now()
 
+	def get_submission(self, user):
+		submissions = Submission.objects.filter(user=user, assignment=self, has_been_submitted=True).order_by('-upload_date')
+		if len(submissions) > 0:
+			return submissions[0]
+		return
+
 class Submission(models.Model):
 	""" An assignment submitted by a user. """
 	user = models.ForeignKey(User)

@@ -4,7 +4,6 @@ import json
 from zipfile import ZipFile, is_zipfile
 
 from django.utils import timezone
-
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
@@ -27,11 +26,13 @@ def index(request):
 	course = Course.objects.get(id=1)
 	# Get all assignments with an open date prior to the current time.
 	assignments = Assignment.objects.filter(open_date__lte=timezone.now()).order_by('due_date')
+	# Get all submissions by the user
 	submissions = {}
 	for assignment in assignments:
-		submission = Submission.objects.filter(user=user, assignment=assignment, has_been_submitted=True).order_by('upload_date')
-		if len(submission) > 0:
-			submissions[assignment.id] = submission[0]
+		submission =  assignment.get_submission(user)
+		if submission:
+			submissions[assignment.id] = submission
+	# Get all assigned reviews for the user
 	assigned_reviews = AssignedReview.objects.filter(assigned_user=user)
 
 	context = {
@@ -87,15 +88,23 @@ def assignment_description(request, assignment_pk):
 		{'title': assignment, 'assignment': assignment})
 
 @ensure_csrf_cookie
-def submission(request, assignment_pk):
-	""" Displays a submission for an assignment. """
+def submission(request, submission_pk):
+	""" Displays the given submission. If the user is the reviewer, enables 
+		commenting. 
+	"""
 	user = User.objects.get(username='s4108532')
-	assignment = get_object_or_404(Assignment, pk=assignment_pk)
-	submission = Submission.objects.filter(user=user, assignment=assignment, has_been_submitted=True).order_by('-upload_date')[0]
+	submission = get_object_or_404(Submission, pk=submission_pk)
+	is_owner = (submission.user == user)
+	if not is_owner and not is_allowed_to_review(user, submission):
+		print "TODO: deal with unauthorised access of submissions"
 	files = SubmissionFile.objects.filter(submission=submission)
 	dir_json = json.dumps({'core':{"multiple" : False,'data':get_directory_contents(submission.upload_path)}})
-	return render(request, 'review/submission.html', 
-		{'submission': submission, 'files': files, 'file_structure': dir_json})
+	return render(request, 'review/submission.html', {
+			'submission': submission, 
+			'files': files, 
+			'file_structure': dir_json,
+			'is_owner': is_owner
+		})
 
 def get_directory_contents(path, parent="#"):
 	contents = []
@@ -108,23 +117,6 @@ def get_directory_contents(path, parent="#"):
 		else:
 			contents.append({'id':f, 'parent':parent, 'text':f, 'icon':False})
 	return contents
-
-def view_file(request, submission_file_pk):
-	""" Displays a particular file within an assignment submission. """
-	submission_file = get_object_or_404(SubmissionFile, pk=submission_file_pk)
-	with open(submission_file.file_path, 'r') as f:
-		file_contents = f.readlines()
-	file_contents = "".join(file_contents)
-	return render(request, 'review/view_file.html', 
-		{'submission': submission_file.submission, 'submission_file': submission_file,
-		 'file_contents': file_contents})
-
-def review_submission(request, submission_pk):
-	""" Displays the submission for review. """
-	submission = get_object_or_404(Submission, pk=submission_pk)
-	files = SubmissionFile.objects.filter(submission=submission)
-	return render(request, 'review/submission.html', 
-		{'submission': submission, 'files': files})
 
 def get_submission_file(request):
 	""" Receives an Ajax post containing a file path and returns the contents of
@@ -181,3 +173,11 @@ def is_valid_file(file_path):
 		return False
 	return True
 
+def is_allowed_to_review(user, submission):
+	""" Returns true if the given user is allowed to review the given submission
+		and they haven't already reviewed it. Returns false otherwise.
+	"""
+	assigned_review = AssignedReview.objects.filter(assigned_user=user, assigned_submission=submission, has_been_reviewed=False)
+	if len(assigned_review) > 0:
+		return True
+	return False

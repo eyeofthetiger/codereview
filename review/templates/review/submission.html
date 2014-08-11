@@ -3,19 +3,32 @@
 
 {% block css %}
 	<link rel="stylesheet" href="{% static 'review/jstree.min.css' %}" />
+	{% if not is_owner %}
+		<link rel="stylesheet" href='{% static "review/annotator.min.css" %}'>
+	{% endif %}
 {% endblock %}
 
 {% block js %}
 	<script src="{% static 'review/jstree.min.js' %}"></script>
+	{% if not is_owner %}
+		<script src='{% static "review/annotator-full.min.js" %}'></script>
+	{% endif %}
 {% endblock %}
 
 {% block content %}
-	<a href="/">Back</a>
-	<div id="filetree"></div>
-	<pre id="filecontents"></pre>
+	{% if is_owner %}
+		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
+	{% else %}
+		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
+	{% endif %}
+	<p><a href="/">Back</a></p>
+	<div id="filetree" style="float:left; margin-right: 20px;"></div>
+	<pre id="filecontents" style="float:left;"></pre>
 
 	<script type="text/javascript">
 		var fileStructure = {{ file_structure|safe }};
+		var is_reviewer = ! {{ is_owner|yesno:"true,false" }};
+
 		$(document).ready( function() {
 		  $(function () { 
 		  	$('#filetree').on('changed.jstree', function (e, data) {
@@ -39,9 +52,18 @@
 			        data: data,
 			        success: function(data) {
             		$('#filecontents').html(data.file_contents);
+            		if(is_reviewer){
+									activateAnnotator();
+								}
         			}   
      				}); 
 				  }).jstree(fileStructure)});
 		});
+		
+		function activateAnnotator(){
+			//Activates the annotation plugin.
+			jQuery(function ($) {$('#filecontents').annotator();});
+		}
+
 	</script>
 {% endblock %}
