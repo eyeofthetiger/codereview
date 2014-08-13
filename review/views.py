@@ -128,9 +128,8 @@ def get_submission_file(request):
 		path = request.POST.get("path")[1:] #Removes the '#' from the start of the path
 		submission_id = int(request.POST.get("submission_id"))
 		submission = Submission.objects.get(id=submission_id)
+		submissionFile = SubmissionFile.objects.filter(submission=submission, file_path=path[1:])
 		path = submission.upload_path + path
-		submissionFile = SubmissionFile.objects.filter(submission=submission, file_path=path)
-		print submissionFile
 		response['submission_file_id'] = submissionFile[0].id
 	response['file_contents'] = get_file_contents(path)
 	return HttpResponse(json.dumps(response), content_type="application/json")
