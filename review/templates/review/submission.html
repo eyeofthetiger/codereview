@@ -53,7 +53,7 @@
 				        success: function(data) {
 	            		$('#filecontents').html(data.file_contents);
 	            		if(is_reviewer){
-										activateAnnotator();
+										activateAnnotator(data.submission_file_id);
 									}
 	        			}   
 	     				}); 
@@ -61,25 +61,25 @@
 				  }).jstree(fileStructure)});
 		});
 		
-		function activateAnnotator(containerId){
+		function activateAnnotator(submissionFileID){
 			//Activates the annotation plugin.
 			$('#filecontents').annotator('destroy');
 			var content = $('#filecontents').annotator();
 			content.annotator('addPlugin', 'Store', {
 				// The endpoint of the store on your server.
-	      prefix: '/app/annotator_api/endpoint',
+	      prefix: '/app/annotator_api',
 
 	      // Attach the uri of the current page to all annotations to allow search.
 	      annotationData: {
-	        'uri': 'http://this/document/only'
+	        'uri': submissionFileID,
 	      },
 
 	      // This will perform a "search" action when the plugin loads. Will
 	      // request the last 20 annotations for the current url.
 	      // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
 	      loadFromSearch: {
-	        'limit': 20,
-	        'uri': 'http://this/document/only'
+	        // 'limit': 20,
+	        'uri': submissionFileID,
 	      }
 			});
 		}

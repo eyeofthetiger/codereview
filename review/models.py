@@ -67,14 +67,6 @@ class Submission(models.Model):
 	has_been_submitted = models.BooleanField()
 	unviewed_reviews = models.IntegerField()
 
-	# def get_upload_path(self, submission):
-	""" Returns a unique file path for the submission. This is
-		constructed from the User's unique_id, the Assignment's 
-		assignment_id, and the upload time. The format is as follows:
-
-		~/Submissions/{user_id}/{assignment_id}/{datetime}/
-	"""
-
 	def __unicode__(self):
 		return str(self.id)
 

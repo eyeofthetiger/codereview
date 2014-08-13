@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
-from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview
+from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange
 from review.forms import UploadForm
 
 def index(request):
@@ -120,7 +120,8 @@ def get_directory_contents(path, parent="#"):
 
 def get_submission_file(request):
 	""" Receives an Ajax post containing a file path and returns the contents of
-		that file in a json container.
+		that file in a json container, along with the id of its corresponding
+		SubmissionFile object.
 	"""
 	response = {}
 	if request.is_ajax():
@@ -128,6 +129,9 @@ def get_submission_file(request):
 		submission_id = int(request.POST.get("submission_id"))
 		submission = Submission.objects.get(id=submission_id)
 		path = submission.upload_path + path
+		submissionFile = SubmissionFile.objects.filter(submission=submission, file_path=path)
+		print submissionFile
+		response['submission_file_id'] = submissionFile[0].id
 	response['file_contents'] = get_file_contents(path)
 	return HttpResponse(json.dumps(response), content_type="application/json")
 
@@ -182,13 +186,61 @@ def is_allowed_to_review(user, submission):
 		return True
 	return False
 
-def annotator_api(request, query):
-	if request.method == 'POST':
-		print request
-		return HttpResponse()
-	return HttpResponse(json.dumps([]), content_type="application/json")
+def api_root(request):
+	""" Returns information about the annotator API. """
+	response = { "name": "Annotator Store API", "version": "2.0.0" }
+	return HttpResponse(json.dumps(response), content_type="application/json")
 
 @csrf_exempt
-def add_annotation(request):
-	print request
-	return HttpResponse(status=303)
+def api_index(request):
+	""" If request type is GET, returns a list of all annotations. If request 
+		type is POST, stores posted annotation.
+	"""
+	if request.method == 'POST':
+		#Save comment
+		comment_data = json.loads(request.body)
+		#TODO - Get actual user, this is just fake
+		user = User.objects.get(username='s4108532')
+		submission_file = SubmissionFile.objects.get(id=str(comment_data['uri']))
+		comment = Comment(
+			commenter = user, 
+			commented_file = submission_file, 
+			selected_text = comment_data['quote'],
+			comment = comment_data['text']
+		)
+		comment.save()
+		for ranges in comment_data['ranges']:
+			comment_range = CommentRange(
+				comment = comment,
+				start = ranges['start'],
+				end = ranges['end'],
+				startOffset = int(ranges['startOffset']),
+				endOffset = int(ranges['endOffset']),
+			)
+			comment_range.save()
+		return HttpResponse()
+
+def api_search(request):
+	"""Receives a search query and returns the annotations that match the 
+		given search.
+	"""
+	submission_file = get_object_or_404(SubmissionFile, pk = request.GET['uri'])
+	#TODO - Get actual user, this is just fake
+	user = User.objects.get(username='s4108532')
+	comments = Comment.objects.filter(commenter=user, commented_file=submission_file)
+	rows = [format_annotation(user, comment) for comment in comments]
+	response = {'total':len(rows), 'rows':rows}
+	return HttpResponse(json.dumps(response), content_type="application/json")
+
+def format_annotation(user, comment):
+	""" Returns a comment in a format acceptable form AnnotatorJS. """
+	#TODO - Might be missing some components need by AnnotatorJS
+	comment_ranges = CommentRange.objects.filter(comment=comment)
+	ranges = [{"start":r.start, "end":r.end, "startOffset":r.startOffset, "endOffset":r.endOffset} for r in comment_ranges]
+	return {
+		"id": comment.id,
+		"text": comment.comment,
+		"quote": comment.selected_text,
+		"ranges": ranges,
+		"user": user.id,
+	}
