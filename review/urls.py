@@ -8,4 +8,6 @@ urlpatterns = patterns('',
     url(r'^(?P<assignment_pk>\d+)/description/$', views.assignment_description, name='assignment_description'),
     url(r'^submission/(?P<submission_pk>\d+)/$', views.submission, name='submission'),
     url(r'^get_submission_file/$', views.get_submission_file, name='get_submission_file'),
+    url(r'^annotator_api/endpoint/(?P<query>.+)$', views.annotator_api, name='annotator_api'),
+    url(r'^annotator_api/endpoint/annotations$', views.add_annotation, name='add_annotation'),
 )

@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview
 from review.forms import UploadForm
@@ -181,3 +181,14 @@ def is_allowed_to_review(user, submission):
 	if len(assigned_review) > 0:
 		return True
 	return False
+
+def annotator_api(request, query):
+	if request.method == 'POST':
+		print request
+		return HttpResponse()
+	return HttpResponse(json.dumps([]), content_type="application/json")
+
+@csrf_exempt
+def add_annotation(request):
+	print request
+	return HttpResponse(status=303)

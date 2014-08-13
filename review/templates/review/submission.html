@@ -33,36 +33,55 @@
 		  $(function () { 
 		  	$('#filetree').on('changed.jstree', function (e, data) {
 				    var node = data.instance.get_node(data.selected);
-				    var path = "";
-				    for(var i=node.parents.length-1; i >= 0; i--){
-				    	path += node.parents[i];
-				    	path += '/';
-				    }
-				    path += node.id;
-
-				    data = {
-				    	path: path,
-				    	submission_id: {{ submission.id }},
-				    	csrfmiddlewaretoken: '{{ csrf_token }}'
-				    };
-
-				    $.ajax({
-			        type: "POST",
-			        url: "/app/get_submission_file/",
-			        data: data,
-			        success: function(data) {
-            		$('#filecontents').html(data.file_contents);
-            		if(is_reviewer){
-									activateAnnotator();
-								}
-        			}   
-     				}); 
+				    //Check for children. If they exist, the node is a directory.
+				    if(node.children.length == 0){
+				    	var path = "";
+					    for(var i=node.parents.length-1; i >= 0; i--){
+					    	path += node.parents[i];
+					    	path += '/';
+					    }
+					    path += node.id;
+					    data = {
+					    	path: path,
+					    	submission_id: {{ submission.id }},
+					    	csrfmiddlewaretoken: '{{ csrf_token }}'
+					    };
+					    $.ajax({
+				        type: "POST",
+				        url: "/app/get_submission_file/",
+				        data: data,
+				        success: function(data) {
+	            		$('#filecontents').html(data.file_contents);
+	            		if(is_reviewer){
+										activateAnnotator();
+									}
+	        			}   
+	     				}); 
+				    } 
 				  }).jstree(fileStructure)});
 		});
 		
-		function activateAnnotator(){
+		function activateAnnotator(containerId){
 			//Activates the annotation plugin.
-			jQuery(function ($) {$('#filecontents').annotator();});
+			$('#filecontents').annotator('destroy');
+			var content = $('#filecontents').annotator();
+			content.annotator('addPlugin', 'Store', {
+				// The endpoint of the store on your server.
+	      prefix: '/app/annotator_api/endpoint',
+
+	      // Attach the uri of the current page to all annotations to allow search.
+	      annotationData: {
+	        'uri': 'http://this/document/only'
+	      },
+
+	      // This will perform a "search" action when the plugin loads. Will
+	      // request the last 20 annotations for the current url.
+	      // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
+	      loadFromSearch: {
+	        'limit': 20,
+	        'uri': 'http://this/document/only'
+	      }
+			});
 		}
 
 	</script>
