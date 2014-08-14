@@ -110,7 +110,6 @@ def get_directory_contents(path, parent="#"):
 	contents = []
 	for f in listdir(path):
 		new_path = os.path.join(path, f)
-		
 		if os.path.isdir(new_path):
 			contents.append({'id':f, 'parent':parent, 'text':f})
 			contents += (get_directory_contents(new_path, f))
