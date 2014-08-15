@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^get_submission_file/$', views.get_submission_file, name='get_submission_file'),
     url(r'^annotator_api/$', views.api_root, name='api_root'),
     url(r'^annotator_api/annotations$', views.api_index, name='api_index'),
+    url(r'^annotator_api/annotations/(?P<comment_pk>\d+)$', views.api_read, name='api_read'),
     url(r'^annotator_api/search$', views.api_search, name='api_search'),
 )

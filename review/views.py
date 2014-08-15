@@ -5,7 +5,7 @@ from zipfile import ZipFile, is_zipfile
 
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
@@ -216,7 +216,9 @@ def api_index(request):
 				endOffset = int(ranges['endOffset']),
 			)
 			comment_range.save()
-		return HttpResponse()
+		response = HttpResponse(content="", status=303)
+		response["Location"] = "/app/annotator_api/annotations/" + str(comment.id)
+		return response
 
 def api_search(request):
 	"""Receives a search query and returns the annotations that match the 
@@ -229,6 +231,31 @@ def api_search(request):
 	rows = [format_annotation(user, comment) for comment in comments]
 	response = {'total':len(rows), 'rows':rows}
 	return HttpResponse(json.dumps(response), content_type="application/json")
+
+@csrf_exempt
+def api_read(request, comment_pk):
+	""" Receives the id of a Comment. It will then deal with that comment 
+		according to the HTTP request type. PUT will update the comment,
+		GET will return a JSON object of the comment, DELETE will remove that 
+		comment from the database.
+	"""
+	comment = get_object_or_404(Comment, pk=comment_pk)
+	if request.method == 'PUT':
+		comment_data = json.loads(request.body)
+		comment.comment = comment_data['text']
+		comment.save()
+		response = HttpResponse(content="", status=303)
+		response["Location"] = "/app/annotator_api/annotations/" + str(comment.id)
+		return response
+	elif request.method == "DELETE":
+		comment_ranges = CommentRange.objects.filter(comment=comment).delete()
+		comment.delete()
+		return HttpResponse(status=204)
+	else:
+		#TODO - Get actual user, this is just fake	
+		user = User.objects.get(username='s4108532')
+		response = format_annotation(user, comment)
+		return HttpResponse(json.dumps(response), content_type="application/json")
 
 def format_annotation(user, comment):
 	""" Returns a comment in a format acceptable form AnnotatorJS. """
