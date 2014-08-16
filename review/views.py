@@ -12,13 +12,13 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange
 from review.forms import UploadForm
+from review.email import send_email
 
 def index(request):
 	""" Displays the appropriate dashboard for the current user. """
 
 	# Get fake user for testing
 	user = User.objects.get(username='s4108532')
-
 	# if teacher:
 	# 	go to teacher page
 

@@ -82,3 +82,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/admin/codereview/static/'
+
+# Email Settings - Change later
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = ''
+EMAIL_PORT = None
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
