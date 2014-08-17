@@ -85,6 +85,7 @@ STATIC_ROOT = '/home/admin/codereview/static/'
 
 # Email Settings - Change later
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = ''
 EMAIL_PORT = None
