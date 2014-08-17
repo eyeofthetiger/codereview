@@ -91,6 +91,18 @@ class AssignedReview(models.Model):
 		return str(self.assigned_user) + " to review " + \
 		str(self.assigned_submission)
 
+class EmailPreferences(models.Model):
+	""" Individual preferences of when a user would like to receive email alerts. """
+	user = models.ForeignKey(User)
+	on_upload = models.BooleanField(default=False)
+	on_submission = models.BooleanField(default=True)
+	on_due_date = models.BooleanField(default=False)
+	on_open_date = models.BooleanField(default=True)
+	on_review_received = models.BooleanField(default=True)
+	on_review_assigned = models.BooleanField(default=True)
+	on_question_answered = models.BooleanField(default=True)
+	on_question_asked = models.BooleanField(default=False)
+
 class Comment(models.Model):
 	""" A Commment made by a User on a particular SubmissionFile """
 	commenter = models.ForeignKey(User)

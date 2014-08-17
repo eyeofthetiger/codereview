@@ -4,13 +4,13 @@ import json
 from zipfile import ZipFile, is_zipfile
 
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
-from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange
+from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange, EmailPreferences
 from review.forms import UploadForm
 from review.email import send_email
 
@@ -18,7 +18,7 @@ def index(request):
 	""" Displays the appropriate dashboard for the current user. """
 
 	# Get fake user for testing
-	user = User.objects.get(username='s4108532')
+	user = User.objects.get(username='user1')
 	# if teacher:
 	# 	go to teacher page
 
@@ -52,7 +52,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 	if request.method == 'POST':
 		upload_form = UploadForm(request.POST, request.FILES)
 		if upload_form.is_valid():
-			user = User.objects.get(username='s4108532')
+			user = User.objects.get(username='user1')
 			submission = Submission(
 				user=user,
 				assignment=assignment,
@@ -92,7 +92,7 @@ def submission(request, submission_pk):
 	""" Displays the given submission. If the user is the reviewer, enables 
 		commenting. 
 	"""
-	user = User.objects.get(username='s4108532')
+	user = User.objects.get(username='user1')
 	submission = get_object_or_404(Submission, pk=submission_pk)
 	is_owner = (submission.user == user)
 	if not is_owner and not is_allowed_to_review(user, submission):
@@ -226,7 +226,7 @@ def api_search(request):
 	"""
 	submission_file = get_object_or_404(SubmissionFile, pk = request.GET['uri'])
 	#TODO - Get actual user, this is just fake
-	user = User.objects.get(username='s4108532')
+	user = User.objects.get(username='user1')
 	comments = Comment.objects.filter(commenter=user, commented_file=submission_file)
 	rows = [format_annotation(user, comment) for comment in comments]
 	response = {'total':len(rows), 'rows':rows}
@@ -253,7 +253,7 @@ def api_read(request, comment_pk):
 		return HttpResponse(status=204)
 	else:
 		#TODO - Get actual user, this is just fake	
-		user = User.objects.get(username='s4108532')
+		user = User.objects.get(username='user1')
 		response = format_annotation(user, comment)
 		return HttpResponse(json.dumps(response), content_type="application/json")
 
@@ -269,3 +269,68 @@ def format_annotation(user, comment):
 		"ranges": ranges,
 		"user": user.id,
 	}
+
+def reset_test_database(request):
+	now = timezone.now()
+	before = timezone.now().replace(day=now.day-1)
+	long_before = timezone.now().replace(month=now.month-1)
+	just_after = timezone.now().replace(seconds=now.seconds+10)
+	after = timezone.now().replace(day=now.day+1)
+	long_after = timezone.now().replace(month=now.month+1)
+	u1 = User(username="user1").save()
+	u2 = User(username="user2").save()
+	u3 = User(username="user3").save()
+	u4 = User(username="user4").save()
+	course = Course(course_name="Test Course", course_code="TEST1000", course_id="201402TEST1000", year=2014, semester='2', institution="UQ").save()
+	a1 = Assignment(
+		assignment_id="ass01", 
+		name="Assignment 1", 
+		create_date=long_before, 
+		modified_date=long_before, 
+		open_date=long_before, 
+		due_date=before, 
+		description="This is assignment 1. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
+		allow_multiple_uploads=True,
+		allow_help_centre=True,
+		number_of_peer_reviews=3,
+		review_open_date=just_after,
+		review_due_date=after,
+		weighting=20,
+		has_tests=False,
+		test_required=False
+	).save()
+	a2 = Assignment(
+		assignment_id="ass02", 
+		name="Assignment 2", 
+		create_date=before, 
+		modified_date=before, 
+		open_date=before, 
+		due_date=after, 
+		description="This is assignment 2. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
+		allow_multiple_uploads=True,
+		allow_help_centre=True,
+		number_of_peer_reviews=3,
+		review_open_date=after,
+		review_due_date=long_after,
+		weighting=20,
+		has_tests=False,
+		test_required=False
+	).save()
+	a3 = Assignment(
+		assignment_id="ass03", 
+		name="Assignment 3", 
+		create_date=now, 
+		modified_date=now, 
+		open_date=after, 
+		due_date=long_after, 
+		description="This is assignment 3. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
+		allow_multiple_uploads=True,
+		allow_help_centre=True,
+		number_of_peer_reviews=3,
+		review_open_date=long_after,
+		review_due_date=long_after,
+		weighting=20,
+		has_tests=False,
+		test_required=False
+	).save()
+	return redirect('index')

@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^annotator_api/annotations$', views.api_index, name='api_index'),
     url(r'^annotator_api/annotations/(?P<comment_pk>\d+)$', views.api_read, name='api_read'),
     url(r'^annotator_api/search$', views.api_search, name='api_search'),
+    url(r'^reset/$', views.reset_test_database, name='reset_test_database'),
 )
