@@ -272,6 +272,7 @@ def format_annotation(user, comment):
 
 def reset_test_database(request):
 	now = timezone.now()
+	just_before = timezone.now().replace(seconds=now.seconds-10)
 	before = timezone.now().replace(day=now.day-1)
 	long_before = timezone.now().replace(month=now.month-1)
 	just_after = timezone.now().replace(seconds=now.seconds+10)
@@ -333,4 +334,53 @@ def reset_test_database(request):
 		has_tests=False,
 		test_required=False
 	).save()
+
+	## Prev assignment w/ review
+	submission0 = Submission(
+		user = user1,
+		assignment = a1,
+		upload_date = before,
+		upload_path = "/test_submission/0/",
+		has_been_submitted = True,
+		unviewed_reviews = 1
+	).save()
+
+	sf0 = SubmissionFile(submission=submission0, file_path="test.py").save()
+	assigned_review = AssignedReview(assigned_user=user2, assigned_submission=submission0, has_been_reviewed=True).save()
+	comment = Comment(commenter=user2, comment="Wow, much deep!", selected_text="hello_world").save()
+	comment_range = CommentRange(comment=comment, start='0', end='10',startOffset=0,endOffset=0).save()
+
+	submission1 = Submission(
+		user = user2,
+		assignment = a2,
+		upload_date = just_before,
+		upload_path = "/test_submission/1/",
+		has_been_submitted = True,
+		unviewed_reviews = 0
+	).save()
+
+	sf1 = SubmissionFile(submission=submission1, file_path="email.py").save()
+
+	submission2 = Submission(
+		user = user3,
+		assignment = a2,
+		upload_date = just_before,
+		upload_path = "/test_submission/2/",
+		has_been_submitted = True,
+		unviewed_reviews = 0
+	).save()
+
+	sf2 = SubmissionFile(submission=submission2, file_path="email.py").save()
+
+	submission3 = Submission(
+		user = user4,
+		assignment = a2,
+		upload_date = just_before,
+		upload_path = "/test_submission/3/",
+		has_been_submitted = True,
+		unviewed_reviews = 0
+	).save()
+
+	sf3 = SubmissionFile(submission=submission3, file_path="email.py").save()
+
 	return redirect('index')
