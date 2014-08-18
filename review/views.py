@@ -94,6 +94,11 @@ def submission(request, submission_pk):
 	"""
 	user = User.objects.get(username='user1')
 	submission = get_object_or_404(Submission, pk=submission_pk)
+	reviews = AssignedReview.objects.get(assigned_submission=submission, has_been_reviewed=True)
+	if type(reviews)!=list:
+		reviews = [reviews]
+	reviews = [{'id':r.id, 'user_id':r.assigned_user.id} for r in reviews]
+	comments = {}
 	is_owner = (submission.user == user)
 	if not is_owner and not is_allowed_to_review(user, submission):
 		print "TODO: deal with unauthorised access of submissions"
@@ -103,7 +108,8 @@ def submission(request, submission_pk):
 			'submission': submission, 
 			'files': files, 
 			'file_structure': dir_json,
-			'is_owner': is_owner
+			'is_owner': is_owner,
+			'reviews': reviews
 		})
 
 def get_directory_contents(path, parent="#"):
@@ -272,17 +278,22 @@ def format_annotation(user, comment):
 
 def reset_test_database(request):
 	now = timezone.now()
-	just_before = timezone.now().replace(seconds=now.seconds-10)
+	just_before = timezone.now().replace(second=now.second-10)
 	before = timezone.now().replace(day=now.day-1)
 	long_before = timezone.now().replace(month=now.month-1)
-	just_after = timezone.now().replace(seconds=now.seconds+10)
+	just_after = timezone.now().replace(second=now.second+10)
 	after = timezone.now().replace(day=now.day+1)
 	long_after = timezone.now().replace(month=now.month+1)
-	u1 = User(username="user1").save()
-	u2 = User(username="user2").save()
-	u3 = User(username="user3").save()
-	u4 = User(username="user4").save()
-	course = Course(course_name="Test Course", course_code="TEST1000", course_id="201402TEST1000", year=2014, semester='2', institution="UQ").save()
+	user1 = User(username="user1")
+	user1.save()
+	user2 = User(username="user2")
+	user2.save()
+	user3 = User(username="user3")
+	user3.save()
+	user4 = User(username="user4")
+	user4.save()
+	course = Course(course_name="Test Course", course_code="TEST1000", course_id="201402TEST1000", year=2014, semester='2', institution="UQ")
+	course.save()
 	a1 = Assignment(
 		assignment_id="ass01", 
 		name="Assignment 1", 
@@ -299,7 +310,8 @@ def reset_test_database(request):
 		weighting=20,
 		has_tests=False,
 		test_required=False
-	).save()
+	)
+	a1.save()
 	a2 = Assignment(
 		assignment_id="ass02", 
 		name="Assignment 2", 
@@ -316,7 +328,8 @@ def reset_test_database(request):
 		weighting=20,
 		has_tests=False,
 		test_required=False
-	).save()
+	)
+	a2.save()
 	a3 = Assignment(
 		assignment_id="ass03", 
 		name="Assignment 3", 
@@ -333,54 +346,66 @@ def reset_test_database(request):
 		weighting=20,
 		has_tests=False,
 		test_required=False
-	).save()
+	)
+	a3.save()
 
 	## Prev assignment w/ review
 	submission0 = Submission(
 		user = user1,
 		assignment = a1,
 		upload_date = before,
-		upload_path = "/test_submission/0/",
+		upload_path = "./test_submission/0/",
 		has_been_submitted = True,
 		unviewed_reviews = 1
-	).save()
+	)
+	submission0.save()
 
-	sf0 = SubmissionFile(submission=submission0, file_path="test.py").save()
-	assigned_review = AssignedReview(assigned_user=user2, assigned_submission=submission0, has_been_reviewed=True).save()
-	comment = Comment(commenter=user2, comment="Wow, much deep!", selected_text="hello_world").save()
-	comment_range = CommentRange(comment=comment, start='0', end='10',startOffset=0,endOffset=0).save()
+	sf0 = SubmissionFile(submission=submission0, file_path="test.py")
+	sf0.save()
+	assigned_review = AssignedReview(assigned_user=user2, assigned_submission=submission0, has_been_reviewed=True)
+	assigned_review.save()
+	comment = Comment(commenter=user2, commented_file=sf0, comment="Wow, much deep!", selected_text="hello_world")
+	comment.save()
+	comment_range = CommentRange(comment=comment, start='0', end='10',startOffset=0,endOffset=0)
+	comment_range.save()
 
 	submission1 = Submission(
 		user = user2,
 		assignment = a2,
 		upload_date = just_before,
-		upload_path = "/test_submission/1/",
+		upload_path = "./test_submission/1/",
 		has_been_submitted = True,
 		unviewed_reviews = 0
-	).save()
+	)
+	submission1.save()
 
-	sf1 = SubmissionFile(submission=submission1, file_path="email.py").save()
+	sf1 = SubmissionFile(submission=submission1, file_path="email.py")
+	sf1.save()
 
 	submission2 = Submission(
 		user = user3,
 		assignment = a2,
 		upload_date = just_before,
-		upload_path = "/test_submission/2/",
+		upload_path = "./test_submission/2/",
 		has_been_submitted = True,
 		unviewed_reviews = 0
-	).save()
+	)
+	submission2.save()
 
-	sf2 = SubmissionFile(submission=submission2, file_path="email.py").save()
+	sf2 = SubmissionFile(submission=submission2, file_path="email.py")
+	sf2.save()
 
 	submission3 = Submission(
 		user = user4,
 		assignment = a2,
 		upload_date = just_before,
-		upload_path = "/test_submission/3/",
+		upload_path = "./test_submission/3/",
 		has_been_submitted = True,
 		unviewed_reviews = 0
-	).save()
+	)
+	submission3.save()
 
-	sf3 = SubmissionFile(submission=submission3, file_path="email.py").save()
+	sf3 = SubmissionFile(submission=submission3, file_path="email.py")
+	sf3.save()
 
 	return redirect('index')

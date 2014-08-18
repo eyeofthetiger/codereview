@@ -1,5 +1,6 @@
 {% extends "review/base.html" %}
 {% load staticfiles %}
+{% load template_tags %}
 
 {% block css %}
 	<link rel="stylesheet" href="{% static 'review/jstree.min.css' %}" />
@@ -18,6 +19,12 @@
 {% block content %}
 	{% if is_owner %}
 		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
+		<ul>
+			<li class="submission-tab" data-id="0">Original</li>
+			{% for i in reviews|get_range %}
+      			<li class="submission-tab" data-id="{{ i }}">Review {{ i }}</li>
+		    {% endfor %}
+		</ul>
 	{% else %}
 		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
 	{% endif %}
@@ -26,8 +33,23 @@
 	<pre id="filecontents" style="float:left;"></pre>
 
 	<script type="text/javascript">
+		var activeTab = "0"; //0 represents original, other nubmers represent the reviews
+		var reviews = {{ reviews|safe }};
+		console.log(reviews);
 		var fileStructure = {{ file_structure|safe }};
 		var is_reviewer = ! {{ is_owner|yesno:"true,false" }};
+
+		$('.submission-tab').click(function(){
+			var clickedTab = $(this).data('id')
+			if($(this).data('id') != clickedTab){
+				activeTab = clickedTab;
+				if (activeTab == '0'){
+					clearComments();
+				}else{
+					loadComments();
+				}
+			}
+		})
 
 		$(document).ready( function() {
 		  $(function () { 
@@ -51,10 +73,10 @@
 				        url: "/app/get_submission_file/",
 				        data: data,
 				        success: function(data) {
-	            		$('#filecontents').html(data.file_contents);
-	            		if(is_reviewer){
-										activateAnnotator(data.submission_file_id);
-									}
+	            			$('#filecontents').html(data.file_contents);
+	            			if(is_reviewer){
+								activateAnnotator(data.submission_file_id);
+							}
 	        			}   
 	     				}); 
 				    } 
@@ -82,6 +104,11 @@
 	        'uri': submissionFileID,
 	      }
 			});
+		}
+
+		function loadComments(){
+			console.log(reviews);
+			activateAnnotator();
 		}
 
 	</script>
