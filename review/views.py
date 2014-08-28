@@ -92,11 +92,11 @@ def submission(request, submission_pk):
 	""" Displays the given submission. If the user is the reviewer, enables 
 		commenting. 
 	"""
+	# TODO, put proper user
 	user = User.objects.get(username='user1')
 	submission = get_object_or_404(Submission, pk=submission_pk)
-	reviews = AssignedReview.objects.get(assigned_submission=submission, has_been_reviewed=True)
-	if type(reviews)!=list:
-		reviews = [reviews]
+	reviews = AssignedReview.objects.filter(assigned_submission=submission, has_been_reviewed=True)
+	print reviews
 	reviews = [{'id':r.id, 'user_id':r.assigned_user.id} for r in reviews]
 	comments = {}
 	is_owner = (submission.user == user)
@@ -109,7 +109,8 @@ def submission(request, submission_pk):
 			'files': files, 
 			'file_structure': dir_json,
 			'is_owner': is_owner,
-			'reviews': reviews
+			'reviews': reviews,
+			'user': user.id # TODO, put proper user
 		})
 
 def get_directory_contents(path, parent="#"):
@@ -204,7 +205,7 @@ def api_index(request):
 		#Save comment
 		comment_data = json.loads(request.body)
 		#TODO - Get actual user, this is just fake
-		user = User.objects.get(username='s4108532')
+		user = User.objects.get(username='user1')
 		submission_file = SubmissionFile.objects.get(id=str(comment_data['uri']))
 		comment = Comment(
 			commenter = user, 
@@ -230,10 +231,12 @@ def api_search(request):
 	"""Receives a search query and returns the annotations that match the 
 		given search.
 	"""
+	print request
 	submission_file = get_object_or_404(SubmissionFile, pk = request.GET['uri'])
 	#TODO - Get actual user, this is just fake
-	user = User.objects.get(username='user1')
+	user = User.objects.get(username='user2')
 	comments = Comment.objects.filter(commenter=user, commented_file=submission_file)
+	print comments
 	rows = [format_annotation(user, comment) for comment in comments]
 	response = {'total':len(rows), 'rows':rows}
 	return HttpResponse(json.dumps(response), content_type="application/json")
@@ -364,9 +367,9 @@ def reset_test_database(request):
 	sf0.save()
 	assigned_review = AssignedReview(assigned_user=user2, assigned_submission=submission0, has_been_reviewed=True)
 	assigned_review.save()
-	comment = Comment(commenter=user2, commented_file=sf0, comment="Wow, much deep!", selected_text="hello_world")
+	comment = Comment(commenter=user2, commented_file=sf0, comment="Wow, much deep!", selected_text="print")
 	comment.save()
-	comment_range = CommentRange(comment=comment, start='0', end='10',startOffset=0,endOffset=0)
+	comment_range = CommentRange(comment=comment, start='', end='',startOffset=0, endOffset=5)
 	comment_range.save()
 
 	submission1 = Submission(

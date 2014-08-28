@@ -4,16 +4,12 @@
 
 {% block css %}
 	<link rel="stylesheet" href="{% static 'review/jstree.min.css' %}" />
-	{% if not is_owner %}
-		<link rel="stylesheet" href='{% static "review/annotator.min.css" %}'>
-	{% endif %}
+	<link rel="stylesheet" href='{% static "review/annotator.min.css" %}'>
 {% endblock %}
 
 {% block js %}
 	<script src="{% static 'review/jstree.min.js' %}"></script>
-	{% if not is_owner %}
-		<script src='{% static "review/annotator-full.min.js" %}'></script>
-	{% endif %}
+	<script src='{% static "review/annotator-full.min.js" %}'></script>
 {% endblock %}
 
 {% block content %}
@@ -33,6 +29,12 @@
 	<pre id="filecontents" style="float:left;"></pre>
 
 	<script type="text/javascript">
+		//TODO - This is a fake user
+		var currentUserID = {{ user }};
+		var currentSubmissionFile;
+
+		var content;
+
 		var activeTab = "0"; //0 represents original, other nubmers represent the reviews
 		var reviews = {{ reviews|safe }};
 		console.log(reviews);
@@ -41,9 +43,9 @@
 
 		$('.submission-tab').click(function(){
 			var clickedTab = $(this).data('id')
-			if($(this).data('id') != clickedTab){
+			if($(this).data('id') != activeTab){
 				activeTab = clickedTab;
-				if (activeTab == '0'){
+				if (clickedTab == '0'){
 					clearComments();
 				}else{
 					loadComments();
@@ -74,8 +76,9 @@
 				        data: data,
 				        success: function(data) {
 	            			$('#filecontents').html(data.file_contents);
+	            			currentSubmissionFile = data.submission_file_id;
 	            			if(is_reviewer){
-								activateAnnotator(data.submission_file_id);
+								activateAnnotator(data.submission_file_id, currentUserID);
 							}
 	        			}   
 	     				}); 
@@ -83,32 +86,51 @@
 				  }).jstree(fileStructure)});
 		});
 		
-		function activateAnnotator(submissionFileID){
+		function activateAnnotator(submissionFileID, userID){
+			console.log("Activating annotator");
 			//Activates the annotation plugin.
-			$('#filecontents').annotator('destroy');
-			var content = $('#filecontents').annotator();
+			// if(content != null){
+				// $('#filecontents').annotator('destroy');
+				// content.annotator('destroy');
+			// }
+			clearComments();
+
+			//Set annoations as read only if not a reviewer.
+			if(!is_reviewer){
+				content = $('#filecontents').annotator({readOnly: true});
+			}else{
+				content = $('#filecontents').annotator();
+			}
+
 			content.annotator('addPlugin', 'Store', {
-				// The endpoint of the store on your server.
-	      prefix: '/app/annotator_api',
+			  // The endpoint of the store on your server.
+	     	prefix: '/app/annotator_api',
 
 	      // Attach the uri of the current page to all annotations to allow search.
 	      annotationData: {
-	        'uri': submissionFileID,
+	        'uri': submissionFileID + '+' + userID,
 	      },
 
 	      // This will perform a "search" action when the plugin loads. Will
-	      // request the last 20 annotations for the current url.
-	      // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
+	      // request all notations for the given ID.
 	      loadFromSearch: {
-	        // 'limit': 20,
 	        'uri': submissionFileID,
-	      }
+      	}
 			});
 		}
 
 		function loadComments(){
-			console.log(reviews);
-			activateAnnotator();
+			var review = reviews[parseInt(activeTab)-1];
+			if(currentSubmissionFile){
+				activateAnnotator(currentSubmissionFile, review.user_id);
+			}
+		}
+
+		function clearComments(){
+			if(content != null){
+				content.annotator('destroy');
+				content = null;
+			}
 		}
 
 	</script>
