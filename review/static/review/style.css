@@ -1,3 +1,31 @@
+/*
+//                      INDEX
+// -------------------------------------------------- 
+    1. MAIN LAYOUT STYLES
+    2. GENERAL STYLES
+    3. PAGE STYLES
+      3.1 BASE
+      3.2 INDEX 
+      3.3 ASSIGNMENT 
+      3.4 ASSIGNMENT DESCRIPTION
+      3.5 SUBMISSION
+    4. NAVBARS
+    5. FORMS
+    6. BUTTONS
+    7. MODALS
+    8. PLUGINS
+    9. MEDIA QUERIES
+/*
+//                      END: INDEX
+// -------------------------------------------------- 
+
+
+/*
+// 1. MAIN LAYOUT STYLES
+// -------------------------------------------------- */
 h1 {
-	color: red;
+	color: green;
 }
+/*
+// END: MAIN LAYOUT STYLES
+// -------------------------------------------------- */
