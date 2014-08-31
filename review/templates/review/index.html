@@ -4,30 +4,51 @@
 	<h1>{{ course }}</h1>
 	<hr/>
 	<h2>My Assignments</h2>
-	<ul>
-		{% for assignment in assignments %}
-		  <li>
-		  	{% if assignment.due_date_passed == True %}
-		  		{{ assignment }} - Closed - Due date: {{ assignment.due_date }}
-		  	{% else %}
-		  		<a href="{% url 'assignment' assignment.id %}">{{ assignment }} - Open - {{ assignment.due_date }}</a>
-		  	{% endif %}
-		  	<a href="{% url 'assignment_description' assignment.id %}"> View Description</a>
-		  	{% if assignment.id in submissions.keys %}
-		  		<a href="{% url 'submission' submissions|get_item:assignment.id  %}">View submission</a>
-		  	{% endif %}
-		  </li>
-		{% endfor %}
-	</ul>
+
+	<table class="table table-striped">
+		<tbody>
+			{% for assignment in assignments %}
+			<tr>
+				
+				<td>
+					{% if assignment.due_date_passed == True %}
+			  		{{ assignment }} - Closed - Due date: {{ assignment.due_date }}
+				  	{% else %}
+				  		<a href="{% url 'assignment' assignment.id %}">{{ assignment }} - Open - {{ assignment.due_date }}</a>
+				  	{% endif %}
+				</td>
+				<td>
+				  	<a href="{% url 'assignment_description' assignment.id %}"> View Description</a>
+				</td>
+				<td>
+				  	{% if assignment.id in submissions.keys %}
+				  		<a href="{% url 'submission' submissions|get_item:assignment.id  %}">View submission</a>
+				  	{% endif %}
+				</td>
+				
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	
 	<hr/>
 	<h2>Code Review</h2>
-	<ul>
-		{% for review in assigned_reviews %}
-		  <li>
-		  	<a href="{% url 'submission' review.assigned_submission.id %}">
-		  		{{ review.assigned_submission.assignment }}
-		  	</a>
-		  </li>
-		{% endfor %}
-	</ul>
+
+	<table class="table table-striped">
+		<tbody>
+			{% for review in assigned_reviews %}
+			<tr>
+				<td>
+				  	<a href="{% url 'submission' review.assigned_submission.id %}">
+				  		{{ review.assigned_submission.assignment }}
+				  	</a>
+				</td>
+			</tr>
+
+			{% endfor %}
+		</tbody>
+	</table>
+
+
 {% endblock %}
