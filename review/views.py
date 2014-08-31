@@ -49,6 +49,7 @@ def index(request):
 def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 	""" Displays an assignment and upload form."""
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
+
 	if request.method == 'POST':
 		upload_form = UploadForm(request.POST, request.FILES)
 		if upload_form.is_valid():
@@ -79,7 +80,16 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 		upload_form = UploadForm()
 
 	return render(request, 'review/assignment.html', 
-		{'assignment': assignment, 'upload_form': upload_form, 'upload': uploaded_file})
+		{'assignment': assignment, 'upload_form': upload_form, 'upload': uploaded_file, 'submission': submission})
+
+def submit_assignment(request, submission_pk):
+	""" This page gives a message to the user informaing them of a successful
+		submission.
+	"""
+	submission = get_object_or_404(Submission, pk=submission_pk)
+	submission.has_been_submitted = True
+	submission.save()
+	return render(request, 'review/submission_success.html', {'submission': submission})
 
 def assignment_description(request, assignment_pk):
 	""" Display the description of an assignment. """

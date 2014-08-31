@@ -30,7 +30,7 @@
 	<h2>Step 3 - Submit</h2>
 
 	{% if upload %}
-		<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+		<form action="{% url 'submit_assignment' submission.id %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<input type="submit" name="submit" value="Submit" />
 		</form>
