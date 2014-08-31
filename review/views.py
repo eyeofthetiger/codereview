@@ -61,7 +61,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 			 	unviewed_reviews=0,
 			)
 			submission.save()
-			directory = os.path.join("../", "submissions", user.username, assignment.assignment_id, str(submission.id))
+			directory = os.path.join("..", "submissions", user.username, assignment.assignment_id, str(submission.id))
 			os.makedirs(directory)
 			submission.upload_path = directory
 			submission.save()
