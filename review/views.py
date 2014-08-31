@@ -238,12 +238,12 @@ def api_index(request):
 		return response
 
 def api_search(request):
-	"""Receives a search query and returns the annotations that match the 
+	""" Receives a search query and returns the annotations that match the 
 		given search.
 	"""
-	submission_file = get_object_or_404(SubmissionFile, pk = request.GET['uri'])
-	#TODO - Get actual user, this is just fake
-	user = User.objects.get(username='user2')
+	submission_file_pk, user_pk = request.GET['uri'].split("+")
+	submission_file = get_object_or_404(SubmissionFile, pk = submission_file_pk)
+	user = get_object_or_404(User, pk = user_pk)
 	comments = Comment.objects.filter(commenter=user, commented_file=submission_file)
 	rows = [format_annotation(user, comment) for comment in comments]
 	response = {'total':len(rows), 'rows':rows}
@@ -382,9 +382,9 @@ def reset_test_database(request):
 
 	assigned_review2 = AssignedReview(assigned_user=user3, assigned_submission=submission0, has_been_reviewed=True)
 	assigned_review2.save()
-	comment2 = Comment(commenter=user3, commented_file=sf0, comment="Comment two", selected_text=" \"h")
+	comment2 = Comment(commenter=user3, commented_file=sf0, comment="Comment two", selected_text="print")
 	comment2.save()
-	comment_range2 = CommentRange(comment=comment, start='', end='',startOffset=6, endOffset=8)
+	comment_range2 = CommentRange(comment=comment2, start='', end='',startOffset=0, endOffset=5)
 	comment_range2.save()
 
 	submission1 = Submission(

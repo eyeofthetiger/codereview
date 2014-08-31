@@ -35,9 +35,8 @@
 
 		var content;
 
-		var activeTab = "0"; //0 represents original, other nubmers represent the reviews
+		var activeTab = "0"; //0 represents original, other numbers represent the reviews
 		var reviews = {{ reviews|safe }};
-		console.log(reviews);
 		var fileStructure = {{ file_structure|safe }};
 		var is_reviewer = ! {{ is_owner|yesno:"true,false" }};
 
@@ -88,11 +87,7 @@
 		
 		function activateAnnotator(submissionFileID, userID){
 			console.log("Activating annotator");
-			//Activates the annotation plugin.
-			// if(content != null){
-				// $('#filecontents').annotator('destroy');
-				// content.annotator('destroy');
-			// }
+
 			clearComments();
 
 			//Set annoations as read only if not a reviewer.
@@ -114,7 +109,7 @@
 	      // This will perform a "search" action when the plugin loads. Will
 	      // request all notations for the given ID.
 	      loadFromSearch: {
-	        'uri': submissionFileID,
+	        'uri': submissionFileID + '+' + userID,
       	}
 			});
 		}
@@ -122,6 +117,7 @@
 		function loadComments(){
 			var review = reviews[parseInt(activeTab)-1];
 			if(currentSubmissionFile){
+				console.log(review.user_id);
 				activateAnnotator(currentSubmissionFile, review.user_id);
 			}
 		}
