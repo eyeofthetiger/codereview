@@ -2,6 +2,7 @@ import os.path
 from os import listdir
 import json
 from zipfile import ZipFile, is_zipfile
+import datetime
 
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
@@ -106,7 +107,6 @@ def submission(request, submission_pk):
 	user = User.objects.get(username='user1')
 	submission = get_object_or_404(Submission, pk=submission_pk)
 	reviews = AssignedReview.objects.filter(assigned_submission=submission, has_been_reviewed=True)
-	print reviews
 	reviews = [{'id':r.id, 'user_id':r.assigned_user.id} for r in reviews]
 	comments = {}
 	is_owner = (submission.user == user)
@@ -241,12 +241,10 @@ def api_search(request):
 	"""Receives a search query and returns the annotations that match the 
 		given search.
 	"""
-	print request
 	submission_file = get_object_or_404(SubmissionFile, pk = request.GET['uri'])
 	#TODO - Get actual user, this is just fake
 	user = User.objects.get(username='user2')
 	comments = Comment.objects.filter(commenter=user, commented_file=submission_file)
-	print comments
 	rows = [format_annotation(user, comment) for comment in comments]
 	response = {'total':len(rows), 'rows':rows}
 	return HttpResponse(json.dumps(response), content_type="application/json")
@@ -291,12 +289,12 @@ def format_annotation(user, comment):
 
 def reset_test_database(request):
 	now = timezone.now()
-	just_before = timezone.now().replace(second=now.second-10)
-	before = timezone.now().replace(day=now.day-1)
-	long_before = timezone.now().replace(month=now.month-1)
-	just_after = timezone.now().replace(second=now.second+10)
-	after = timezone.now().replace(day=now.day+1)
-	long_after = timezone.now().replace(month=now.month+1)
+	just_before = timezone.now() - datetime.timedelta(seconds=10)
+	before = timezone.now() - datetime.timedelta(days=1)
+	long_before = timezone.now() - datetime.timedelta(days=30)
+	just_after = timezone.now() + datetime.timedelta(seconds=10)
+	after = timezone.now() + datetime.timedelta(days=1)
+	long_after = timezone.now() + datetime.timedelta(days=30)
 	user1 = User(username="user1")
 	user1.save()
 	user2 = User(username="user2")
@@ -381,6 +379,13 @@ def reset_test_database(request):
 	comment.save()
 	comment_range = CommentRange(comment=comment, start='', end='',startOffset=0, endOffset=5)
 	comment_range.save()
+
+	assigned_review2 = AssignedReview(assigned_user=user3, assigned_submission=submission0, has_been_reviewed=True)
+	assigned_review2.save()
+	comment2 = Comment(commenter=user3, commented_file=sf0, comment="Comment two", selected_text=" \"h")
+	comment2.save()
+	comment_range2 = CommentRange(comment=comment, start='', end='',startOffset=6, endOffset=8)
+	comment_range2.save()
 
 	submission1 = Submission(
 		user = user2,
