@@ -214,9 +214,9 @@ def api_index(request):
 	if request.method == 'POST':
 		#Save comment
 		comment_data = json.loads(request.body)
-		#TODO - Get actual user, this is just fake
-		user = User.objects.get(username='user1')
-		submission_file = SubmissionFile.objects.get(id=str(comment_data['uri']))
+		submission_file_pk, user_pk = comment_data['uri'].split("+")
+		submission_file = get_object_or_404(SubmissionFile, pk = submission_file_pk)
+		user = get_object_or_404(User, pk = user_pk)
 		comment = Comment(
 			commenter = user, 
 			commented_file = submission_file, 
@@ -389,7 +389,7 @@ def reset_test_database(request):
 
 	submission1 = Submission(
 		user = user2,
-		assignment = a2,
+		assignment = a1,
 		upload_date = just_before,
 		upload_path = "./test_submission/1/",
 		has_been_submitted = True,
@@ -399,6 +399,9 @@ def reset_test_database(request):
 
 	sf1 = SubmissionFile(submission=submission1, file_path="email.py")
 	sf1.save()
+
+	assigned_review3 = AssignedReview(assigned_user=user1, assigned_submission=submission1, has_been_reviewed=False)
+	assigned_review3.save()
 
 	submission2 = Submission(
 		user = user3,
