@@ -29,7 +29,6 @@ html {
 }
 
 body {
-  position: relative;
   font-family: Arial, sans-serif;
   line-height: 20px;
 }
@@ -57,6 +56,12 @@ input[type="password"],
 input[type="submit"],
 textarea { font-family: Arial, sans-serif; }
 
+pre{
+  overflow: visible;
+}
+pre#filecontents{
+  width: 90%;
+}
 /*
 // END: MAIN LAYOUT STYLES
 // -------------------------------------------------- */

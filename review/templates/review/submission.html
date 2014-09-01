@@ -7,10 +7,7 @@
 	<link rel="stylesheet" href='{% static "review/annotator.min.css" %}'>
 {% endblock %}
 
-{% block js %}
-	<script src="{% static 'review/jstree.min.js' %}"></script>
-	<script src='{% static "review/annotator-full.min.js" %}'></script>
-{% endblock %}
+
 
 {% block content %}
 	{% if is_owner %}
@@ -28,6 +25,12 @@
 	<div id="filetree" style="float:left; margin-right: 20px;"></div>
 	<pre id="filecontents" style="float:left;"></pre>
 
+	
+{% endblock %}
+
+{% block jsEnd %}
+	<script src="{% static 'review/jstree.min.js' %}"></script>
+	<script src='{% static "review/annotator-full.min.js" %}'></script>
 	<script type="text/javascript">
 		//TODO - This is a fake user
 		var currentUserID = {{ user }};

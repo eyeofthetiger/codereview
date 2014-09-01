@@ -16,9 +16,6 @@
 
         <!-- IE Compatibility: Works with older versions of IE, has to be inside the HEAD tag -->
         <script src="{% static 'review/respond.js' %}"></script> 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <!-- After jQuery because it depends on jQuery -->
-        <script src="{% static 'review/bootstrap.min.js' %}"></script> 
         {% block js %}{% endblock %}
 
     	<title>{{ title }}</title>
@@ -49,13 +46,10 @@
 
 
         <!-- Javascript: Loads when the rest of the webpage is already loaded -->
-
-        <!-- 
-        LUKE: Can the jQuery script be moved here like this? 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <!-- After jQuery because it depends on jQuery -->
         <script src="{% static 'review/bootstrap.min.js' %}"></script> 
-        -->
-
+        {% block jsEnd %}{% endblock %}
 
         
     </body>
