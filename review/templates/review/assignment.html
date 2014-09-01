@@ -8,14 +8,10 @@
 	<h2>File Upload</h2>
 
 	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
-	    <div>
-	    	{% csrf_token %}
-	    	{{ upload_form }}
-		
-	    	<br>
-
-	    	<p><input type="submit" value="Upload" /></p>
-	    </div>
+	    {% csrf_token %}
+	    {{ upload_form }}
+		<br>
+		<input type="submit" value="Upload" />
 	</form>
 
 	{% if upload %}

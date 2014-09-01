@@ -25,7 +25,8 @@
 // -------------------------------------------------- */
 
 html {
-  margin: 0; }
+  margin: 0;
+}
 
 body {
   position: relative;
@@ -63,8 +64,15 @@ textarea { font-family: Arial, sans-serif; }
 /*
 // 2. GENERAL STYLES
 // -------------------------------------------------- */
+body h2{
+  color: #666;
+}
+
 header{
-  background-color: #cccccc;
+  background-color: #CCC;
+}
+footer{
+  background-color: #E2E5E4;
 }
 .alert {
   padding: 10px;
@@ -79,6 +87,18 @@ header{
 header .container{
   padding: 20px 0;
   margin-bottom: 20px;
+}
+footer .container{
+  padding: 10px 0 0 0;
+}
+footer .container p{
+  color: #999;
+  font-size: 11px;
+}
+.sticky-footer{
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }
 /*
 // END: BASE - PAGE STYLES
