@@ -1,33 +1,34 @@
 {% extends "review/base.html" %}
 {% block content %}
-	<a href="/">Back</a>
+	<a class="btn btn-default" href="/">Back</a>
 	<h1>{{ assignment.name }}</h1>
 
 	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-	<h2>Step 1 - Upload</h2>
+	<h2>File Upload</h2>
 
 	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
 	    {% csrf_token %}
 	    {{ upload_form }}
-	    <p><input type="submit" value="Upload" /></p>
+		<br>
+		<input type="submit" value="Upload" />
 	</form>
 
 	{% if upload %}
-		<p>{{ upload }} has been uploaded.</p>
+		<p class="alert bg-success">{{ upload }} has been uploaded.</p>
 	{% endif %}
 
 	<hr>
-	<h2>Step 2 - Test</h2>
+	<h2>Unit Test</h2>
 
 	{% if upload %}
 		<button>Start</button>
 	{% else %}
-		<p>Unavailable. Upload something.</p>
+		<p class="alert bg-danger">Unavailable. Upload something.</p>
 	{% endif %}
 
 	<hr>
-	<h2>Step 3 - Submit</h2>
+	<h2>Submit</h2>
 
 	{% if upload %}
 		<form action="{% url 'submit_assignment' submission.id %}" method="post" enctype="multipart/form-data">
@@ -35,7 +36,7 @@
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 	{% else %}
-		<p>Unavailable. Upload something.</p>
+		<p class="alert bg-danger">Unavailable. Upload something.</p>
 	{% endif %}
 
 {% endblock %}

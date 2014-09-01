@@ -2,20 +2,62 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+    <head>  
+        <meta charset="UTF-8">
+        <!-- Responsive - Scale screens correctly -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap Styles - v3.1.1 -->
+        <link rel="stylesheet" href="{% static 'review/bootstrap.min.css' %}" />
+        <!-- Custom Styles - Enkidu -->
     	<link rel="stylesheet" href="{% static 'review/style.css' %}" />
     	<!-- <link rel="stylesheet" href= "../static/css/htmlFormat.css" /> -->
         {% block css %}{% endblock %}
-      	<meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- IE Compatibility: Works with older versions of IE, has to be inside the HEAD tag -->
+        <script src="{% static 'review/respond.js' %}"></script> 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <!-- After jQuery because it depends on jQuery -->
+        <script src="{% static 'review/bootstrap.min.js' %}"></script> 
         {% block js %}{% endblock %}
+
     	<title>{{ title }}</title>
     </head>
 
     <body>
+
+        <header>
+            <div class="container"> 
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                       <img src="" alt="LOGO" class="img-thumbnail"> <strong>ENKIDU</strong>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <section class="content">
+            <div class="container">
+
         {% block content %}
         {% endblock %}
+
+            </div>
+        </section>
+
+
+
+        <!-- Javascript: Loads when the rest of the webpage is already loaded -->
+
+        <!-- 
+        LUKE: Can the jQuery script be moved here like this? 
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
+        <script src="{% static 'review/bootstrap.min.js' %}"></script> 
+        -->
+
+
+        
     </body>
 </html>
 
