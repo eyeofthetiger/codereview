@@ -81,6 +81,8 @@
 	            			currentSubmissionFile = data.submission_file_id;
 	            			if(is_reviewer){
 								activateAnnotator(data.submission_file_id, currentUserID);
+							}else if(activeTab != 0){
+								loadComments();
 							}
 	        			}   
 	     				}); 
