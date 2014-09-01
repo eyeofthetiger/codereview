@@ -4,13 +4,14 @@
 	<h1>{{ assignment.name }}</h1>
 
 	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
+	<hr>
 	<h2>File Upload</h2>
 
 	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+		<h3>Step 1:</h3>
 	    {% csrf_token %}
 	    {{ upload_form }}
-		<br>
+		<h3>Step 2:</h3>
 		<input type="submit" value="Upload" />
 	</form>
 
