@@ -146,8 +146,14 @@ p.status{
 /*
 // 3.5. SUBMISSION - PAGE STYLES
 // -------------------------------------------------- */
-
-pre{
+p.glyphicon{
+  font-size: 20px;
+  color: #666;
+}
+div#filetree{
+  margin-bottom: 10px;
+}
+pre#filecontents{
   overflow: visible;
   width: 100%;
   background: url(../../static/review/80char.png) repeat-y left top;
