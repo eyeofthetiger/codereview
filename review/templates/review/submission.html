@@ -47,7 +47,7 @@
            <div id="filetree" style="float:left; margin-right: 20px;"></div>
         </div>
         <div class="col-lg-11 col-md-10 col-sm-9">
-			<pre id="filecontents" style="float:left;"></pre></div>
+			<pre id="filecontents" style="float:left;">No file selected.</pre>
         </div>
     </div>
 
@@ -114,7 +114,10 @@
 							}
 	        			}   
 	     				}); 
-				    } 
+				    }else{
+				    	// If folder is selected, set text to show no file selected.
+				    	$('#filecontents').html("No file selected.");
+				    }
 				  }).jstree(fileStructure)});
 		});
 		
