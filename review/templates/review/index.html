@@ -12,7 +12,6 @@
 			<th>Due date</th>
 			<th>Submission</th>
 			<th>Files submitted</th>
-
 		</thead>
 		<tbody>
 			{% for assignment in assignments %}
@@ -21,13 +20,13 @@
 				
 				{% if assignment.due_date_passed == True %}
 				<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td> 
-				<td><p class="status bg-danger">Closed</p></td>
+				<td><p class="status alert bg-danger">Closed</p></td>
 				<td>{{ assignment.due_date }}</td>
 				<td><button type="button" class="btn btn-default" disabled="disabled">Unavailable</button></td>
 
 			  	{% else %}
 			  	<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td>
-			  	<td><p class="status bg-success">Open</p></td>
+			  	<td><p class="status alert bg-success">Open</p></td>
 			  	<td>{{ assignment.due_date }}</td>
 			  	<td><a class="btn btn-success" href="{% url 'assignment' assignment.id %}">Submit now</a></td>
 			  	
@@ -50,14 +49,20 @@
 	<h2>Code Review</h2>
 
 	<table class="table table-striped">
+		<thead>
+			<th>Assignment</th>
+			<th>Due date</th>
+			<th>Review</th>
+		</thead>
 		<tbody>
 			{% for review in assigned_reviews %}
 			<tr>
 				<td>
-				  	<a href="{% url 'submission' review.assigned_submission.id %}">
-				  		{{ review.assigned_submission.assignment }}
-				  	</a>
+					{{ review.assigned_submission.assignment }} <br> 
+					<a href="#"> Details &raquo;</a>
 				</td>
+				<td>[Enter date here :D]</td>
+				<td><a class="btn btn-success" href="{% url 'submission' review.assigned_submission.id %}">Review now</a></td>
 			</tr>
 
 			{% endfor %}

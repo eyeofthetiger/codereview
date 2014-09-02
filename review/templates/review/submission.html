@@ -11,12 +11,13 @@
 
 {% block content %}
 
-	<p><a class="btn btn-default" href="/">Back</a></p>
+	<p><a class="btn btn-default" href="/">&laquo; back</a></p>
 
 	{% if is_owner %}
 		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
 
 		
+	<hr/>
 
 		<div class="row">
 			<div class="col-lg-2 col-md-2 col-sm-3"></div>
@@ -39,6 +40,8 @@
 
 	{% if not is_owner %}
 		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
+
+	<hr/>
 	{% endif %}
 	
 
@@ -52,7 +55,15 @@
         </div>
     </div>
 
-	
+	{% if not is_owner %}
+		<div class="row">
+			<div class="review-buttons">
+			  <button type="button" class="btn btn-default">Save</button>
+			  <button type="button" class="btn btn-default">Cancel</button>
+			  <button type="button" class="btn btn-default">Submit</button>
+			</div>
+		</div>
+	{% endif %}
 
 	
 {% endblock %}
