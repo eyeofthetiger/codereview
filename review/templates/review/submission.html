@@ -105,7 +105,7 @@
 				        url: "/app/get_submission_file/",
 				        data: data,
 				        success: function(data) {
-	            			$('#filecontents').html(data.file_contents);
+	            			$('#filecontents').text(data.file_contents);
 	            			currentSubmissionFile = data.submission_file_id;
 	            			if(is_reviewer){
 								activateAnnotator(data.submission_file_id, currentUserID);
@@ -116,7 +116,7 @@
 	     				}); 
 				    }else{
 				    	// If folder is selected, set text to show no file selected.
-				    	$('#filecontents').html("No file selected.");
+				    	$('#filecontents').text("No file selected.");
 				    }
 				  }).jstree(fileStructure)});
 		});

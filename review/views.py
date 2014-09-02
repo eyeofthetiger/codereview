@@ -154,6 +154,7 @@ def get_file_contents(path):
 	""" Returns the contents of a file as a string. """
 	with open(path, 'r') as f:
 		file_contents = f.readlines()
+	print file_contents
 	return "".join(file_contents)
 
 def save_file(upload, submission):
