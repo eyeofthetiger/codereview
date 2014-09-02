@@ -6,23 +6,37 @@
 	<h2>My Assignments</h2>
 
 	<table class="table table-striped">
+		<thead>
+			<th>Assignment</th>
+			<th>Status</th>
+			<th>Due date</th>
+			<th>Submission</th>
+			<th>Files submitted</th>
+
+		</thead>
 		<tbody>
 			{% for assignment in assignments %}
 			<tr>
 				
-				<td>
-					{% if assignment.due_date_passed == True %}
-			  		{{ assignment }} - Closed - Due date: {{ assignment.due_date }}
-				  	{% else %}
-				  		<a href="{% url 'assignment' assignment.id %}">{{ assignment }} - Open - {{ assignment.due_date }}</a>
-				  	{% endif %}
-				</td>
-				<td>
-				  	<a href="{% url 'assignment_description' assignment.id %}"> View Description</a>
-				</td>
+				
+				{% if assignment.due_date_passed == True %}
+				<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td> 
+				<td><p class="status bg-danger">Closed</p></td>
+				<td>{{ assignment.due_date }}</td>
+				<td><button type="button" class="btn btn-default" disabled="disabled">Unavailable</button></td>
+
+			  	{% else %}
+			  	<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td>
+			  	<td><p class="status bg-success">Open</p></td>
+			  	<td>{{ assignment.due_date }}</td>
+			  	<td><a class="btn btn-success" href="{% url 'assignment' assignment.id %}">Submit now</a></td>
+			  	
+			  	{% endif %}
+				
+				
 				<td>
 				  	{% if assignment.id in submissions.keys %}
-				  		<a href="{% url 'submission' submissions|get_item:assignment.id  %}">View submission</a>
+				  		<a href="{% url 'submission' submissions|get_item:assignment.id  %}">View</a>
 				  	{% endif %}
 				</td>
 				

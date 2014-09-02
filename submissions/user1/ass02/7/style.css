@@ -1,0 +1,86 @@
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+/*
+//                      INDEX
+// -------------------------------------------------- 
+    1. MAIN LAYOUT STYLES
+    2. GENERAL STYLES
+    3. PAGE STYLES
+      3.1 BASE
+      3.2 INDEX 
+      3.3 ASSIGNMENT 
+      3.4 ASSIGNMENT DESCRIPTION
+      3.5 SUBMISSION
+    4. NAVBARS
+    5. FORMS
+    6. BUTTONS
+    7. MODALS
+    8. PLUGINS
+    9. MEDIA QUERIES
+/*
+//                      END: INDEX
+// -------------------------------------------------- 
+
+
+/*
+// 1. MAIN LAYOUT STYLES
+// -------------------------------------------------- */
+
+html {
+  margin: 0; }
+
+body {
+  position: relative;
+  font-family: Arial, sans-serif;
+  line-height: 20px;
+}
+
+body h1, body h2, body h3, body h4, body h5, body h6, body .h1, body .h2, body .h3, body .h4, body .h5, body .h6 {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: inherit;
+}
+
+body h1, body h2, body h3 {
+  line-height: 40px;
+}
+
+body h2 {
+  font-size: 26px; 
+}
+
+a:hover {
+  text-decoration: none; 
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"],
+textarea { font-family: Arial, sans-serif; }
+
+/*
+// END: MAIN LAYOUT STYLES
+// -------------------------------------------------- */
+
+/*
+// 2. GENERAL STYLES
+// -------------------------------------------------- */
+header{
+  background-color: #cccccc;
+}
+.alert {
+  padding: 10px;
+}
+/*
+// END: GENERAL STYLES
+// -------------------------------------------------- */
+
+/*
+// 3.1. BASE - PAGE STYLES
+// -------------------------------------------------- */
+header .container{
+  padding: 20px 0;
+  margin-bottom: 20px;
+}
+/*
+// END: BASE - PAGE STYLES
+// -------------------------------------------------- */

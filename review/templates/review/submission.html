@@ -10,20 +10,44 @@
 
 
 {% block content %}
+
+	<p><a class="btn btn-default" href="/">Back</a></p>
+
 	{% if is_owner %}
 		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
-		<ul>
-			<li class="submission-tab" data-id="0">Original</li>
-			{% for i in reviews|get_range %}
-      			<li class="submission-tab" data-id="{{ i }}">Review {{ i }}</li>
-		    {% endfor %}
-		</ul>
-	{% else %}
+
+		
+
+		<div class="row">
+			<div class="col-lg-1 col-md-2 col-sm-3"></div>
+			<div class="col-lg-11 col-md-10 col-sm-9">
+				<ul class="nav nav-tabs" role="tablist">
+				    <li class="active submission-tab" data-id="0"><a href="#">Original</a></li>
+				    {% for i in reviews|get_range %}
+		      			<li class="submission-tab" data-id="{{ i }}"><a href="#">Review {{ i }}</a></li>
+				    {% endfor %}
+				</ul>
+			</div>
+		</div>
+		<br>
+
+	{% endif %}	
+
+	{% if not is_owner %}
 		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
 	{% endif %}
-	<p><a class="btn btn-default" href="/">Back</a></p>
-	<div id="filetree" style="float:left; margin-right: 20px;"></div>
-	<pre id="filecontents" style="float:left;"></pre>
+	
+
+	<div class="row">
+        <div class="col-lg-1 col-md-2 col-sm-3">
+           <div id="filetree" style="float:left; margin-right: 20px;"></div>
+        </div>
+        <div class="col-lg-11 col-md-10 col-sm-9">
+			<pre id="filecontents" style="float:left;"></pre></div>
+        </div>
+    </div>
+
+	
 
 	
 {% endblock %}
