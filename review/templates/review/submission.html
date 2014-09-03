@@ -11,16 +11,17 @@
 
 {% block content %}
 
-	<p><a class="btn btn-default" href="/">Back</a></p>
+	<p><a class="btn btn-default" href="/">&laquo; back</a></p>
 
 	{% if is_owner %}
 		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
 
 		
+	<hr/>
 
 		<div class="row">
-			<div class="col-lg-1 col-md-2 col-sm-3"></div>
-			<div class="col-lg-11 col-md-10 col-sm-9">
+			<div class="col-lg-2 col-md-2 col-sm-3"></div>
+			<div class="col-lg-10 col-md-10 col-sm-9">
 				<ul class="nav nav-tabs" role="tablist">
 				    <li class="active submission-tab" data-id="0">
 				    	<a href="#" role="tab" data-toggle="tab">Original</a>
@@ -39,19 +40,30 @@
 
 	{% if not is_owner %}
 		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
+
+	<hr/>
 	{% endif %}
 	
 
 	<div class="row">
-        <div class="col-lg-1 col-md-2 col-sm-3">
-           <div id="filetree" style="float:left; margin-right: 20px;"></div>
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+        	<p class="glyphicon glyphicon-folder-open"></p>
+            <div id="filetree"></div>
         </div>
-        <div class="col-lg-11 col-md-10 col-sm-9">
-			<pre id="filecontents" style="float:left;">No file selected.</pre>
+        <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
+			 <pre id="filecontents">No file selected.</pre>
         </div>
     </div>
 
-	
+	{% if not is_owner %}
+		<div class="row">
+			<div class="review-buttons">
+			  <button type="button" class="btn btn-default">Save</button>
+			  <button type="button" class="btn btn-default">Cancel</button>
+			  <button type="button" class="btn btn-default">Submit</button>
+			</div>
+		</div>
+	{% endif %}
 
 	
 {% endblock %}

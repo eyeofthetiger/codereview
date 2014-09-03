@@ -31,6 +31,7 @@ html {
 body {
   font-family: Arial, sans-serif;
   line-height: 20px;
+  padding-bottom: 40px
 }
 
 body h1, body h2, body h3, body h4, body h5, body h6, body .h1, body .h2,
@@ -41,7 +42,12 @@ body .h3, body .h4, body .h5, body .h6 {
 }
 
 body h1, body h2, body h3 {
-  line-height: 40px;
+  line-height: 34px;
+}
+
+body h1 {
+  font-size: 34px;
+  margin-bottom: 20px 
 }
 
 body h2 {
@@ -70,20 +76,19 @@ textarea { font-family: Arial, sans-serif; }
 /*
 // 2. GENERAL STYLES
 // -------------------------------------------------- */
+
 body h2{
   color: #666;
 }
 body h3{
   color: #666;
+  font-weight: normal;
 }
 header{
   background-color: #CCC;
 }
 footer{
   background-color: #E2E5E4;
-}
-.alert {
-  padding: 10px;
 }
 /*
 // END: GENERAL STYLES
@@ -114,6 +119,7 @@ header .container{
 p.status{
   text-align: center;
   padding: 5px;
+  width: 70%;
 }
 
 /*
@@ -125,7 +131,24 @@ p.status{
 // 3.3. ASSIGNMENT - PAGE STYLES
 // -------------------------------------------------- */
 
+.file-upload {
+  padding-left: 20px;
+}
 
+.file-upload label, .file-upload input{
+  display: inline-block;
+}
+
+.file-upload label{
+  font-weight: normal;
+  padding-right: 10px;
+}
+
+.file-uploaded.alert {
+  padding: 10px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
 
 /*
 // END: ASSIGNMENT - PAGE STYLES
@@ -146,13 +169,22 @@ p.status{
 /*
 // 3.5. SUBMISSION - PAGE STYLES
 // -------------------------------------------------- */
-
-pre{
+p.glyphicon{
+  font-size: 20px;
+  color: #666;
+}
+div#filetree{
+  margin-bottom: 10px;
+}
+pre#filecontents{
   overflow: visible;
   width: 100%;
   background: url(../../static/review/80char.png) repeat-y left top;
 }
-
+.review-buttons{
+  text-align: right;
+  padding-right: 15px;
+}
 /*
 // END: SUBMISSION - PAGE STYLES
 // -------------------------------------------------- */
