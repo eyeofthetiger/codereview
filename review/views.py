@@ -17,16 +17,18 @@ from review.email import send_email
 
 def index(request):
 	""" Displays the appropriate dashboard for the current user. """
-
 	# Get fake user for testing
 	user = User.objects.get(username='user1')
-	# if teacher:
-	# 	go to teacher page
+	# if user.is_admin:
+	# 	return instructor_index(request)
 
-	# Get fake course for testing. This assumes that only a single course can be active at a time.
+	# Get fake course for testing. This assumes that only a single course can
+	# be active at a time.
 	course = Course.objects.get(id=1)
+
 	# Get all assignments with an open date prior to the current time.
-	assignments = Assignment.objects.filter(open_date__lte=timezone.now()).order_by('due_date')
+	assignments = Assignment.objects.filter(
+		open_date__lte=timezone.now()).order_by('due_date')
 	# Get all submissions by the user
 	submissions = {}
 	for assignment in assignments:
@@ -47,13 +49,18 @@ def index(request):
 
 	return render(request, 'review/index.html', context)
 
+def instructor_index(request):
+	""" Displays the appropriate dashboard for course instructors. """
+	return render("HELLO")
+
 def assignment(request, assignment_pk, submission=None, uploaded_file=None):
-	""" Displays an assignment and upload form."""
+	""" Displays an assignment upload form."""
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 
 	if request.method == 'POST':
 		upload_form = UploadForm(request.POST, request.FILES)
 		if upload_form.is_valid():
+			# TODO - change this to get actual user
 			user = User.objects.get(username='user1')
 			submission = Submission(
 				user=user,
@@ -63,17 +70,28 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 			 	unviewed_reviews=0,
 			)
 			submission.save()
-			directory = os.path.join( "submissions", user.username, assignment.assignment_id, str(submission.id))
+			#Directory for submission upload
+			directory = os.path.join("submissions", user.username,
+			 assignment.assignment_id, str(submission.id))
 			os.makedirs(directory)
 			submission.upload_path = directory
 			submission.save()
 
-			if request.FILES['file'].name.endswith('.zip'):
-				if is_zipfile(request.FILES['file']):
-					uploaded_file = save_zip(request.FILES['file'], submission)
+			#Check if upload is zip file and take appropriate action
+			u_file = request.FILES['file']
+			if u_file.name.endswith('.zip'):
+				if is_zipfile(u_file):
+					uploaded_file = save_zip(u_file, submission)
 				else:
-					# TODO: Deal with broken zip files
-					pass
+					return render(request, 'review/assignment.html', 
+						{
+							'assignment': assignment,
+							'upload_form': upload_form, 
+							'upload': None,
+							'submission': None,
+							'error_message': "The file '" + u_file.name + 
+							"' is not a valid Zip file."
+						})
 			else:
 				uploaded_file = save_file(request.FILES['file'], submission)
 
@@ -81,7 +99,12 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 		upload_form = UploadForm()
 
 	return render(request, 'review/assignment.html', 
-		{'assignment': assignment, 'upload_form': upload_form, 'upload': uploaded_file, 'submission': submission})
+		{
+			'assignment': assignment, 
+			'upload_form': upload_form, 
+			'upload': uploaded_file, 
+			'submission': submission,
+		})
 
 def submit_assignment(request, submission_pk):
 	""" This page gives a message to the user informaing them of a successful
@@ -154,7 +177,6 @@ def get_file_contents(path):
 	""" Returns the contents of a file as a string. """
 	with open(path, 'r') as f:
 		file_contents = f.readlines()
-	print file_contents
 	return "".join(file_contents)
 
 def save_file(upload, submission):
