@@ -59,9 +59,9 @@
 			<tr>
 				<td>
 					{{ review.assigned_submission.assignment }} <br> 
-					<a href="#"> Details &raquo;</a>
+					<a href="{% url 'assignment_description' review.assigned_submission.assignment.id %}"> Details &raquo;</a>
 				</td>
-				<td>[Enter date here :D]</td>
+				<td>{{ review.assigned_submission.assignment.review_due_date }}</td>
 				<td><a class="btn btn-success" href="{% url 'submission' review.assigned_submission.id %}">Review now</a></td>
 			</tr>
 
