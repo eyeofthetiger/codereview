@@ -179,10 +179,10 @@ div#filetree{
 }
 pre#filecontents{
   overflow: visible;
-  overflow-x: scroll;
-  word-wrap: normal;
+  word-wrap: auto;
   width: 100%;
-  background: url(../../static/review/80char.png) repeat-y left top;
+  background: url(../../static/review/80char.png) repeat-y left top local;
+  padding-bottom: 20px;
 }
 .review-buttons{
   text-align: right;
