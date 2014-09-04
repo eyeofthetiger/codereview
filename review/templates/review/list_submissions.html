@@ -1,0 +1,32 @@
+{% extends "review/base.html" %}
+{% load template_tags %}
+{% block content %}
+	<h1>{{ course }}</h1>
+	<hr/>
+	<h2>Submissions for {{ assignment }}</h2>
+
+	<table class="table table-striped">
+		<thead>
+			<th>User</th>
+			<th>Submission</th>
+			<th></th>
+			<th>Submission date</th>
+		</thead>
+		<tbody>
+		{% for student in students %}
+			<tr>
+				<td>{{ student }}</td>
+				{% if submissions|get_submission_date:student %}
+					<td><a href="{% url 'submission' submissions|get_item:student  %}">View submission</a></td>
+					<td><a href="">Download submission</a></td>
+					<td>{{ submissions|get_submission_date:student }}</td>
+				{% else %}
+					<td></td>
+					<td></td>
+					<td>No files submitted</td>
+				{% endif %}
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

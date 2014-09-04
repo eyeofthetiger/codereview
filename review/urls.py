@@ -4,6 +4,11 @@ from review import views
 
 urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
+    url(r'^choose_user/$', views.choose_user, name='choose_user'),
+    url(r'^load_student/$', views.load_student, name='load_student'),
+    url(r'^load_admin/$', views.load_admin, name='load_admin'),
+    url(r'^staff/$', views.staff, name='staff'),
+    url(r'^staff/submissions/(?P<assignment_pk>\d+)/$', views.list_submissions, name='list_submissions'),
     url(r'^(?P<assignment_pk>\d+)/$', views.assignment, name='assignment'),
     url(r'^(?P<assignment_pk>\d+)/description/$', views.assignment_description, name='assignment_description'),
     url(r'^submit/(?P<submission_pk>\d+)/$', views.submit_assignment, name='submit_assignment'),

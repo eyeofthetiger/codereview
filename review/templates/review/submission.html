@@ -98,39 +98,46 @@
 		$(document).ready( function() {
 		  $(function () { 
 		  	$('#filetree').on('changed.jstree', function (e, data) {
-				    var node = data.instance.get_node(data.selected);
-				    //Check for children. If they exist, the node is a directory.
-				    if(node.children.length == 0){
-				    	var path = "";
-					    for(var i=node.parents.length-1; i >= 0; i--){
-					    	path += node.parents[i];
-					    	path += '/';
-					    }
-					    path += node.id;
-					    data = {
-					    	path: path,
-					    	submission_id: {{ submission.id }},
-					    	csrfmiddlewaretoken: '{{ csrf_token }}'
-					    };
-					    $.ajax({
-				        type: "POST",
-				        url: "/app/get_submission_file/",
-				        data: data,
-				        success: function(data) {
-	            			$('#filecontents').text(data.file_contents);
-	            			currentSubmissionFile = data.submission_file_id;
-	            			if(is_reviewer){
-								activateAnnotator(data.submission_file_id, currentUserID);
-							}else if(activeTab != 0){
-								loadComments();
-							}
-	        			}   
-	     				}); 
-				    }else{
-				    	// If folder is selected, set text to show no file selected.
-				    	$('#filecontents').text("No file selected.");
+			    var node = data.instance.get_node(data.selected);
+			    //Check for children. If they exist, the node is a directory.
+			    if(node.children.length == 0){
+			    	var path = "";
+				    for(var i=node.parents.length-1; i >= 0; i--){
+				    	path += node.parents[i];
+				    	path += '/';
 				    }
-				  }).jstree(fileStructure)});
+				    path += node.id;
+				    data = {
+				    	path: path,
+				    	submission_id: {{ submission.id }},
+				    	csrfmiddlewaretoken: '{{ csrf_token }}'
+				    };
+				    $.ajax({
+			        type: "POST",
+			        url: "/app/get_submission_file/",
+			        data: data,
+			        success: function(data) {
+            			$('#filecontents').text(data.file_contents);
+            			currentSubmissionFile = data.submission_file_id;
+            			if(is_reviewer){
+							activateAnnotator(data.submission_file_id, currentUserID);
+						}else if(activeTab != 0){
+							loadComments();
+						}
+        			}   
+     				}); 
+			    }else{
+			    	// If folder is selected, set text to show no file selected.
+			    	$('#filecontents').text("No file selected.");
+			    }
+			  }).on('loaded.jstree', function (e, data){
+			  	loadTreeIcons();
+			  // }).on('open_node.jstree', function (e, data){
+			  // 	loadTreeIcons();
+			  }).on('close_node.jstree', function (e, data){
+			  	console.log("!");
+			  	loadTreeIcons();	
+			  }).jstree(fileStructure)});
 		});
 		
 		function activateAnnotator(submissionFileID, userID){
@@ -176,6 +183,21 @@
 				content = null;
 			}
 		}
+
+	function loadTreeIcons(){
+		console.log("go");
+		$('.jstree-themeicon-hidden').each(function() {
+			// console.log($(this).parent().parent());
+			if($(this).parent().parent().hasClass("jstree-leaf")){
+				$(this).removeClass('jstree-icon jstree-themeicon jstree-themeicon-hidden').addClass('glyphicon glyphicon-file');
+			}else if($(this).parent().parent().hasClass("jstree-closed")){
+				$(this).removeClass('jstree-icon jstree-themeicon jstree-themeicon-hidden').addClass('glyphicon glyphicon-folder-close');
+			}else{
+				$(this).removeClass('jstree-icon jstree-themeicon jstree-themeicon-hidden').addClass('glyphicon glyphicon-folder-open');
+			}
+			
+		});
+	}
 
 	</script>
 {% endblock %}

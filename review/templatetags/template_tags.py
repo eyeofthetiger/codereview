@@ -15,3 +15,13 @@ def get_range(item):
     Returns a range, indexed from 1, based on the length of the given object.
   """
   return range(1, len(item)+1)
+
+@register.filter(name='get_submission_date')
+def get_submission_date(dictionary, key):
+  """
+    Returns the submission date for a Submission in the given dictionary at the given key.
+  """
+  submission = dictionary.get(key)
+  if submission:
+  	return submission.upload_date
+  return None

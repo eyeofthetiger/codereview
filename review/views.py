@@ -7,7 +7,9 @@ import datetime
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
@@ -15,12 +17,14 @@ from review.models import Submission, SubmissionFile, Course, Assignment, UserAc
 from review.forms import UploadForm
 from review.email import send_email
 
+@login_required
 def index(request):
 	""" Displays the appropriate dashboard for the current user. """
 	# Get fake user for testing
-	user = User.objects.get(username='user1')
-	# if user.is_admin:
-	# 	return instructor_index(request)
+	user = request.user
+	# user = User.objects.get(username='user1')
+	if user.is_staff:
+		return redirect('staff')
 
 	# Get fake course for testing. This assumes that only a single course can
 	# be active at a time.
@@ -49,10 +53,33 @@ def index(request):
 
 	return render(request, 'review/index.html', context)
 
-def instructor_index(request):
-	""" Displays the appropriate dashboard for course instructors. """
-	return render("HELLO")
+@login_required
+def staff(request):
+	""" Displays the appropriate dashboard for course staff. """
+	
+	user = request.user
 
+	#Redirect if not staff
+	if not user.is_staff:
+		return redirect('index')
+
+	# Get fake course for testing. This assumes that only a single course can
+	# be active at a time.
+	course = Course.objects.get(id=1)
+	assignments = Assignment.objects.all()
+
+	context = {
+		"title": course,
+		"course": course,
+		"user": user,
+		"assignments": assignments,
+		# "submissions": submissions,
+		# "assigned_reviews": assigned_reviews
+	}
+
+	return render(request, 'review/staff.html', context)
+
+@login_required
 def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 	""" Displays an assignment upload form."""
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
@@ -60,8 +87,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 	if request.method == 'POST':
 		upload_form = UploadForm(request.POST, request.FILES)
 		if upload_form.is_valid():
-			# TODO - change this to get actual user
-			user = User.objects.get(username='user1')
+			user = request.user
 			submission = Submission(
 				user=user,
 				assignment=assignment,
@@ -106,6 +132,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 			'submission': submission,
 		})
 
+@login_required
 def submit_assignment(request, submission_pk):
 	""" This page gives a message to the user informaing them of a successful
 		submission.
@@ -115,19 +142,20 @@ def submit_assignment(request, submission_pk):
 	submission.save()
 	return render(request, 'review/submission_success.html', {'submission': submission})
 
+@login_required
 def assignment_description(request, assignment_pk):
 	""" Display the description of an assignment. """
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 	return render(request, 'review/assignment_description.html', 
 		{'title': assignment, 'assignment': assignment})
 
+@login_required
 @ensure_csrf_cookie
 def submission(request, submission_pk):
 	""" Displays the given submission. If the user is the reviewer, enables 
 		commenting. 
 	"""
-	# TODO, put proper user
-	user = User.objects.get(username='user1')
+	user = request.user
 	submission = get_object_or_404(Submission, pk=submission_pk)
 	reviews = AssignedReview.objects.filter(assigned_submission=submission, has_been_reviewed=True)
 	reviews = [{'id':r.id, 'user_id':r.assigned_user.id} for r in reviews]
@@ -143,15 +171,40 @@ def submission(request, submission_pk):
 			'file_structure': dir_json,
 			'is_owner': is_owner,
 			'reviews': reviews,
-			'user': user.id # TODO, put proper user
+			'user': user.id
 		})
+
+@login_required
+def list_submissions(request, assignment_pk):
+	""" List all submissions by students for a particular assignment. """
+	user = request.user
+	#Redirect if not staff
+	if not user.is_staff:
+		return redirect('index')
+
+	assignment = get_object_or_404(Assignment, pk=assignment_pk)
+	students = User.objects.filter(is_staff=False)
+	submissions = {}
+	for student in students:
+		student_submissions = Submission.objects.filter(user=student, assignment=assignment, has_been_submitted=True).order_by('-upload_date')
+		if len(student_submissions) == 0:
+			submissions[student] = None
+		else:
+			submissions[student] = student_submissions[0]
+	print submissions
+	context = {
+		'assignment': assignment, 
+		'submissions': submissions,
+		'students': students
+	}
+	return render(request, 'review/list_submissions.html', context)
 
 def get_directory_contents(path, parent="#"):
 	contents = []
 	for f in listdir(path):
 		new_path = os.path.join(path, f)
 		if os.path.isdir(new_path):
-			contents.append({'id':f, 'parent':parent, 'text':f})
+			contents.append({'id':f, 'parent':parent, 'text':f, 'icon':False})
 			contents += (get_directory_contents(new_path, f))
 		else:
 			contents.append({'id':f, 'parent':parent, 'text':f, 'icon':False})
@@ -292,8 +345,7 @@ def api_read(request, comment_pk):
 		comment.delete()
 		return HttpResponse(status=204)
 	else:
-		#TODO - Get actual user, this is just fake	
-		user = User.objects.get(username='user1')
+		user = request.user
 		response = format_annotation(user, comment)
 		return HttpResponse(json.dumps(response), content_type="application/json")
 
@@ -310,6 +362,24 @@ def format_annotation(user, comment):
 		"user": user.id,
 	}
 
+# 
+# THE BELOW FUNCTIONS ARE JUST FOR TESTING AND WILL BE REMOVED IN THE FINAL SYSTEM
+# 
+
+@csrf_exempt
+def choose_user(request):
+	return render(request, 'review/login.html')
+
+def load_admin(request):
+	user = authenticate(username='admin', password='admin')
+	login(request, user)
+	return redirect('index')
+
+def load_student(request):
+	user = authenticate(username='user1', password='user1')
+	login(request, user)
+	return redirect('index')
+
 def reset_test_database(request):
 	now = timezone.now()
 	just_before = timezone.now() - datetime.timedelta(seconds=10)
@@ -318,7 +388,7 @@ def reset_test_database(request):
 	just_after = timezone.now() + datetime.timedelta(seconds=10)
 	after = timezone.now() + datetime.timedelta(days=1)
 	long_after = timezone.now() + datetime.timedelta(days=30)
-	user1 = User(username="user1")
+	user1 = User(username="user1", password="USER1")
 	user1.save()
 	user2 = User(username="user2")
 	user2.save()

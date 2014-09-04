@@ -1,0 +1,30 @@
+{% extends "review/base.html" %}
+{% load template_tags %}
+{% block content %}
+	<h1>{{ course }}</h1>
+	<hr/>
+	<h2>Assignments</h2>
+
+	<table class="table table-striped">
+		<thead>
+			<th>Assignment</th>
+			<th>Status</th>
+			<th>Due date</th>
+			<th>Submissions</th>
+		</thead>
+		<tbody>
+			{% for assignment in assignments %}
+			<tr>
+				<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td> 
+				{% if assignment.due_date_passed == True %}
+					<td><p class="status alert bg-danger">Closed</p></td>
+				{% else %}
+					<td><p class="status alert bg-success">Open</p></td>
+				{% endif %}
+				<td>{{ assignment.due_date }}</td>
+				<td><a href="{% url 'list_submissions' assignment.id %}">View Submissions</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

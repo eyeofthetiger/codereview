@@ -3,7 +3,11 @@
 	<p><a class="btn btn-default" href="/">&laquo; back</a></p>
 	<h1>{{ assignment.name }}</h1>
 
-	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+	<div class="alert alert-danger" role="alert">
+		{% if error_message %}
+			<p><strong>{{ error_message }}</strong></p>
+		{% endif %}
+	</div>
 	<hr>
 	<h2>File Upload</h2>
 
