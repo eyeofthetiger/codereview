@@ -16,7 +16,6 @@
 	{% if is_owner %}
 		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
 
-		
 	<hr/>
 
 		<div class="row">
@@ -36,9 +35,9 @@
 		</div>
 		<br>
 
-	{% endif %}	
-
-	{% if not is_owner %}
+	{% elif user.is_staff %}	
+		<h1>Viewing submission for {{ submission.assignment.name }} from {{ submission.user }}</h1>
+	{% else %}
 		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
 
 	<hr/>
@@ -55,7 +54,7 @@
         </div>
     </div>
 
-	{% if not is_owner %}
+	{% if not is_owner and not user.is_staff %}
 		<div class="row">
 			<div class="review-buttons">
 			  <button type="button" class="btn btn-default">Save</button>
@@ -73,7 +72,7 @@
 	<script src='{% static "review/annotator-full.min.js" %}'></script>
 	<script type="text/javascript">
 		//TODO - This is a fake user
-		var currentUserID = {{ user }};
+		var currentUserID = {{ user.id }};
 		var currentSubmissionFile;
 
 		var content;

@@ -171,7 +171,7 @@ def submission(request, submission_pk):
 			'file_structure': dir_json,
 			'is_owner': is_owner,
 			'reviews': reviews,
-			'user': user.id
+			'user': user
 		})
 
 @login_required
@@ -191,7 +191,6 @@ def list_submissions(request, assignment_pk):
 			submissions[student] = None
 		else:
 			submissions[student] = student_submissions[0]
-	print submissions
 	context = {
 		'assignment': assignment, 
 		'submissions': submissions,
