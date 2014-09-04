@@ -175,9 +175,12 @@ p.glyphicon{
 }
 div#filetree{
   margin-bottom: 10px;
+  overflow-x: scroll;
 }
 pre#filecontents{
   overflow: visible;
+  overflow-x: scroll;
+  word-wrap: normal;
   width: 100%;
   background: url(../../static/review/80char.png) repeat-y left top;
 }
