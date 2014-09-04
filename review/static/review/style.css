@@ -182,7 +182,7 @@ pre#filecontents{
   overflow-x: scroll;
   word-wrap: normal;
   width: 100%;
-  background: url(../../static/review/80char.png) repeat-y left top;
+  background: url(../../static/review/80char.png) repeat-y left top local;
 }
 .review-buttons{
   text-align: right;
