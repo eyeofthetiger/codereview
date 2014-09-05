@@ -53,7 +53,8 @@ class Assignment(models.Model):
 		return self.due_date < timezone.now()
 
 	def get_submission(self, user):
-		submissions = Submission.objects.filter(user=user, assignment=self, has_been_submitted=True).order_by('-upload_date')
+		submissions = Submission.objects.filter(user=user, assignment=self,
+		 has_been_submitted=True).order_by('-upload_date')
 		if len(submissions) > 0:
 			return submissions[0]
 		return
@@ -92,7 +93,9 @@ class AssignedReview(models.Model):
 		str(self.assigned_submission)
 
 class EmailPreferences(models.Model):
-	""" Individual preferences of when a user would like to receive email alerts. """
+	""" Individual preferences of when a user would like to receive email 
+		alerts.
+	"""
 	user = models.ForeignKey(User)
 	on_upload = models.BooleanField(default=False)
 	on_submission = models.BooleanField(default=True)

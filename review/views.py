@@ -140,7 +140,8 @@ def submit_assignment(request, submission_pk):
 	submission = get_object_or_404(Submission, pk=submission_pk)
 	submission.has_been_submitted = True
 	submission.save()
-	return render(request, 'review/submission_success.html', {'submission': submission})
+	return render(request, 'review/submission_success.html',
+	 {'title': submission + " uploaded", 'submission': submission})
 
 @login_required
 def assignment_description(request, assignment_pk):
@@ -157,14 +158,20 @@ def submission(request, submission_pk):
 	"""
 	user = request.user
 	submission = get_object_or_404(Submission, pk=submission_pk)
-	reviews = AssignedReview.objects.filter(assigned_submission=submission, has_been_reviewed=True)
+	reviews = AssignedReview.objects.filter(
+		assigned_submission=submission, has_been_reviewed=True)
 	reviews = [{'id':r.id, 'user_id':r.assigned_user.id} for r in reviews]
 	comments = {}
 	is_owner = (submission.user == user)
 	if not is_owner and not is_allowed_to_review(user, submission):
 		print "TODO: deal with unauthorised access of submissions"
 	files = SubmissionFile.objects.filter(submission=submission)
-	dir_json = json.dumps({'core':{"multiple" : False,'data':get_directory_contents(submission.upload_path)}})
+	dir_json = json.dumps(
+		{'core':{
+			"multiple" : False,
+			'data':get_directory_contents(submission.upload_path)
+		}
+	})
 	return render(request, 'review/submission.html', {
 			'submission': submission, 
 			'files': files, 
@@ -186,7 +193,11 @@ def list_submissions(request, assignment_pk):
 	students = User.objects.filter(is_staff=False)
 	submissions = {}
 	for student in students:
-		student_submissions = Submission.objects.filter(user=student, assignment=assignment, has_been_submitted=True).order_by('-upload_date')
+		student_submissions = Submission.objects.filter(
+			user=student, 
+			assignment=assignment, 
+			has_been_submitted=True
+		).order_by('-upload_date')
 		if len(student_submissions) == 0:
 			submissions[student] = None
 		else:
@@ -199,6 +210,7 @@ def list_submissions(request, assignment_pk):
 	return render(request, 'review/list_submissions.html', context)
 
 def get_directory_contents(path, parent="#"):
+	""" Gets the contents of a directory and returns it as a list. """
 	contents = []
 	for f in listdir(path):
 		new_path = os.path.join(path, f)
@@ -216,10 +228,12 @@ def get_submission_file(request):
 	"""
 	response = {}
 	if request.is_ajax():
-		path = request.POST.get("path")[1:] #Removes the '#' from the start of the path
+		#[1:] Removes the '#' from the start of the path
+		path = request.POST.get("path")[1:]
 		submission_id = int(request.POST.get("submission_id"))
 		submission = Submission.objects.get(id=submission_id)
-		submissionFile = SubmissionFile.objects.filter(submission=submission, file_path=path[1:])
+		submissionFile = SubmissionFile.objects.filter(
+			submission=submission, file_path=path[1:])
 		path = submission.upload_path + path
 		response['submission_file_id'] = submissionFile[0].id
 	response['file_contents'] = get_file_contents(path)
@@ -239,7 +253,8 @@ def save_file(upload, submission):
 	path = os.path.join(submission.upload_path, upload.name)
 	with open(path, "w") as f:
 		f.write(upload.read())
-	submission_file = SubmissionFile(submission=submission, file_path=upload.name)
+	submission_file = SubmissionFile(
+		submission=submission, file_path=upload.name)
 	submission_file.save()
 	return upload.name
 
@@ -258,6 +273,7 @@ def is_valid_file(file_path):
 	""" Returns false if it is an invalid file (e.g. *.pyc), or in an invalid
 		folder (e.g. /.git/). Returns true otherwise.
 	"""
+	#TODO - build up larger list of files/folders to ignore
 	invalid_dirs = ['__MACOSX','.git']
 	file_path = os.path.normpath(file_path) #Normalise path
 	path_list = file_path.split(os.sep)
@@ -271,10 +287,17 @@ def is_allowed_to_review(user, submission):
 	""" Returns true if the given user is allowed to review the given submission
 		and they haven't already reviewed it. Returns false otherwise.
 	"""
-	assigned_review = AssignedReview.objects.filter(assigned_user=user, assigned_submission=submission, has_been_reviewed=False)
+	assigned_review = AssignedReview.objects.filter(assigned_user=user,
+	 assigned_submission=submission, has_been_reviewed=False)
 	if len(assigned_review) > 0:
 		return True
 	return False
+
+def download_submission(submission_pk):
+	""" Returns the given submission as a zip file for download. """
+	# TODO
+	submission = get_object_or_404(Submission, pk=submission_pk)
+
 
 def api_root(request):
 	""" Returns information about the annotator API. """
@@ -290,7 +313,8 @@ def api_index(request):
 		#Save comment
 		comment_data = json.loads(request.body)
 		submission_file_pk, user_pk = comment_data['uri'].split("+")
-		submission_file = get_object_or_404(SubmissionFile, pk = submission_file_pk)
+		submission_file = get_object_or_404(
+			SubmissionFile, pk = submission_file_pk)
 		user = get_object_or_404(User, pk = user_pk)
 		comment = Comment(
 			commenter = user, 
@@ -319,7 +343,8 @@ def api_search(request):
 	submission_file_pk, user_pk = request.GET['uri'].split("+")
 	submission_file = get_object_or_404(SubmissionFile, pk = submission_file_pk)
 	user = get_object_or_404(User, pk = user_pk)
-	comments = Comment.objects.filter(commenter=user, commented_file=submission_file)
+	comments = Comment.objects.filter(
+		commenter=user, commented_file=submission_file)
 	rows = [format_annotation(user, comment) for comment in comments]
 	response = {'total':len(rows), 'rows':rows}
 	return HttpResponse(json.dumps(response), content_type="application/json")
@@ -352,7 +377,13 @@ def format_annotation(user, comment):
 	""" Returns a comment in a format acceptable form AnnotatorJS. """
 	#TODO - Might be missing some components need by AnnotatorJS
 	comment_ranges = CommentRange.objects.filter(comment=comment)
-	ranges = [{"start":r.start, "end":r.end, "startOffset":r.startOffset, "endOffset":r.endOffset} for r in comment_ranges]
+	ranges = [
+		{
+			"start":r.start, 
+			"end":r.end, 
+			"startOffset":r.startOffset, 
+			"endOffset":r.endOffset
+		} for r in comment_ranges]
 	return {
 		"id": comment.id,
 		"text": comment.comment,
@@ -361,25 +392,30 @@ def format_annotation(user, comment):
 		"user": user.id,
 	}
 
-# 
-# THE BELOW FUNCTIONS ARE JUST FOR TESTING AND WILL BE REMOVED IN THE FINAL SYSTEM
-# 
-
+####################################################################################
+# 																				   #
+# THE BELOW FUNCTIONS ARE JUST FOR TESTING AND WILL BE REMOVED IN THE FINAL SYSTEM #
+# 																				   #
+####################################################################################
 @csrf_exempt
 def choose_user(request):
+	""" Loads the page for selecting a user. """
 	return render(request, 'review/login.html')
 
 def load_admin(request):
+	""" Changes the user to account to be a staff member. """
 	user = authenticate(username='admin', password='admin')
 	login(request, user)
 	return redirect('index')
 
 def load_student(request):
+	""" Changes the user to account to be a student. """
 	user = authenticate(username='user1', password='user1')
 	login(request, user)
 	return redirect('index')
 
 def reset_test_database(request):
+	""" Loads a database with fake data for testing. """
 	now = timezone.now()
 	just_before = timezone.now() - datetime.timedelta(seconds=10)
 	before = timezone.now() - datetime.timedelta(days=1)
@@ -492,7 +528,8 @@ def reset_test_database(request):
 	sf1 = SubmissionFile(submission=submission1, file_path="email.py")
 	sf1.save()
 
-	assigned_review3 = AssignedReview(assigned_user=user1, assigned_submission=submission1, has_been_reviewed=False)
+	assigned_review3 = AssignedReview(assigned_user=user1, 
+		assigned_submission=submission1, has_been_reviewed=False)
 	assigned_review3.save()
 
 	submission2 = Submission(
