@@ -3,6 +3,9 @@
 {% block content %}
 	<h1>{{ course }}</h1>
 	<hr/>
+
+	<p><a href="{% url 'add_assignment' %}">Add assignment</a></p>
+
 	<h2>Assignments</h2>
 
 	<table class="table table-striped">
@@ -23,6 +26,7 @@
 				{% endif %}
 				<td>{{ assignment.due_date }}</td>
 				<td><a href="{% url 'list_submissions' assignment.id %}">View Submissions</a></td>
+				<td><a href="{% url 'edit_assignment' assignment.id %}"> Edit &raquo;</a></td> 
 			</tr>
 			{% endfor %}
 		</tbody>

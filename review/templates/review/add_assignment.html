@@ -1,0 +1,19 @@
+{% extends "review/base.html" %}
+{% block content %}
+	<p><a class="btn btn-default" href="{% url 'staff' %}">&laquo; back</a></p>
+	<h1>Create an Assignment</h1>
+
+	{% if error_message %}
+	<div class="alert alert-danger" role="alert">
+			<p><strong>{{ error_message }}</strong></p>
+	</div>
+	{% endif %}
+
+	<form method="post" enctype="multipart/form-data">
+	    {% csrf_token %}
+	    {{ form.as_p }}
+		<input type="submit" value="Save" />
+	</form>
+	
+
+{% endblock %}

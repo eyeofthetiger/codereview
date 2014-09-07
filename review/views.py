@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange, EmailPreferences
-from review.forms import UploadForm
+from review.forms import UploadForm, AssignmentEditForm, AssignmentForm
 from review.email import send_email
 
 @login_required
@@ -208,6 +208,73 @@ def list_submissions(request, assignment_pk):
 		'students': students
 	}
 	return render(request, 'review/list_submissions.html', context)
+
+@login_required
+def edit_assignment(request, assignment_pk):
+	""" Displays the settings of an assignment and allows the user to edit them 
+		if they have the authority.
+	"""
+	user = request.user
+	#Redirect if not staff
+	if not user.is_staff:
+		return redirect('index')
+
+	assignment = get_object_or_404(Assignment, pk=assignment_pk)
+
+	if request.method == 'POST':
+		form = AssignmentEditForm(request.POST)
+		if form.is_valid():
+			assignment.name = form.data['name']
+			assignment.description = form.data['description']
+			assignment.open_date = form.data['open_date']
+			assignment.due_date = form.data['due_date']
+			assignment.modified_date = timezone.now()
+			assignment.save()
+		return redirect('staff')
+	else:
+		form = AssignmentEditForm(instance=assignment)
+
+	context = { 'assignment': assignment, 'form': form}
+	return render(request, 'review/edit_assignment.html', context)
+
+@login_required
+def add_assignment(request):
+	""" Displays a page with a form for the creation of a new assignment by 
+		the course staff.
+	"""
+	user = request.user
+	#Redirect if not staff
+	if not user.is_staff:
+		return redirect('index')
+
+	if request.method == 'POST':
+		form = AssignmentForm(request.POST)
+		print form.is_valid()
+		if form.is_valid():
+			assignment = Assignment(
+				assignment_id=form.data['assignment_id'], 
+				name=form.data['name'], 
+				create_date=timezone.now(), 
+				modified_date=timezone.now(), 
+				open_date=form.data['open_date'], 
+				due_date=form.data['due_date'], 
+				description=form.data['description'],
+				number_of_peer_reviews=form.data['number_of_peer_reviews'],
+				review_open_date=form.data['review_open_date'],
+				review_due_date=form.data['review_due_date'],
+				weighting=form.data['weighting'],	
+			)
+			# Get booleans. If false they aren't in the form dict.
+			assignment.test_required = form.data.get('test_required', False)
+			assignment.has_tests = form.data.get('has_tests', False)
+			assignment.allow_multiple_uploads = form.data.get('allow_multiple_uploads', False)
+			assignment.allow_help_centre = form.data.get('allow_help_centre', False)
+			assignment.save()
+		return redirect('staff')
+	else:
+		form = AssignmentForm()
+
+	return render(request, 'review/add_assignment.html', {'form':form})
 
 def get_directory_contents(path, parent="#"):
 	""" Gets the contents of a directory and returns it as a list. """
