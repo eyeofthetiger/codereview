@@ -181,7 +181,7 @@ pre#filecontents{
   overflow: visible;
   word-wrap: auto;
   width: 100%;
-  background: url(../../static/review/80char.png) repeat-y left top local;
+  background: url(../../static/review/images/80char.png) repeat-y left top local;
   padding-bottom: 20px;
 }
 .review-buttons{
