@@ -1,7 +1,8 @@
 {% extends "review/base.html" %}
 {% block content %}
 	<p><a class="btn btn-default" href="{% url 'staff' %}">&laquo; back</a></p>
-	<h1>{{ assignment.name }}</h1>
+	<h1>Edit: {{ assignment.name }}</h1>
+	<hr/>
 
 	{% if error_message %}
 	<div class="alert alert-danger" role="alert">
@@ -10,9 +11,11 @@
 	{% endif %}
 
 	<form method="post" enctype="multipart/form-data">
-	    {% csrf_token %}
-	    {{ form.as_p }}
-		<input type="submit" value="Save" />
+		<div class="form-group">
+		    {% csrf_token %}
+		    {{ form.as_p }}
+			<input type="submit" value="Save" />
+		</div>
 	</form>
 	
 

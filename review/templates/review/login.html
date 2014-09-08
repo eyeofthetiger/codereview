@@ -1,6 +1,17 @@
 {% extends "review/base.html" %}
 
 {% block content %}
-	<a href="/app/load_admin/" id="admin">Admin</a>
-	<a href="/app/load_student/" id="student">Student</a>
+	<h1>Select user</h1>
+	<hr>
+	<p>Start using ENKIDU as:</p><br>
+	<p>
+			<a class="btn btn-primary" href="/app/load_admin/" id="admin">
+				<span class="glyphicon glyphicon-user"></span> Admin
+			</a>
+		 
+			<a class="btn btn-primary" href="/app/load_student/" id="student">
+				<span class="glyphicon glyphicon-user"></span> Student
+			</a>
+		</p>
+	
 {% endblock %}

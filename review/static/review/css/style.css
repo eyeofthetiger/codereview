@@ -106,7 +106,10 @@ header .container{
   padding: 20px 0;
   margin-bottom: 20px;
 }
-
+.temporal{
+  float: right;
+  padding-top: 5px; 
+}
 /*
 // END: BASE - PAGE STYLES
 // -------------------------------------------------- */
@@ -149,6 +152,16 @@ p.status{
   margin-left: 20px;
   margin-top: 20px;
 }
+
+.form-group p label{
+  display: block;
+  margin-top: 15px;
+}
+
+.form-group p input[type="text"], .form-group p textarea{
+  width: 40%;
+}
+
 
 /*
 // END: ASSIGNMENT - PAGE STYLES
