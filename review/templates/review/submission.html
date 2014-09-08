@@ -50,7 +50,7 @@
             <div id="filetree"></div>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-			 <pre id="filecontents">No file selected.</pre>
+			 <pre id="filecontents">No file selected. Please select a file from the left.</pre>
         </div>
     </div>
 
@@ -127,7 +127,7 @@
      				}); 
 			    }else{
 			    	// If folder is selected, set text to show no file selected.
-			    	$('#filecontents').text("No file selected.");
+			    	$('#filecontents').text("No file selected. Please select a file from the left");
 			    }
 			  }).on('loaded.jstree', function (e, data){
 			  	loadTreeIcons();

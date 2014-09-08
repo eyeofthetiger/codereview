@@ -1,6 +1,7 @@
 {% extends "review/base.html" %}
 {% load template_tags %}
 {% block content %}
+	<p><a class="btn btn-default" href="{% url 'staff' %}">&laquo; back</a></p>
 	<h1>{{ course }}</h1>
 	<hr/>
 	<h2>Submissions for {{ assignment }}</h2>

@@ -141,7 +141,7 @@ def submit_assignment(request, submission_pk):
 	submission.has_been_submitted = True
 	submission.save()
 	return render(request, 'review/submission_success.html',
-	 {'title': submission + " uploaded", 'submission': submission})
+	 {'title': submission.assignment.name + " uploaded", 'submission': submission})
 
 @login_required
 def assignment_description(request, assignment_pk):
@@ -189,6 +189,7 @@ def list_submissions(request, assignment_pk):
 	if not user.is_staff:
 		return redirect('index')
 
+	course = Course.objects.get(id=1)
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 	students = User.objects.filter(is_staff=False)
 	submissions = {}
@@ -205,7 +206,8 @@ def list_submissions(request, assignment_pk):
 	context = {
 		'assignment': assignment, 
 		'submissions': submissions,
-		'students': students
+		'students': students,
+		'course': course,
 	}
 	return render(request, 'review/list_submissions.html', context)
 
@@ -275,6 +277,18 @@ def add_assignment(request):
 		form = AssignmentForm()
 
 	return render(request, 'review/add_assignment.html', {'form':form})
+
+@login_required
+def download(request):
+	""" Downloads the sumbission represented by the given primary key. The
+		submission is packaged in a zip file.
+	"""
+	user = request.user
+	#Redirect if not staff
+	if not user.is_staff:
+		return redirect('index')
+
+
 
 def get_directory_contents(path, parent="#"):
 	""" Gets the contents of a directory and returns it as a list. """
