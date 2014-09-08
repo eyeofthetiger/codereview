@@ -91,3 +91,7 @@ EMAIL_HOST = ''
 EMAIL_PORT = None
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
+
+# Login settings
+
+LOGIN_URL = '/app/choose_user'
