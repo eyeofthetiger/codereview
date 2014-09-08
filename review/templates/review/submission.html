@@ -3,8 +3,8 @@
 {% load template_tags %}
 
 {% block css %}
-	<link rel="stylesheet" href="{% static 'review/jstree.min.css' %}" />
-	<link rel="stylesheet" href='{% static "review/annotator.min.css" %}'>
+	<link rel="stylesheet" href="{% static 'review/css/jstree.min.css' %}" />
+	<link rel="stylesheet" href='{% static "review/css/annotator.min.css" %}'>
 {% endblock %}
 
 
@@ -68,8 +68,8 @@
 {% endblock %}
 
 {% block jsEnd %}
-	<script src="{% static 'review/jstree.min.js' %}"></script>
-	<script src='{% static "review/annotator-full.min.js" %}'></script>
+	<script src="{% static 'review/js/jstree.min.js' %}"></script>
+	<script src='{% static "review/js/annotator-full.min.js" %}'></script>
 	<script type="text/javascript">
 		//TODO - This is a fake user
 		var currentUserID = {{ user.id }};
