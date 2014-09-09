@@ -80,7 +80,8 @@
 		var activeTab = "0"; //0 represents original, other numbers represent the reviews
 		var reviews = {{ reviews|safe }};
 		var fileStructure = {{ file_structure|safe }};
-		var is_reviewer = ! {{ is_owner|yesno:"true,false" }};
+		var isReviewer = ! {{ is_owner|yesno:"true,false" }};
+		var isStaff = {{ user.is_staff|yesno:"true,false" }};
 
 		$('.submission-tab').click(function(){
 			var clickedTab = $(this).data('id')
@@ -118,7 +119,7 @@
 			        success: function(data) {
             			$('#filecontents').text(data.file_contents);
             			currentSubmissionFile = data.submission_file_id;
-            			if(is_reviewer){
+            			if(isReviewer && !isStaff){
 							activateAnnotator(data.submission_file_id, currentUserID);
 						}else if(activeTab != 0){
 							loadComments();
@@ -145,7 +146,7 @@
 			clearComments();
 
 			//Set annoations as read only if not a reviewer.
-			if(!is_reviewer){
+			if(!is_reviewer || is_staff){
 				content = $('#filecontents').annotator({readOnly: true});
 			}else{
 				content = $('#filecontents').annotator();

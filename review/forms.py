@@ -8,7 +8,21 @@ class AssignmentEditForm(forms.ModelForm):
 	""" A form for editing an assignment after it has been created. """
 	class Meta:
 		model = Assignment
-		fields = ['name', 'description', 'open_date', 'due_date']
+		fields = [
+			'assignment_id',
+			'name', 
+			'description', 
+			'open_date', 
+			'due_date',
+			'allow_multiple_uploads', 
+			'allow_help_centre',
+			'number_of_peer_reviews',
+			'review_open_date',
+			'review_due_date',
+			'weighting',
+			'has_tests',
+			'test_required',
+		]
 
 class AssignmentForm(forms.ModelForm):
 	""" A form for the creation of an assignment. """
