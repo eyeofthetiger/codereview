@@ -4,6 +4,13 @@ from review.models import Assignment
 class UploadForm(forms.Form):
 	file = forms.FileField(label='Select a file')
 
+class QuestionForm(forms.Form):
+	title = forms.CharField(label='Title')
+	text = forms.CharField(label='Question', widget=forms.Textarea)
+
+class ResponseForm(forms.Form):
+	text = forms.CharField(label='Response', widget=forms.Textarea)
+
 class AssignmentEditForm(forms.ModelForm):
 	""" A form for editing an assignment after it has been created. """
 	class Meta:

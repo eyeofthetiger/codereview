@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
-from review.forms import UploadForm, AssignmentEditForm, AssignmentForm
+from review.forms import UploadForm, AssignmentEditForm, AssignmentForm, QuestionForm, ResponseForm
 from review.email import send_email
 
 @login_required
@@ -296,6 +296,54 @@ def download(request, submission_pk):
 	response = HttpResponse(download, mimetype='application/zip')
 	response['Content-Disposition'] = 'attachment; filename=' + download_path
 	return response
+
+@login_required
+def add_question(request):
+	user = request.user
+
+	if request.method == 'POST':
+		form = QuestionForm(request.POST)
+		if form.is_valid():
+			question = Question(
+				user=user,
+				title=form.data['title'], 
+				text=form.data['text'], 
+				create_date=timezone.now(), 
+				modified_date=timezone.now(),
+			)
+			question.save()
+		return redirect('index')
+	else:
+		form = QuestionForm()
+
+	return render(request, 'review/add_question.html', {'form':form})
+
+@login_required
+def question(request, question_pk):
+	user = request.user
+	question = get_object_or_404(Question, pk = question_pk)
+	responses = Response.objects.filter(question=question)
+	if request.method == 'POST':
+		form = ResponseForm(request.POST)
+		if form.is_valid():
+			response = Response(
+				user=user,
+				question=question,
+				text=form.data['text'], 
+				create_date=timezone.now(), 
+				modified_date=timezone.now(),
+			)
+			response.save()
+		return redirect('question', question.id)
+	else:
+		form = ResponseForm()
+		context = {
+			'form': form,
+			'question': question,
+			'responses': responses
+		}
+
+	return render(request, 'review/question.html', context)
 
 def zip_submission(submission):
 	""" Receives a Submission object, get all the files of the submission and 
@@ -660,7 +708,8 @@ def reset_test_database(request):
 
 	question1 = Question(
 		user = user4,
-		text = "Why is the sky blue?",
+		title = "Why is the sky blue?",
+		text = "Tell me why.",
 		create_date = long_before,
 		modified_date = just_before,
 	)
@@ -668,7 +717,8 @@ def reset_test_database(request):
 
 	question2 = Question(
 		user = user4,
-		text = "Why did the chicken cross the road?",
+		title = "Why did the chicken cross the road?",
+		text = "Bacon ipsum dolor sit amet short loin jowl swine.",
 		create_date = long_before,
 		modified_date = long_before,
 	)

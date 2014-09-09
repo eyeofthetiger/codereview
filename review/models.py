@@ -131,6 +131,7 @@ class CommentTag(models.Model):
 class Question(models.Model):
 	""" A question posted by a user. """
 	user = models.ForeignKey(User)
+	title = models.CharField(max_length=140)
 	text = models.TextField()
 	create_date = models.DateTimeField()
 	modified_date = models.DateTimeField()

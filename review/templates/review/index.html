@@ -70,7 +70,7 @@
 
 	<hr/>
 	<h2>Forum</h2>
-
+	<p><a class="btn btn-default" href="{% url 'add_question' %}"><span class="glyphicon glyphicon-plus"></span> Ask a question</a></p>
 	<table class="table table-striped">
 		<thead>
 			<th>Question</th>
@@ -79,7 +79,7 @@
 		<tbody>
 			{% for question in questions %}
 			<tr>
-				<td>{{ question.text }}</td>
+				<td><a href="{% url 'question' question.id %}">{{ question.title }}</a></td>
 				<td>{{ question.create_date }}</td>
 			</tr>
 			{% endfor %}

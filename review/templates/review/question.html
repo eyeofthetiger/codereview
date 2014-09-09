@@ -1,0 +1,27 @@
+{% extends "review/base.html" %}
+{% block content %}
+	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
+	<h1>{{ question.title }}</h1>
+	<hr>
+
+	{% if error_message %}
+	<div class="alert alert-danger" role="alert">
+			<p><strong>{{ error_message }}</strong></p>
+	</div>
+	{% endif %}
+
+	{% for response in responses %}
+		<p>{{ response.text }}</p>
+		<hr />
+	{% endfor %}
+
+	<form method="post" enctype="multipart/form-data">
+		<div class="form-group">
+		    {% csrf_token %}
+		    {{ form.as_p }}
+			<input type="submit" value="Post" />
+		</div>
+	</form>
+	
+
+{% endblock %}
