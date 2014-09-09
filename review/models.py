@@ -127,3 +127,18 @@ class CommentTag(models.Model):
 	""" A tag for a given Comment. """
 	comment = models.ForeignKey(Comment)
 	tag = models.TextField()
+
+class Question(models.Model):
+	""" A question posted by a user. """
+	user = models.ForeignKey(User)
+	text = models.TextField()
+	create_date = models.DateTimeField()
+	modified_date = models.DateTimeField()
+
+class Response(models.Model):
+	""" A response to a question posted by a user. """
+	user = models.ForeignKey(User)
+	question = models.ForeignKey(Question)
+	text = models.TextField()
+	create_date = models.DateTimeField()
+	modified_date = models.DateTimeField()

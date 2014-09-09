@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
-from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange, EmailPreferences
+from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
 from review.forms import UploadForm, AssignmentEditForm, AssignmentForm
 from review.email import send_email
 
@@ -41,6 +41,8 @@ def index(request):
 			submissions[assignment.id] = submission
 	# Get all assigned reviews for the user
 	assigned_reviews = AssignedReview.objects.filter(assigned_user=user)
+	# Get all questions for forum
+	questions = Question.objects.order_by('create_date')
 
 	context = {
 		"title": course,
@@ -48,7 +50,8 @@ def index(request):
 		"user": user,
 		"assignments": assignments,
 		"submissions": submissions,
-		"assigned_reviews": assigned_reviews
+		"assigned_reviews": assigned_reviews,
+		"questions": questions
 	}
 
 	return render(request, 'review/index.html', context)
@@ -654,5 +657,39 @@ def reset_test_database(request):
 
 	sf3 = SubmissionFile(submission=submission3, file_path="email.py")
 	sf3.save()
+
+	question1 = Question(
+		user = user4,
+		text = "Why is the sky blue?",
+		create_date = long_before,
+		modified_date = just_before,
+	)
+	question1.save()
+
+	question2 = Question(
+		user = user4,
+		text = "Why did the chicken cross the road?",
+		create_date = long_before,
+		modified_date = long_before,
+	)
+	question2.save()
+
+	answer1 = Response(
+		user = user2,
+		question = question2,
+		text = "Just because.",
+		create_date = before,
+		modified_date = before,
+	)
+	answer1.save()
+
+	answer2 = Response(
+		user = user2,
+		question = question2,
+		text = "Egg.",
+		create_date = before,
+		modified_date = before,
+	)
+	answer2.save()
 
 	return redirect('index')
