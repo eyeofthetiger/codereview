@@ -279,7 +279,7 @@ def add_assignment(request):
 	return render(request, 'review/add_assignment.html', {'form':form})
 
 @login_required
-def download(request):
+def download(request, submission_pk):
 	""" Downloads the sumbission represented by the given primary key. The
 		submission is packaged in a zip file.
 	"""
@@ -287,8 +287,26 @@ def download(request):
 	#Redirect if not staff
 	if not user.is_staff:
 		return redirect('index')
+	submission = get_object_or_404(Submission, pk=submission_pk)
+	download_path = zip_submission(submission)
+	download = open(download_path, 'r')
+	response = HttpResponse(download, mimetype='application/zip')
+	response['Content-Disposition'] = 'attachment; filename=' + download_path
+	return response
 
-
+def zip_submission(submission):
+	""" Receives a Submission object, get all the files of the submission and 
+		puts them as a zip file retaining the original structure of the
+		submission. The path to the zip file is then returned.
+	"""
+	if not os.path.isdir(os.path.join('temp', 'downloads')):
+		os.makedirs(os.path.join('temp', 'downloads'))
+	submission_files = SubmissionFile.objects.filter(submission=submission)
+	zip_path = os.path.join('temp', 'downloads', (str(timezone.now()) + ".zip"))
+	with ZipFile(zip_path, 'w') as zipfile:
+		for f in submission_files:
+			zipfile.write(os.path.join(submission.upload_path, f.file_path), f.file_path)
+	return zip_path
 
 def get_directory_contents(path, parent="#"):
 	""" Gets the contents of a directory and returns it as a list. """
@@ -373,12 +391,6 @@ def is_allowed_to_review(user, submission):
 	if len(assigned_review) > 0:
 		return True
 	return False
-
-def download_submission(submission_pk):
-	""" Returns the given submission as a zip file for download. """
-	# TODO
-	submission = get_object_or_404(Submission, pk=submission_pk)
-
 
 def api_root(request):
 	""" Returns information about the annotator API. """

@@ -19,7 +19,7 @@
 				<td>{{ student }}</td>
 				{% if submissions|get_submission_date:student %}
 					<td><a href="{% url 'submission' submissions|get_item:student  %}">View submission</a></td>
-					<td><a href="">Download submission</a></td>
+					<td><a href="{% url 'download' submissions|get_submission_id:student  %}">Download submission</a></td>
 					<td>{{ submissions|get_submission_date:student }}</td>
 				{% else %}
 					<td></td>

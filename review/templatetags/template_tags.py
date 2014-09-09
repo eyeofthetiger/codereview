@@ -25,3 +25,13 @@ def get_submission_date(dictionary, key):
   if submission:
   	return submission.upload_date
   return None
+
+@register.filter(name='get_submission_id')
+def get_submission_id(dictionary, key):
+  """
+    Returns the submission id for a Submission in the given dictionary at the given key.
+  """
+  submission = dictionary.get(key)
+  if submission:
+    return submission.id
+  return None
