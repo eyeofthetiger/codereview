@@ -19,8 +19,15 @@
 	<hr/>
 
 		<div class="row">
-			<div class="col-lg-3 col-md-3 col-sm-3"></div>
+			<div class="col-lg-3 col-md-3 col-sm-3">
+
+        	<p class='instructions'><span>1</span> Select a file from the list</p>
+        	
+			</div>
 			<div class="col-lg-9 col-md-9 col-sm-9">
+
+        	<p class='instructions'><span>2</span> Display the original code and the reviewed versions. Highlighted code shows comments from users.</p>
+        
 				<ul class="nav nav-tabs" role="tablist">
 				    <li class="active submission-tab" data-id="0">
 				    	<a href="#" role="tab" data-toggle="tab">Original</a>
@@ -39,18 +46,31 @@
 		<h1>Viewing submission for {{ submission.assignment.name }} from {{ submission.user }}</h1>
 	{% else %}
 		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
+<hr/>
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3">
 
-	<hr/>
+        	<p class='instructions'><span>1</span> Select a file from the list</p>
+        	
+			</div>
+			<div class="col-lg-9 col-md-9 col-sm-9">
+
+        	<p class='instructions'><span>2</span> Display the code and highlight where you want to leave a comment</p>
+       		</div>
+        </div>
+        <br><br>
+
+	
 	{% endif %}
 	
 
 	<div class="row">
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        	<p class="glyphicon glyphicon-folder-open"></p>
+        	<p><span class="glyphicon glyphicon-folder-open"></span> <strong>Assignment files</strong></p>
             <div id="filetree"></div>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-			 <pre id="filecontents">No file selected. Please select a file from the left.</pre>
+			 <pre id="filecontents"><i class="glyphicon glyphicon-arrow-left"></i> No file selected. Please select a file from the list on the left.</pre>
         </div>
     </div>
 
@@ -59,7 +79,7 @@
 			<div class="review-buttons">
 			  <button type="button" class="btn btn-default">Save</button>
 			  <button type="button" class="btn btn-default">Cancel</button>
-			  <button type="button" class="btn btn-default">Submit</button>
+			  <button type="button" class="btn btn-default" onClick='alert("Your review has been submitted")'>Submit</button>
 			</div>
 		</div>
 	{% endif %}

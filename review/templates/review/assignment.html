@@ -3,19 +3,23 @@
 	<p><a class="btn btn-default" href="/">&laquo; back</a></p>
 	<h1>{{ assignment.name }}</h1>
 
-	<div class="alert alert-danger" role="alert">
-		{% if error_message %}
+	
+	{% if error_message %}
+		<div class="alert alert-danger" role="alert">
 			<p><strong>{{ error_message }}</strong></p>
-		{% endif %}
-	</div>
+		</div>
+	{% endif %}
 	<hr>
 	<h2>File Upload</h2>
+	<p>You need to select your assignment files from your computer and upload them. Don't for get to press the 'Upload' button after selecting the files.</p>
 
-	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data" class="file-upload">
-		<h3>Step 1:</h3>
+	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data" class="file-upload"><br>
+		<p class='instructions'><span>1</span> Select the file you want to upload</p>
+		<br>
 	    {% csrf_token %}
 	    {{ upload_form }}
-		<h3>Step 2:</h3>
+		<p class='instructions'><br><span>2</span> Upload the file </p><br>
+		
 		<input type="submit" value="Upload" />
 	</form>
 
@@ -26,22 +30,28 @@
 	<hr>
 	<h2>Unit Test</h2>
 
+	<p>After uploading your files, you can run an automated unit test. This can be done only of you succesfully uploaded your files.</p>
+
 	{% if upload %}
-		<button>Start</button>
+		<button type="button" class="btn btn-primary">Start test</button>
 	{% else %}
-		<p class="alert bg-danger">Unavailable! Please upload something.</p>
+		<p class="alert bg-danger"><strong>Please upload files to enable Unit Test.</strong></p>
+		<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
 	{% endif %}
 
 	<hr>
 	<h2>Submit</h2>
 
+	<p>In order to submit your files for Peer Review, you need to press the following 'Submit' button. You can only do this after succesfully uploading your files.</p>
+
 	{% if upload %}
 		<form action="{% url 'submit_assignment' submission.id %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
-			<input type="submit" name="submit" value="Submit" />
+			<input type="submit" class="btn btn-primary" name="submit" value="Submit" />
 		</form>
 	{% else %}
-		<p class="alert bg-danger">Unavailable! Please upload something.</p>
+		<p class="alert bg-danger"><strong>Please upload files first to enable the submission button.</strong></p>
+		<button type="button" class="btn btn-default" disabled="disabled">Submit</button>
 	{% endif %}
 
 {% endblock %}
