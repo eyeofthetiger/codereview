@@ -136,6 +136,9 @@ class Question(models.Model):
 	create_date = models.DateTimeField()
 	modified_date = models.DateTimeField()
 
+	def number_of_responses(self):
+		return len(Response.objects.filter(question=self))
+
 class Response(models.Model):
 	""" A response to a question posted by a user. """
 	user = models.ForeignKey(User)

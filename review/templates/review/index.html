@@ -95,7 +95,7 @@
 			{% for question in questions %}
 			<tr>
 				<td><a href="{% url 'question' question.id %}">{{ question.title }}</a></td>
-				<td>[INSERT NUMBER HERE]</td>
+				<td>{{ question.number_of_responses }}</td>
 				<td>{{ question.create_date }}</td>
 			</tr>
 			{% endfor %}
