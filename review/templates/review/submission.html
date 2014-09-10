@@ -179,7 +179,7 @@
 			clearComments();
 
 			//Set annoations as read only if not a reviewer.
-			if(!is_reviewer || is_staff){
+			if(!isReviewer || isStaff){
 				content = $('#filecontents').annotator({readOnly: true});
 			}else{
 				content = $('#filecontents').annotator();
