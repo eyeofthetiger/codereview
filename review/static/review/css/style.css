@@ -79,6 +79,7 @@ textarea { font-family: Arial, sans-serif; }
 
 body h2{
   color: #666;
+  padding-top: 20px;
 }
 body h3{
   color: #666;
@@ -110,6 +111,9 @@ header .container{
   float: right;
   padding-top: 5px; 
 }
+.table{
+  margin: 10px 0;
+}
 /*
 // END: BASE - PAGE STYLES
 // -------------------------------------------------- */
@@ -120,9 +124,14 @@ header .container{
 // -------------------------------------------------- */
 
 p.status{
-  text-align: center;
-  padding: 5px;
-  width: 70%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+p.status.positive{
+  color: green;
+}
+p.status.negative{
+  color: red;
 }
 
 /*
