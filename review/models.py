@@ -137,12 +137,25 @@ class Question(models.Model):
 	modified_date = models.DateTimeField()
 
 	def number_of_responses(self):
+		""" Returns the number of responses associated with a Question. """
 		return len(Response.objects.filter(question=self))
 
+	def is_staff(self):
+		""" Returns true if the creator of the question is staff,
+			false otherwise.
+		"""
+		return self.user.is_staff
+
 class Response(models.Model):
-	""" A response to a question posted by a user. """
+	""" A response to a Question posted by a user. """
 	user = models.ForeignKey(User)
 	question = models.ForeignKey(Question)
 	text = models.TextField()
 	create_date = models.DateTimeField()
 	modified_date = models.DateTimeField()
+
+	def is_staff(self):
+		""" Returns true if the creator of the response is staff,
+			false otherwise.
+		"""
+		return self.user.is_staff

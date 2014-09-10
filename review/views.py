@@ -71,13 +71,15 @@ def staff(request):
 	course = Course.objects.get(id=1)
 	assignments = Assignment.objects.all()
 
+	# Get all questions for forum
+	questions = Question.objects.order_by('create_date')
+
 	context = {
 		"title": course,
 		"course": course,
 		"user": user,
 		"assignments": assignments,
-		# "submissions": submissions,
-		# "assigned_reviews": assigned_reviews
+		"questions": questions,
 	}
 
 	return render(request, 'review/staff.html', context)

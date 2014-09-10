@@ -6,102 +6,107 @@
 	<h2>My Assignments</h2>
 	<p>List of the course assignments where you can submit your code, view submitted files and check comments from peers.</p>
 
-<div class="container">
-	<table class="table table-hover">
-		<thead>
-			<th>Assignment</th>
-			<th>Submission</th>
-			<th>Status</th>
-			<th>Due date</th>
-			<th>Files submitted</th>
-		</thead>
-		<tbody>
-			{% for assignment in assignments %}
-			<tr>
-				
-				
-				{% if assignment.due_date_passed == True %}
-				<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td> 
-				<td><button type="button" class="btn btn-default" disabled="disabled">Submitted</button></td>
-				<td><p class="status negative">Closed</p></td>
-				<td>{{ assignment.due_date }}</td>
+	<div class="container">
+		<table class="table table-hover">
+			<thead>
+				<th>Assignment</th>
+				<th>Submission</th>
+				<th>Status</th>
+				<th>Due date</th>
+				<th>Files submitted</th>
+			</thead>
+			<tbody>
+				{% for assignment in assignments %}
+				<tr>
+					
+					
+					{% if assignment.due_date_passed == True %}
+					<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td> 
+					<td><button type="button" class="btn btn-default" disabled="disabled">Submitted</button></td>
+					<td><p class="status negative">Closed</p></td>
+					<td>{{ assignment.due_date }}</td>
 
-			  	{% else %}
-			  	<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td>
-			  	<td><a class="btn btn-primary" href="{% url 'assignment' assignment.id %}">Submit now</a></td>
-			  	<td><p class="status positive">Open</p></td>
-			  	<td>{{ assignment.due_date }}</td>
-			  	
-			  	{% endif %}
-				
-				
-				<td>
-				  	{% if assignment.id in submissions.keys %}
-				  		<a class="btn btn-primary" href="{% url 'submission' submissions|get_item:assignment.id  %}">View feedback</a>
 				  	{% else %}
-						<a class="btn btn-default" disabled="disabled">Unavailable</a>
-
+				  	<td>{{ assignment }} <br> <a href="{% url 'assignment_description' assignment.id %}"> Details &raquo;</a></td>
+				  	<td><a class="btn btn-primary" href="{% url 'assignment' assignment.id %}">Submit now</a></td>
+				  	<td><p class="status positive">Open</p></td>
+				  	<td>{{ assignment.due_date }}</td>
+				  	
 				  	{% endif %}
-				</td>
-				
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
+					
+					
+					<td>
+					  	{% if assignment.id in submissions.keys %}
+					  		<a class="btn btn-primary" href="{% url 'submission' submissions|get_item:assignment.id  %}">View feedback</a>
+					  	{% else %}
+							<a class="btn btn-default" disabled="disabled">Unavailable</a>
+
+					  	{% endif %}
+					</td>
+					
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
 	<h2>Peer Review</h2>
 	<p>Peer assignment files for you to review. Select an assignment that is pending review and open the code to leave your feedback.</p>
 	
-<div class="container">
+	<div class="container">
 
-	<table class="table table-hover">
-		<thead>
-			<th>Assignment</th>
-			<th>Review</th>
-			<th>Status</th>
-			<th>Due date</th>
-		</thead>
-		<tbody>
-			{% for review in assigned_reviews %}
-			<tr>
-				<td>
-					{{ review.assigned_submission.assignment }} <br> 
-					<a href="{% url 'assignment_description' review.assigned_submission.assignment.id %}"> Details &raquo;</a>
-				</td>
-				<td><a class="btn btn-primary" href="{% url 'submission' review.assigned_submission.id %}">Review now</a></td>
-			  	<td><p class="status negative"> Pending review</p></td>
-				<td>{{ review.assigned_submission.assignment.review_due_date }}</td>
-			</tr>
+		<table class="table table-hover">
+			<thead>
+				<th>Assignment</th>
+				<th>Review</th>
+				<th>Status</th>
+				<th>Due date</th>
+			</thead>
+			<tbody>
+				{% for review in assigned_reviews %}
+				<tr>
+					<td>
+						{{ review.assigned_submission.assignment }} <br> 
+						<a href="{% url 'assignment_description' review.assigned_submission.assignment.id %}"> Details &raquo;</a>
+					</td>
+					<td><a class="btn btn-primary" href="{% url 'submission' review.assigned_submission.id %}">Review now</a></td>
+				  	<td><p class="status negative"> Pending review</p></td>
+					<td>{{ review.assigned_submission.assignment.review_due_date }}</td>
+				</tr>
 
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 	
 	<h2>Help Forum</h2>
 	<p>Here you can find answers to questions you might have or you can ask a question for the community.</p>
 	
-<div class="container">
-	<br>
-	<p><a class="btn btn-primary" href="{% url 'add_question' %}"><span class="glyphicon glyphicon-plus"></span> Ask a question</a></p>
-	<table class="table table-hover">
-		<thead>
-			<th>Question</th>
-			<th>Number of answers</th>
-			<th>Date</th>
-		</thead>
-		<tbody>
-			{% for question in questions %}
-			<tr>
-				<td><a href="{% url 'question' question.id %}">{{ question.title }}</a></td>
-				<td>{{ question.number_of_responses }}</td>
-				<td>{{ question.create_date }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+	<div class="container">
+		<br>
+		<p><a class="btn btn-primary" href="{% url 'add_question' %}"><span class="glyphicon glyphicon-plus"></span> Ask a question</a></p>
+		<table class="table table-hover">
+			<thead>
+				<th>Question</th>
+				<th>Number of answers</th>
+				<th>Date</th>
+			</thead>
+			<tbody>
+				{% for question in questions %}
+				<tr>
+					<td>
+						<a href="{% url 'question' question.id %}">{{ question.title }}</a>
+						{% if question.is_staff %}
+							<span class="label label-info">Staff Question</span>
+						{% endif %}
+					</td>
+					<td>{{ question.number_of_responses }}</td>
+					<td>{{ question.create_date }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 
-</div>
+	</div>
 
 {% endblock %}

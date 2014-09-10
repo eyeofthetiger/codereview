@@ -11,7 +11,11 @@
 	{% endif %}
 
 	{% for response in responses %}
-		<p>{{ response.text }}</p>
+		{% if response.is_staff %}
+			<p class="staff-question">{{ response.text }}</p>
+		{% else %}
+			<p>{{ response.text }}</p>
+		{% endif %}
 		<hr />
 	{% endfor %}
 

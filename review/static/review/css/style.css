@@ -9,6 +9,7 @@
       3.3 ASSIGNMENT 
       3.4 ASSIGNMENT DESCRIPTION
       3.5 SUBMISSION
+      3.6 QUESTION
     4. NAVBARS
     5. FORMS
     6. BUTTONS
@@ -234,6 +235,19 @@ pre#filecontents{
   text-align: right;
   padding-right: 15px;
 }
+/*
+// END: SUBMISSION - PAGE STYLES
+// -------------------------------------------------- */
+
+/*
+// 3.5. SUBMISSION - PAGE STYLES
+// -------------------------------------------------- */
+
+.staff-question {
+  /*border: 1px solid orange;*/
+  background: orange;
+}
+
 /*
 // END: SUBMISSION - PAGE STYLES
 // -------------------------------------------------- */

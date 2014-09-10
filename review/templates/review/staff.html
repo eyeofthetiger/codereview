@@ -35,4 +35,34 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<h2>Help Forum</h2>
+	<p>Here you can find answers to questions you might have or you can ask a question for the community.</p>
+	
+	<div class="container">
+		<br>
+		<p><a class="btn btn-primary" href="{% url 'add_question' %}"><span class="glyphicon glyphicon-plus"></span> Ask a question</a></p>
+		<table class="table table-hover">
+			<thead>
+				<th>Question</th>
+				<th>Number of answers</th>
+				<th>Date</th>
+			</thead>
+			<tbody>
+				{% for question in questions %}
+				<tr>
+					<td>
+						<a href="{% url 'question' question.id %}">{{ question.title }}</a>
+						{% if question.is_staff %}
+							<span class="label label-info">Staff Question</span>
+						{% endif %}
+					</td>
+					<td>{{ question.number_of_responses }}</td>
+					<td>{{ question.create_date }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
 {% endblock %}
