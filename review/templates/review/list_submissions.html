@@ -5,6 +5,7 @@
 	<h1>{{ course }}</h1>
 	<hr/>
 	<h2>Submissions for {{ assignment }}</h2>
+	<p>List of students and submission status.</p><br>
 
 	<table class="table table-striped">
 		<thead>
@@ -18,8 +19,8 @@
 			<tr>
 				<td>{{ student }}</td>
 				{% if submissions|get_submission_date:student %}
-					<td><a href="{% url 'submission' submissions|get_item:student  %}">View submission</a></td>
-					<td><a href="{% url 'download' submissions|get_submission_id:student  %}">Download submission</a></td>
+					<td><a class="btn btn-primary" href="{% url 'submission' submissions|get_item:student  %}">View submission</a></td>
+					<td><a class="btn btn-primary" href="{% url 'download' submissions|get_submission_id:student  %}"><i class="glyphicon glyphicon-arrow-down"></i> Download submission</a></td>
 					<td>{{ submissions|get_submission_date:student }}</td>
 				{% else %}
 					<td></td>

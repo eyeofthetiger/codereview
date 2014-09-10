@@ -44,6 +44,19 @@
 
 	{% elif user.is_staff %}	
 		<h1>Viewing submission for {{ submission.assignment.name }} from {{ submission.user }}</h1>
+<hr/>
+<div class="row">
+			<div class="col-lg-3 col-md-2 col-sm-2 col-xs-3">
+
+        	<p class='instructions'><span>1</span> Select a file from the list</p>
+        	
+			</div>
+			<div class="col-lg-9 col-md-10 col-sm-10 col-xs-9">
+
+        	<p class='instructions'><span>2</span> Display the code </p>
+       		</div>
+        </div>
+        <br>
 	{% else %}
 		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
 <hr/>
