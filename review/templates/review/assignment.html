@@ -11,7 +11,7 @@
 	{% endif %}
 	<hr>
 	<h2>File Upload</h2>
-	<p>You need to select your assignment files from your computer and upload them. Don't for get to press the 'Upload' button after selecting the files.</p>
+	<p>You need to select your assignment file from your computer and upload it. Don't forget to press the 'Upload' button after selecting the file.</p>
 
 	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data" class="file-upload"><br>
 		<p class='instructions'><span>1</span> Select the file you want to upload</p>
@@ -30,19 +30,19 @@
 	<hr>
 	<h2>Unit Test</h2>
 
-	<p>After uploading your files, you can run an automated unit test. This can be done only of you succesfully uploaded your files.</p>
+	<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
 
 	{% if upload %}
 		<button type="button" class="btn btn-primary">Start test</button>
 	{% else %}
-		<p class="alert bg-danger"><strong>Please upload files to enable Unit Test.</strong></p>
+		<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
 		<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
 	{% endif %}
 
 	<hr>
 	<h2>Submit</h2>
 
-	<p>In order to submit your files for Peer Review, you need to press the following 'Submit' button. You can only do this after succesfully uploading your files.</p>
+	<p>In order to submit your file for assessment by your instructor and for review by a peer, you need to press the following 'Submit' button. You can only do this after succesfully uploading your file.</p>
 
 	{% if upload %}
 		<form action="{% url 'submit_assignment' submission.id %}" method="post" enctype="multipart/form-data">
@@ -50,7 +50,7 @@
 			<input type="submit" class="btn btn-primary" name="submit" value="Submit" />
 		</form>
 	{% else %}
-		<p class="alert bg-danger"><strong>Please upload files first to enable the submission button.</strong></p>
+		<p class="alert bg-danger"><strong>Please upload file first to enable the submission button.</strong></p>
 		<button type="button" class="btn btn-default" disabled="disabled">Submit</button>
 	{% endif %}
 

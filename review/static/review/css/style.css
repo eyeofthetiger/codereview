@@ -194,6 +194,7 @@ p.status.negative{
 p.instructions{
   font-weight: bold;
   padding-top: 10px;
+  font-size: 12px;
 }
 p.instructions span{
   border-radius:250px;
@@ -201,7 +202,9 @@ p.instructions span{
   color:#fff;
   text-align:center;
   background:#000;
-  padding: 5px 10px;
+  padding: 5px 9px;
+  font-size: 14px;
+  margin-right: 5px;
 
 }
 .nav-tabs{
