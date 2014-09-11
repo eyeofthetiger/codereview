@@ -10,6 +10,9 @@
 	</div>
 	{% endif %}
 
+	<p><em>{{ question.text }}</em></p>
+
+	<hr />
 	{% for response in responses %}
 		{% if response.is_staff %}
 			<p class="staff-question">{{ response.text }}</p>

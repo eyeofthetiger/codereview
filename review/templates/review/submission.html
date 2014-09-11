@@ -90,8 +90,8 @@
 	{% if not is_owner and not user.is_staff %}
 		<div class="row">
 			<div class="review-buttons">
-			  <button type="button" class="btn btn-default">Save</button>
-			  <button type="button" class="btn btn-default">Cancel</button>
+			  <!-- <button type="button" class="btn btn-default">Save</button> -->
+			  <button type="button" class="btn btn-default">Reset</button>
 			  <button type="button" class="btn btn-default" onClick='alert("Your review has been submitted")'>Submit</button>
 			</div>
 		</div>
@@ -104,7 +104,7 @@
 	<script src="{% static 'review/js/jstree.min.js' %}"></script>
 	<script src='{% static "review/js/annotator-full.min.js" %}'></script>
 	<script type="text/javascript">
-		//TODO - This is a fake user
+	
 		var currentUserID = {{ user.id }};
 		var currentSubmissionFile;
 
