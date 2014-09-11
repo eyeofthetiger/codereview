@@ -2,7 +2,7 @@
 {% block content %}
 	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
 	<h1>{{ question.title }}</h1>
-	<hr>
+	
 
 	{% if error_message %}
 	<div class="alert alert-danger" role="alert">
@@ -13,6 +13,7 @@
 	<p><em>{{ question.text }}</em></p>
 
 	<hr />
+	<div class="container">
 	{% for response in responses %}
 		{% if response.is_staff %}
 			<p class="staff-question">{{ response.text }}</p>
@@ -21,7 +22,8 @@
 		{% endif %}
 		<hr />
 	{% endfor %}
-
+	</div>
+	
 	<form method="post" enctype="multipart/form-data">
 		<div class="form-group">
 		    {% csrf_token %}

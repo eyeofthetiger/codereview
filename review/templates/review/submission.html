@@ -90,6 +90,7 @@
 	{% if not is_owner and not user.is_staff %}
 		<div class="row">
 			<div class="review-buttons">
+				<div id="save-notification">All comments saved</div>
 			  <!-- <button type="button" class="btn btn-default">Save</button> -->
 			  <button type="button" class="btn btn-default">Reset</button>
 			  <button type="button" class="btn btn-default" onClick='alert("Your review has been submitted")'>Submit</button>
@@ -175,7 +176,6 @@
 		
 		function activateAnnotator(submissionFileID, userID){
 			console.log("Activating annotator");
-
 			clearComments();
 
 			//Set annoations as read only if not a reviewer.
@@ -230,6 +230,15 @@
 			}
 			
 		});
+	}
+
+	function showSaveNotification(){
+		// Switches the save notification to tell the user when comments are being 
+		// saved.
+		$('#save-notification').text('Saving comments...');
+		setTimeout(function () {
+        $('#save-notification').text('All comments saved.');
+    }, 2000);
 	}
 
 	</script>

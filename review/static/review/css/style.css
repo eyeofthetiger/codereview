@@ -245,7 +245,8 @@ pre#filecontents{
 
 .staff-question {
   /*border: 1px solid orange;*/
-  background: orange;
+  background: #FFF135;
+  padding: 10px;
 }
 
 /*
