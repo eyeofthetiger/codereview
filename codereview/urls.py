@@ -4,8 +4,11 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
+
+	#Main app urls
     url(r'^$', include('review.urls')),
     url(r'^app/', include('review.urls')),
+    
+	#Built in Django Admin url
     url(r'^admin/', include(admin.site.urls)),
 )

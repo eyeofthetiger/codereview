@@ -13,30 +13,29 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
-from review.models import Submission, SubmissionFile, Course, Assignment, UserAccount, AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
-from review.forms import UploadForm, AssignmentEditForm, AssignmentForm, QuestionForm, ResponseForm
+from review.models import Submission, SubmissionFile, Course, Assignment, \
+	AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
+from review.forms import UploadForm, AssignmentForm, QuestionForm, ResponseForm
 from review.email import send_email
 
 @login_required
 def index(request):
 	""" Displays the appropriate dashboard for the current user. """
-	# Get fake user for testing
+
 	user = request.user
-	# user = User.objects.get(username='user1')
+	# Redirect if user is staff
 	if user.is_staff:
 		return redirect('staff')
-
-	# Get fake course for testing. This assumes that only a single course can
-	# be active at a time.
-	course = Course.objects.get(id=1)
+	course = Course.objects.get(id=1) # There should only be a single course
 
 	# Get all assignments with an open date prior to the current time.
 	assignments = Assignment.objects.filter(
 		open_date__lte=timezone.now()).order_by('due_date')
+
 	# Get all submissions by the user
 	submissions = {}
 	for assignment in assignments:
-		submission =  assignment.get_submission(user)
+		submission = assignment.get_submission(user)
 		if submission:
 			submissions[assignment.id] = submission
 	# Get all assigned reviews for the user
@@ -59,15 +58,12 @@ def index(request):
 @login_required
 def staff(request):
 	""" Displays the appropriate dashboard for course staff. """
-	
-	user = request.user
 
-	#Redirect if not staff
+	user = request.user
+	#Redirect if user is not staff
 	if not user.is_staff:
 		return redirect('index')
 
-	# Get fake course for testing. This assumes that only a single course can
-	# be active at a time.
 	course = Course.objects.get(id=1)
 	assignments = Assignment.objects.all()
 
@@ -115,7 +111,8 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 					uploaded_file = save_zip(u_file, submission)
 				else:
 					return render(request, 'review/assignment.html', 
-						{
+						{	
+							'title': "Submission for " + assignment,
 							'assignment': assignment,
 							'upload_form': upload_form, 
 							'upload': None,
@@ -129,13 +126,15 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 	else:
 		upload_form = UploadForm()
 
-	return render(request, 'review/assignment.html', 
-		{
-			'assignment': assignment, 
-			'upload_form': upload_form, 
-			'upload': uploaded_file, 
-			'submission': submission,
-		})
+	context = { 
+		'title': "Submission for " + assignment.name,
+		'assignment': assignment, 
+		'upload_form': upload_form, 
+		'upload': uploaded_file, 
+		'submission': submission,
+	}
+
+	return render(request, 'review/assignment.html', context)
 
 @login_required
 def submit_assignment(request, submission_pk):
@@ -145,8 +144,13 @@ def submit_assignment(request, submission_pk):
 	submission = get_object_or_404(Submission, pk=submission_pk)
 	submission.has_been_submitted = True
 	submission.save()
-	return render(request, 'review/submission_success.html',
-	 {'title': submission.assignment.name + " uploaded", 'submission': submission})
+
+	context = {	
+		'title': submission.assignment.name + " submitted",
+		'submission': submission
+	}
+
+	return render(request, 'review/submission_success.html', context)
 
 @login_required
 def assignment_description(request, assignment_pk):
@@ -171,6 +175,7 @@ def submission(request, submission_pk):
 	if not is_owner and not is_allowed_to_review(user, submission):
 		print "TODO: deal with unauthorised access of submissions"
 	files = SubmissionFile.objects.filter(submission=submission)
+	# Builds JSON representation of the submission directory
 	dir_json = json.dumps(
 		{'core':{
 			"multiple" : False,
@@ -209,6 +214,7 @@ def list_submissions(request, assignment_pk):
 		else:
 			submissions[student] = student_submissions[0]
 	context = {
+		'title': "Submissions for " + assignment.name,
 		'assignment': assignment, 
 		'submissions': submissions,
 		'students': students,
@@ -229,7 +235,7 @@ def edit_assignment(request, assignment_pk):
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 
 	if request.method == 'POST':
-		form = AssignmentEditForm(request.POST)
+		form = AssignmentForm(request.POST)
 		if form.is_valid():
 			assignment.name = form.data['name']
 			assignment.description = form.data['description']
@@ -239,9 +245,13 @@ def edit_assignment(request, assignment_pk):
 			assignment.save()
 		return redirect('staff')
 	else:
-		form = AssignmentEditForm(instance=assignment)
+		form = AssignmentForm(instance=assignment)
 
-	context = { 'assignment': assignment, 'form': form}
+	context = { 
+		'title': "Editing " + assignment.name,
+		'assignment': assignment,
+		'form': form
+	}
 	return render(request, 'review/edit_assignment.html', context)
 
 @login_required
@@ -274,14 +284,21 @@ def add_assignment(request):
 			# Get booleans. If false they aren't in the form dict.
 			assignment.test_required = form.data.get('test_required', False)
 			assignment.has_tests = form.data.get('has_tests', False)
-			assignment.allow_multiple_uploads = form.data.get('allow_multiple_uploads', False)
-			assignment.allow_help_centre = form.data.get('allow_help_centre', False)
+			assignment.allow_multiple_uploads = form.data.get(
+				'allow_multiple_uploads', False)
+			assignment.allow_help_centre = form.data.get(
+				'allow_help_centre', False)
 			assignment.save()
 		return redirect('staff')
 	else:
 		form = AssignmentForm()
 
-	return render(request, 'review/add_assignment.html', {'form':form})
+	context = {
+		'title': 'Add an assignment',
+		'form': form
+	}
+
+	return render(request, 'review/add_assignment.html', context)
 
 @login_required
 def download(request, submission_pk):
@@ -301,6 +318,7 @@ def download(request, submission_pk):
 
 @login_required
 def add_question(request):
+	""" Displays a form for creating a new Question on the forum. """
 	user = request.user
 
 	if request.method == 'POST':
@@ -318,10 +336,18 @@ def add_question(request):
 	else:
 		form = QuestionForm()
 
-	return render(request, 'review/add_question.html', {'form':form})
+	context = {
+		'title': 'Add a question',
+		'form': form
+	}
+
+	return render(request, 'review/add_question.html', context)
 
 @login_required
 def question(request, question_pk):
+	""" Displays a question, its associated responses and a form for users to
+		post their own response.
+	"""
 	user = request.user
 	question = get_object_or_404(Question, pk = question_pk)
 	responses = Response.objects.filter(question=question)
@@ -340,6 +366,7 @@ def question(request, question_pk):
 	else:
 		form = ResponseForm()
 		context = {
+			'title': question.title,
 			'form': form,
 			'question': question,
 			'responses': responses
@@ -358,7 +385,8 @@ def zip_submission(submission):
 	zip_path = os.path.join('temp', 'downloads', (str(timezone.now()) + ".zip"))
 	with ZipFile(zip_path, 'w') as zipfile:
 		for f in submission_files:
-			zipfile.write(os.path.join(submission.upload_path, f.file_path), f.file_path)
+			zipfile.write(os.path.join(submission.upload_path, f.file_path),
+			 f.file_path)
 	return zip_path
 
 def get_directory_contents(path, parent="#"):
@@ -479,7 +507,8 @@ def api_index(request):
 			)
 			comment_range.save()
 		response = HttpResponse(content="", status=303)
-		response["Location"] = "/app/annotator_api/annotations/" + str(comment.id)
+		response["Location"] = "/app/annotator_api/annotations/" + \
+			str(comment.id)
 		return response
 
 def api_search(request):
@@ -517,7 +546,8 @@ def api_read(request, comment_pk):
 	else:
 		user = request.user
 		response = format_annotation(user, comment)
-		return HttpResponse(json.dumps(response), content_type="application/json")
+		return HttpResponse(json.dumps(response),
+			content_type="application/json")
 
 def format_annotation(user, comment):
 	""" Returns a comment in a format acceptable form AnnotatorJS. """

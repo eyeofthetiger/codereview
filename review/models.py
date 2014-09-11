@@ -1,18 +1,8 @@
 from django.utils import timezone
-
 from django.contrib.auth.models import User
 from django.db import models
 
-class UserAccount(models.Model):
-	""" A User of the application. This extends the default Django User class"""
-	user = models.OneToOneField(User)
-	#Different from Django's User's user_id field
-	institution_user_id = models.CharField(max_length=140)
-	is_admin = models.BooleanField()
-
-	def __unicode__(self):
-		return self.user.first_name + " " + self.user.last_name + " - " + \
-		self.institution_user_id
+""" This file contains Model descriptions for database tables. """
 
 class Course(models.Model):
 	""" The course that this application is being used for. """
@@ -53,6 +43,9 @@ class Assignment(models.Model):
 		return self.due_date < timezone.now()
 
 	def get_submission(self, user):
+		""" Returns the latest Submission for this assignment by a given 
+			User. 
+		"""
 		submissions = Submission.objects.filter(user=user, assignment=self,
 		 has_been_submitted=True).order_by('-upload_date')
 		if len(submissions) > 0:
@@ -113,6 +106,9 @@ class Comment(models.Model):
 	comment = models.TextField()
 	selected_text = models.TextField()
 
+	def __unicode__(self):
+		return str(self.comment)
+
 class CommentRange(models.Model):
 	""" The range of a given Comment, to be used by Javascript to highlight 
 		the correct area of the HTML.
@@ -136,6 +132,9 @@ class Question(models.Model):
 	create_date = models.DateTimeField()
 	modified_date = models.DateTimeField()
 
+	def __unicode__(self):
+		return str(self.title)
+
 	def number_of_responses(self):
 		""" Returns the number of responses associated with a Question. """
 		return len(Response.objects.filter(question=self))
@@ -153,6 +152,9 @@ class Response(models.Model):
 	text = models.TextField()
 	create_date = models.DateTimeField()
 	modified_date = models.DateTimeField()
+
+	def __unicode__(self):
+		return str(self.text)
 
 	def is_staff(self):
 		""" Returns true if the creator of the response is staff,
