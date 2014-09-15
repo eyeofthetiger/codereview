@@ -11,7 +11,7 @@
 
 {% block content %}
 
-	<p><a class="btn btn-default" href="/">&laquo; back</a></p>
+	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
 
 	{% if is_owner %}
 		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
@@ -117,6 +117,7 @@
 		var isReviewer = ! {{ is_owner|yesno:"true,false" }};
 		var isStaff = {{ user.is_staff|yesno:"true,false" }};
 
+		// Click listeners for tabs
 		$('.submission-tab').click(function(){
 			var clickedTab = $(this).data('id')
 			if($(this).data('id') != activeTab){
@@ -130,6 +131,7 @@
 		})
 
 		$(document).ready( function() {
+			// Setup the JSTree instance.
 		  $(function () { 
 		  	$('#filetree').on('changed.jstree', function (e, data) {
 			    var node = data.instance.get_node(data.selected);
@@ -175,6 +177,7 @@
 		});
 		
 		function activateAnnotator(submissionFileID, userID){
+			//Activate the Annotator instance for a selected file.
 			console.log("Activating annotator");
 			clearComments();
 
@@ -203,6 +206,7 @@
 		}
 
 		function loadComments(){
+			// Load comments for the selected file.
 			var review = reviews[parseInt(activeTab)-1];
 			if(currentSubmissionFile){
 				console.log(review.user_id);
@@ -211,6 +215,7 @@
 		}
 
 		function clearComments(){
+			// Remove all comments from the page.
 			if(content != null){
 				content.annotator('destroy');
 				content = null;
@@ -218,6 +223,7 @@
 		}
 
 	function loadTreeIcons(){
+		// Load the icons for files and folders in JSTree
 		console.log("go");
 		$('.jstree-themeicon-hidden').each(function() {
 			// console.log($(this).parent().parent());
@@ -235,6 +241,7 @@
 	function showSaveNotification(){
 		// Switches the save notification to tell the user when comments are being 
 		// saved.
+		// TODO: work out how to run this when a comment is saved.
 		$('#save-notification').text('Saving comments...');
 		setTimeout(function () {
         $('#save-notification').text('All comments saved.');
