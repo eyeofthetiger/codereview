@@ -410,6 +410,22 @@ def question(request, question_pk):
 
 	return render(request, 'review/question.html', context)
 
+@login_required
+def sticky(request, question_pk):
+	""" Switches the sticky status of the given question. """
+	user = request.user
+	if user.is_staff:
+		question = get_object_or_404(Question, pk = question_pk)
+		if question.stickied:
+			question.stickied = False
+		else:
+			question.stickied = True
+		question.save()
+		return redirect('staff')
+	else:
+		return redirect('index')
+
+
 def zip_submission(submission):
 	""" Receives a Submission object, get all the files of the submission and 
 		puts them as a zip file retaining the original structure of the

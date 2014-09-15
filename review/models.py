@@ -131,6 +131,7 @@ class Question(models.Model):
 	text = models.TextField()
 	create_date = models.DateTimeField()
 	modified_date = models.DateTimeField()
+	stickied = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return str(self.title)
@@ -152,6 +153,7 @@ class Response(models.Model):
 	text = models.TextField()
 	create_date = models.DateTimeField()
 	modified_date = models.DateTimeField()
+	selected_answer = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return str(self.text)
@@ -161,3 +163,19 @@ class Response(models.Model):
 			false otherwise.
 		"""
 		return self.user.is_staff
+
+class QuestionComment(models.Model):
+	""" A comment on a Question in the forum. """
+	user = models.ForeignKey(User)
+	question = models.ForeignKey(Question)
+	text = models.TextField()
+	create_date = models.DateTimeField()
+	modified_date = models.DateTimeField()
+
+class ResponseComment(models.Model):
+	""" A comment on a Response in the forum. """
+	user = models.ForeignKey(User)
+	response = models.ForeignKey(Response)
+	text = models.TextField()
+	create_date = models.DateTimeField()
+	modified_date = models.DateTimeField()

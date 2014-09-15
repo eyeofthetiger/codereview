@@ -30,9 +30,9 @@ urlpatterns = patterns('',
         name='assignment_description'),
 
     # Forum URLs
-
     url(r'^add_question/$', views.add_question, name='add_question'),
     url(r'^question/(?P<question_pk>\d+)/$', views.question, name='question'),
+    url(r'^sticky/(?P<question_pk>\d+)/$', views.sticky, name='sticky'),
 
     # Submission URLs
     url(r'^submit/(?P<submission_pk>\d+)/$', views.submit_assignment, 
