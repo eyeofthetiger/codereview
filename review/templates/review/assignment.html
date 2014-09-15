@@ -10,15 +10,15 @@
 		</div>
 	{% endif %}
 	<hr>
-	<h2>File Upload</h2>
+	<h2><strong>1.</strong> File Upload</h2>
 	<p>You need to select your assignment file from your computer and upload it. Don't forget to press the 'Upload' button after selecting the file.</p>
 
 	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data" class="file-upload"><br>
-		<p class='instructions'><span>1</span> Select the file you want to upload</p>
+		<p class='instructions'><span>A</span> Select the file you want to upload</p>
 		<br>
 	    {% csrf_token %}
 	    {{ upload_form }}
-		<p class='instructions'><br><span>2</span> Upload the file </p><br>
+		<p class='instructions'><br><span>B</span> Upload the file </p><br>
 		
 		<input type="submit" value="Upload" />
 	</form>
@@ -28,7 +28,7 @@
 	{% endif %}
 
 	<hr>
-	<h2>Unit Test</h2>
+	<h2><strong>2.</strong> Unit Test</h2>
 
 	<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
 
@@ -40,7 +40,7 @@
 	{% endif %}
 
 	<hr>
-	<h2>Submit</h2>
+	<h2><strong>3.</strong> Submit</h2>
 
 	<p>In order to submit your file for assessment by your instructor and for review by a peer, you need to press the following 'Submit' button. You can only do this after succesfully uploading your file.</p>
 
