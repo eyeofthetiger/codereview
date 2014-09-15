@@ -15,7 +15,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from review.models import Submission, SubmissionFile, Course, Assignment, \
 	AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
-from review.forms import UploadForm, AssignmentForm, QuestionForm, ResponseForm
+from review.forms import UploadForm, AssignmentForm, QuestionForm, ResponseForm, EmailPreferencesForm
 from review.email import send_email
 
 @login_required
@@ -79,6 +79,42 @@ def staff(request):
 	}
 
 	return render(request, 'review/staff.html', context)
+
+@login_required
+def email_preferences(request):
+	""" Displays the settings page for a User's email preferences. """
+	user = request.user
+	# Redirect if user is staff
+	if user.is_staff:
+		return redirect('staff')
+
+	prefs = EmailPreferences.objects.filter(user=user)[0]
+	print prefs
+
+	if request.method == 'POST':
+		form = EmailPreferencesForm(request.POST)
+		if form.is_valid():
+			prefs.on_upload = form.data.get('on_upload', False)
+			prefs.on_submission = form.data.get('on_submission', False)
+			prefs.on_due_date = form.data.get('on_due_date', False)
+			prefs.on_open_date = form.data.get('on_open_date', False)
+			prefs.on_review_received = form.data.get('on_review_received', False)
+			prefs.on_review_assigned = form.data.get('on_review_assigned', False)
+			prefs.on_question_answered = form.data.get('on_question_answered', False)
+			prefs.on_question_asked = form.data.get('on_question_asked', False)
+			prefs.on_upload = form.data.get('on_upload', False)
+			prefs.save()
+		return redirect('index')
+	else:
+		form = EmailPreferencesForm(instance=prefs)
+
+	context = {
+		"title": 'Email Preferences',
+		"user": user,
+		"form": form
+	}
+	return render(request, 'review/email_preferences.html', context)
+
 
 @login_required
 def assignment(request, assignment_pk, submission=None, uploaded_file=None):
@@ -602,15 +638,23 @@ def reset_test_database(request):
 	user1 = User(username="user1")
 	user1.set_password('user1')
 	user1.save()
+	user1prefs = EmailPreferences(user=user1)
+	user1prefs.save()
 	user2 = User(username="user2")
 	user2.set_password('user2')
 	user2.save()
+	user2prefs = EmailPreferences(user=user2)
+	user2prefs.save()
 	user3 = User(username="user3")
 	user3.set_password('user3')
 	user3.save()
+	user3prefs = EmailPreferences(user=user3)
+	user3prefs.save()
 	user4 = User(username="user4")
 	user4.set_password('user4')
 	user4.save()
+	user4prefs = EmailPreferences(user=user4)
+	user4prefs.save()
 	course = Course(course_name="Test Course", course_code="TEST1000", course_id="201402TEST1000", year=2014, semester='2', institution="UQ")
 	course.save()
 	a1 = Assignment(

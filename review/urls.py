@@ -13,6 +13,9 @@ urlpatterns = patterns('',
     url(r'^load_student/$', views.load_student, name='load_student'),
     url(r'^load_admin/$', views.load_admin, name='load_admin'),
 
+    # Settings URLs
+    url(r'^settings/$', views.email_preferences, name='email_preferences'),
+
     # Staff URLs
     url(r'^staff/$', views.staff, name='staff'),
     url(r'^staff/submissions/(?P<assignment_pk>\d+)/$', views.list_submissions, 

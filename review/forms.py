@@ -1,5 +1,5 @@
 from django import forms
-from review.models import Assignment
+from review.models import Assignment, EmailPreferences
 
 """ This file contains forms to be used throughout the codereview app. """
 
@@ -15,6 +15,22 @@ class QuestionForm(forms.Form):
 class ResponseForm(forms.Form):
 	""" A form for the creation of a Response to a Question in the  forum. """
 	text = forms.CharField(label='Response', widget=forms.Textarea)
+
+class EmailPreferencesForm(forms.ModelForm):
+	""" A form for the setting of user email preferences. """
+	class Meta:
+		""" Builds the form from the EmailPreferences model. """
+		model = EmailPreferences
+		fields = [
+			'on_upload',
+			'on_submission',
+			'on_due_date',
+			'on_open_date',
+			'on_review_received',
+			'on_review_assigned',
+			'on_question_answered',
+			'on_question_asked',
+		]
 
 class AssignmentForm(forms.ModelForm):
 	""" A form for the creation or editing of an assignment. """
