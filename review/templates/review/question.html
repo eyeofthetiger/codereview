@@ -11,6 +11,12 @@
 	{% endif %}
 
 	<p><em>{{ question.text }}</em></p>
+	{% for comment in question.get_comments %}
+		<div style="margin-left:20px;">
+			<p>{{ comment.text }}</p>
+			<p>{{ comment.create_date }}</p>
+		</div>
+	{% endfor %}
 
 	<hr />
 	<div class="container">
@@ -28,6 +34,12 @@
 		{% if user == response.question.user and not response.question.has_answer%}
 			<a href="{% url 'set_as_answer' response.id %}"><p style="color: green">Set as answer</p></a>
 		{% endif %}
+		{% for comment in response.get_comments %}
+			<div style="margin-left:20px;">
+				<p>{{ comment.text }}</p>
+				<p>{{ comment.create_date }}</p>
+			</div>
+		{% endfor %}
 		<hr />
 	{% endfor %}
 	</div>

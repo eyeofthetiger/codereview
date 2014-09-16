@@ -410,7 +410,7 @@ def question(request, question_pk):
 				modified_date=timezone.now(),
 			)
 			response.save()
-				# Send success email
+			# Send email to Questioner about the new answer.
 			prefs = EmailPreferences.objects.get(user=response.question.user)
 			if prefs.on_question_answered:
 				subject = "New answer for your question"

@@ -154,6 +154,10 @@ class Question(models.Model):
 			return True
 		return False
 
+	def get_comments(self):
+		""" Returns a list of all comments for this question. """
+		return QuestionComment.objects.filter(question=self)
+
 class Response(models.Model):
 	""" A response to a Question posted by a user. """
 	user = models.ForeignKey(User)
@@ -180,6 +184,10 @@ class Response(models.Model):
 		if not self.user.is_staff:
 			return "Anonymous"
 		return self.user
+
+	def get_comments(self):
+		""" Returns a list of all comments for this response. """
+		return ResponseComment.objects.filter(response=self)
 
 class QuestionComment(models.Model):
 	""" A comment on a Question in the forum. """
