@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from review import views, development, annotator
+from review import views, development, annotator, submission
 
 """ This file contains the URL patterns for the codereview app. """
 
@@ -42,7 +42,7 @@ urlpatterns = patterns('',
         name='submission'),
     url(r'^submission/(?P<submission_pk>\d+)/download/$', views.download, 
         name='download'),
-    url(r'^get_submission_file/$', views.get_submission_file, 
+    url(r'^get_submission_file/$', submission.get_submission_file, 
         name='get_submission_file'),
 
     # Annotation API URLs
