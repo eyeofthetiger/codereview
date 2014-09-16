@@ -176,9 +176,23 @@ def submit_assignment(request, submission_pk):
 	""" This page gives a message to the user informaing them of a successful
 		submission.
 	"""
+	user = request.user
+	# Redirect if user is staff
+	if user.is_staff:
+		return redirect('staff')
 	submission = get_object_or_404(Submission, pk=submission_pk)
+	# Redirect if user is not the submitter
+	if user != submission.user:
+		return redirect('index')
 	submission.has_been_submitted = True
 	submission.save()
+
+	# Send success email
+	prefs = EmailPreferences.objects.get(user=user)[0]
+	if prefs.on_submission:
+		subject = "Submission for " + submission.assignment.name
+		message = "You're submission was successful."
+		send_email(subject, message, [submission.user.email])
 
 	context = {	
 		'title': submission.assignment.name + " submitted",
@@ -396,6 +410,12 @@ def question(request, question_pk):
 				modified_date=timezone.now(),
 			)
 			response.save()
+				# Send success email
+			prefs = EmailPreferences.objects.get(user=response.question.user)
+			if prefs.on_question_answered:
+				subject = "New answer for your question"
+				message = "Someone has posted a new answer to your question."
+				send_email(subject, message, [response.question.user.email])
 		return redirect('question', question.id)
 	else:
 		form = ResponseForm()
