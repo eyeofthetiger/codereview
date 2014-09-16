@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from review import views
+from review import views, development, annotator
 
 """ This file contains the URL patterns for the codereview app. """
 
@@ -9,9 +9,9 @@ urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
 
     # Login URLs
-    url(r'^choose_user/$', views.choose_user, name='choose_user'),
-    url(r'^load_student/$', views.load_student, name='load_student'),
-    url(r'^load_admin/$', views.load_admin, name='load_admin'),
+    url(r'^choose_user/$', development.choose_user, name='choose_user'),
+    url(r'^load_student/$', development.load_student, name='load_student'),
+    url(r'^load_admin/$', development.load_admin, name='load_admin'),
 
     # Settings URLs
     url(r'^settings/$', views.email_preferences, name='email_preferences'),
@@ -46,12 +46,12 @@ urlpatterns = patterns('',
         name='get_submission_file'),
 
     # Annotation API URLs
-    url(r'^annotator_api/$', views.api_root, name='api_root'),
-    url(r'^annotator_api/annotations$', views.api_index, name='api_index'),
-    url(r'^annotator_api/annotations/(?P<comment_pk>\d+)$', views.api_read, 
+    url(r'^annotator_api/$', annotator.api_root, name='api_root'),
+    url(r'^annotator_api/annotations$', annotator.api_index, name='api_index'),
+    url(r'^annotator_api/annotations/(?P<comment_pk>\d+)$', annotator.api_read, 
         name='api_read'),
-    url(r'^annotator_api/search$', views.api_search, name='api_search'),
+    url(r'^annotator_api/search$', annotator.api_search, name='api_search'),
 
     # Development/Testing URLs
-    url(r'^reset/$', views.reset_test_database, name='reset_test_database'),
+    url(r'^reset/$', development.reset_test_database, name='reset_test_database'),
 )
