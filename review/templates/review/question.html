@@ -15,10 +15,18 @@
 	<hr />
 	<div class="container">
 	{% for response in responses %}
+		{% if response.selected_answer %}
+			<span class="glyphicon glyphicon-ok"></span>
+		{% endif %}
 		{% if response.is_staff %}
 			<p class="staff-question">{{ response.text }}</p>
 		{% else %}
 			<p>{{ response.text }}</p>
+		{% endif %}
+		<p><em>Answered {{ response.modified_date }} by {{ response.get_user }}</em></p>
+
+		{% if user == response.question.user and not response.question.has_answer%}
+			<a href="{% url 'set_as_answer' response.id %}"><p style="color: green">Set as answer</p></a>
 		{% endif %}
 		<hr />
 	{% endfor %}

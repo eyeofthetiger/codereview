@@ -146,6 +146,14 @@ class Question(models.Model):
 		"""
 		return self.user.is_staff
 
+	def has_answer(self):
+		""" Returns true if the question has a response that has been selected 
+			as a definitive answer.
+		"""
+		if(len(Response.objects.filter(question=self, selected_answer=True)) > 0):
+			return True
+		return False
+
 class Response(models.Model):
 	""" A response to a Question posted by a user. """
 	user = models.ForeignKey(User)
@@ -163,6 +171,15 @@ class Response(models.Model):
 			false otherwise.
 		"""
 		return self.user.is_staff
+
+	def get_user(self):
+		""" Returns the user who created this post. If they are a student, the 
+			string 'Anonymous' is returned unless settings indicate they user
+			name can be displayed.
+		"""
+		if not self.user.is_staff:
+			return "Anonymous"
+		return self.user
 
 class QuestionComment(models.Model):
 	""" A comment on a Question in the forum. """

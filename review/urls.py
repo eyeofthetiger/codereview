@@ -33,6 +33,7 @@ urlpatterns = patterns('',
     url(r'^add_question/$', views.add_question, name='add_question'),
     url(r'^question/(?P<question_pk>\d+)/$', views.question, name='question'),
     url(r'^sticky/(?P<question_pk>\d+)/$', views.sticky, name='sticky'),
+    url(r'^set_as_answer/(?P<response_pk>\d+)/$', views.set_as_answer, name='set_as_answer'),
 
     # Submission URLs
     url(r'^submit/(?P<submission_pk>\d+)/$', views.submit_assignment, 

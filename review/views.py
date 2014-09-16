@@ -405,14 +405,15 @@ def question(request, question_pk):
 			'title': question.title,
 			'form': form,
 			'question': question,
-			'responses': responses
+			'responses': responses,
+			'user': user
 		}
 
 	return render(request, 'review/question.html', context)
 
 @login_required
 def sticky(request, question_pk):
-	""" Switches the sticky status of the given question. """
+	""" Switches the sticky status of the given response. """
 	user = request.user
 	if user.is_staff:
 		question = get_object_or_404(Question, pk = question_pk)
@@ -424,6 +425,19 @@ def sticky(request, question_pk):
 		return redirect('staff')
 	else:
 		return redirect('index')
+
+@login_required
+def set_as_answer(request, response_pk):
+	""" Switches the answer status of the given question. """
+	user = request.user
+	response = get_object_or_404(Response, pk = response_pk)
+	if response.question.user == user:
+		if response.selected_answer:
+			response.selected_answer = False
+		else:
+			response.selected_answer = True
+		response.save()
+	return redirect('question', response.question.id)
 
 
 def zip_submission(submission):
