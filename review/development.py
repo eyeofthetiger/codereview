@@ -1,5 +1,7 @@
 """ This file contains function to be used in development. """
+import datetime
 
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
@@ -62,7 +64,7 @@ def reset_test_database(request):
 		create_date=long_before, 
 		modified_date=long_before, 
 		open_date=long_before, 
-		due_date=before, 
+		due_date=just_after, 
 		description="This is assignment 1. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		allow_multiple_uploads=True,
 		allow_help_centre=True,
@@ -74,6 +76,8 @@ def reset_test_database(request):
 		test_required=False
 	)
 	a1.save()
+	a1.set_async()
+	print "a1 created"
 	a2 = Assignment(
 		assignment_id="ass02", 
 		name="Assignment 2", 
@@ -92,12 +96,14 @@ def reset_test_database(request):
 		test_required=False
 	)
 	a2.save()
+	a2.set_async()
+	print "a2 created"
 	a3 = Assignment(
 		assignment_id="ass03", 
 		name="Assignment 3", 
 		create_date=now, 
 		modified_date=now, 
-		open_date=after, 
+		open_date=just_after, 
 		due_date=long_after, 
 		description="This is assignment 3. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		allow_multiple_uploads=True,
@@ -110,7 +116,8 @@ def reset_test_database(request):
 		test_required=False
 	)
 	a3.save()
-
+	a3.set_async()
+	print "a3 created"
 	## Prev assignment w/ review
 	submission0 = Submission(
 		user = user1,

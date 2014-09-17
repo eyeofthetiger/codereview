@@ -17,6 +17,7 @@ from review.forms import UploadForm, AssignmentForm, QuestionForm, ResponseForm,
 from review.email import send_email
 from review.submission import zip_submission, get_directory_contents, get_file_contents, save_zip, save_file, is_zipfile
 
+
 @login_required
 def index(request):
 	""" Displays the appropriate dashboard for the current user. """
@@ -291,6 +292,7 @@ def edit_assignment(request, assignment_pk):
 			assignment.due_date = form.data['due_date']
 			assignment.modified_date = timezone.now()
 			assignment.save()
+			assignment.set_async()
 		return redirect('staff')
 	else:
 		form = AssignmentForm(instance=assignment)
@@ -336,6 +338,7 @@ def add_assignment(request):
 			assignment.allow_help_centre = form.data.get(
 				'allow_help_centre', False)
 			assignment.save()
+			assignment.set_async()
 		return redirect('staff')
 	else:
 		form = AssignmentForm()

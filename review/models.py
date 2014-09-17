@@ -1,6 +1,10 @@
+from datetime import timedelta
+
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
+
+from review.tasks import due_date_reached, open_date_reached, due_date_tomorrow
 
 """ This file contains Model descriptions for database tables. """
 
@@ -51,6 +55,16 @@ class Assignment(models.Model):
 		if len(submissions) > 0:
 			return submissions[0]
 		return
+
+	def set_async(self):
+		""" Set the async triggers for this Assignment. """
+		open_date_reached.apply_async(args=(self,), eta=self.open_date)
+		due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
+		due_date_reached.apply_async(args=(self,), eta=self.due_date)
+
+	def get_before_due_date(self):
+		""" Return the datetime 24 hours before the due date. """
+		return self.due_date - timedelta(days=1)
 
 class Submission(models.Model):
 	""" An assignment submitted by a user. """
