@@ -4,18 +4,18 @@ from celery import shared_task
 
 from django.contrib.auth.models import User
 
+# from review.models import EmailPreferences
 from review.email import send_email
-from review.models import *
 
 @shared_task
 def due_date_reached(assignment):
 	# Send email to students who have selected to receive an email when an assigment is due.
 	subject = assignment.name + " is due"
-	body = assignment.name + " is now due. Make sure you've submitted it!"
-	recipients = [u.email for u in EmailPreferences.objects.filter(on_due_date=True) if not u.is_staff]
+	message = assignment.name + " is now due. Make sure you've submitted it!"
+	recipients = assignment.get_due_date_email_recipients()
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)
-	
+
 	# Get submissions
 	students = User.objects.filter(is_staff=False)
 	submissions = []
@@ -34,8 +34,8 @@ def open_date_reached(assignment):
 	"""
 	# Send email to students who have selected to receive an email when an assigment becomes available.
 	subject = assignment.name + " released"
-	body = assignment.name + " has been released. Head over to Enkidu to check it out!"
-	recipients = [u.email for u in EmailPreferences.objects.filter(on_open_date=True) if not u.is_staff]
+	message = assignment.name + " has been released. Head over to Enkidu to check it out!"
+	recipients = assignment.get_open_date_email_recipients()
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)
 
@@ -46,7 +46,7 @@ def due_date_tomorrow(assignment):
 	"""
 	# Send email to students who have selected to receive an email the day before a due date.
 	subject = assignment.name + " due tomorrow"
-	body = "The due date for " + assignment.name + " is in 24 hours. Don't forget to submit it!"
-	recipients = [u.email for u in EmailPreferences.objects.filter(on_day_before_due=True) if not u.is_staff]
+	message = "The due date for " + assignment.name + " is in 24 hours. Don't forget to submit it!"
+	recipients = assignment.get_before_due_date_email_recipients()
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)

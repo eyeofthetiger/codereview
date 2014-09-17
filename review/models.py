@@ -58,13 +58,41 @@ class Assignment(models.Model):
 
 	def set_async(self):
 		""" Set the async triggers for this Assignment. """
-		open_date_reached.apply_async(args=(self,), eta=self.open_date)
-		due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
-		due_date_reached.apply_async(args=(self,), eta=self.due_date)
+		now = timezone.now()
+		if self.open_date >= now:
+			open_date_reached.apply_async(args=(self,), eta=self.open_date)
+		if self.get_before_due_date() >= now:
+			due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
+		if self.due_date >= now:
+			due_date_reached.apply_async(args=(self,), eta=self.due_date)
 
 	def get_before_due_date(self):
 		""" Return the datetime 24 hours before the due date. """
 		return self.due_date - timedelta(days=1)
+
+	def get_open_date_email_recipients(self):
+		""" Returns a list of users who will receive an email when the open date
+			occurs. Note: This is not really the most logical place for this 
+			function, but due to a bug when using Django and Celery, it's the
+			only place I could put it and get it to work.
+		"""
+		return [pref.user.email for pref in EmailPreferences.objects.filter(on_open_date=True) if not pref.user.is_staff]
+
+	def get_before_due_date_email_recipients(self):
+		""" Returns a list of users who will receive an email 24 hours before 
+			the due date . Note: This is not really the most logical place for 
+			this function, but due to a bug when using Django and Celery, it's 
+			the only place I could put it and get it to work.
+		"""
+		return [pref.user.email for pref in review.models.EmailPreferences.objects.filter(on_day_before_due=True) if not pref.user.is_staff]
+
+	def get_due_date_email_recipients(self):
+		""" Returns a list of users who will receive an email when the due date
+			occurs. Note: This is not really the most logical place for this 
+			function, but due to a bug when using Django and Celery, it's the
+			only place I could put it and get it to work.
+		"""
+		return [pref.user.email for pref in EmailPreferences.objects.filter(on_due_date=True) if not pref.user.is_staff]
 
 class Submission(models.Model):
 	""" An assignment submitted by a user. """
