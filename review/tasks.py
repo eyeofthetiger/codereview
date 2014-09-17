@@ -15,6 +15,17 @@ def due_date_reached(assignment):
 	recipients = [u.email for u in EmailPreferences.objects.filter(on_due_date=True) if not u.is_staff]
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)
+	
+	# Get submissions
+	students = User.objects.filter(is_staff=False)
+	submissions = []
+	for student in students:
+		submission = assignment.get_submission(student)
+		if submission != None:
+			submissions.append(submission)
+
+	#Assign reviews
+
 
 @shared_task
 def open_date_reached(assignment):

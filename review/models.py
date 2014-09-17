@@ -54,7 +54,7 @@ class Assignment(models.Model):
 		 has_been_submitted=True).order_by('-upload_date')
 		if len(submissions) > 0:
 			return submissions[0]
-		return
+		return None
 
 	def set_async(self):
 		""" Set the async triggers for this Assignment. """
