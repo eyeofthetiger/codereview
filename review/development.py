@@ -39,7 +39,7 @@ def reset_test_database(request):
 	user1 = User(username="user1")
 	user1.set_password('user1')
 	user1.save()
-	user1prefs = EmailPreferences(user=user1)
+	user1prefs = EmailPreferences(user=user1, on_day_before_due=True, on_due_date=True)
 	user1prefs.save()
 	user2 = User(username="user2")
 	user2.set_password('user2')

@@ -106,6 +106,7 @@ class EmailPreferences(models.Model):
 	user = models.ForeignKey(User)
 	on_upload = models.BooleanField(default=False)
 	on_submission = models.BooleanField(default=True)
+	on_day_before_due = models.BooleanField(default=False)
 	on_due_date = models.BooleanField(default=False)
 	on_open_date = models.BooleanField(default=True)
 	on_review_received = models.BooleanField(default=True)
