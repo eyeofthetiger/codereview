@@ -1,5 +1,7 @@
 from django import forms
+
 from review.models import Assignment, EmailPreferences
+
 
 """ This file contains forms to be used throughout the codereview app. """
 

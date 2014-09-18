@@ -16,6 +16,7 @@ from review.models import Submission, SubmissionFile, Course, Assignment, \
 from review.forms import UploadForm, AssignmentForm, QuestionForm, ResponseForm, EmailPreferencesForm
 from review.email import send_email
 from review.submission import zip_submission, get_directory_contents, get_file_contents, save_zip, save_file, is_zipfile
+from review.markdown import markdown_to_html
 
 
 @login_required
@@ -287,7 +288,7 @@ def edit_assignment(request, assignment_pk):
 		form = AssignmentForm(request.POST)
 		if form.is_valid():
 			assignment.name = form.data['name']
-			assignment.description = form.data['description']
+			assignment.description = markdown_to_html(form.data['description'])
 			assignment.open_date = form.data['open_date']
 			assignment.due_date = form.data['due_date']
 			assignment.modified_date = timezone.now()
@@ -324,7 +325,7 @@ def add_assignment(request):
 				modified_date=timezone.now(), 
 				open_date=form.data['open_date'], 
 				due_date=form.data['due_date'], 
-				description=form.data['description'],
+				description=markdown_to_html(form.data['description']),
 				number_of_peer_reviews=form.data['number_of_peer_reviews'],
 				review_open_date=form.data['review_open_date'],
 				review_due_date=form.data['review_due_date'],
@@ -377,7 +378,7 @@ def add_question(request):
 			question = Question(
 				user=user,
 				title=form.data['title'], 
-				text=form.data['text'], 
+				text=markdown_to_html(form.data['text']), 
 				create_date=timezone.now(), 
 				modified_date=timezone.now(),
 			)
@@ -407,17 +408,18 @@ def question(request, question_pk):
 			response = Response(
 				user=user,
 				question=question,
-				text=form.data['text'], 
+				text=markdown_to_html(form.data['text']), 
 				create_date=timezone.now(), 
 				modified_date=timezone.now(),
 			)
 			response.save()
 			# Send email to Questioner about the new answer.
-			prefs = EmailPreferences.objects.get(user=response.question.user)
-			if prefs.on_question_answered:
-				subject = "New answer for your question"
-				message = "Someone has posted a new answer to your question."
-				send_email(subject, message, [response.question.user.email])
+			if not response.question.user.is_staff:
+				prefs = EmailPreferences.objects.get(user=response.question.user)
+				if prefs.on_question_answered:
+					subject = "New answer for your question"
+					message = "Someone has posted a new answer to your question."
+					send_email(subject, message, [response.question.user.email])
 		return redirect('question', question.id)
 	else:
 		form = ResponseForm()

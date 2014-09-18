@@ -10,10 +10,10 @@
 	</div>
 	{% endif %}
 
-	<p><em>{{ question.text }}</em></p>
+	<p><em>{{ question.text|safe }}</em></p>
 	{% for comment in question.get_comments %}
 		<div style="margin-left:20px;">
-			<p>{{ comment.text }}</p>
+			<p>{{ comment.text|safe }}</p>
 			<p>{{ comment.create_date }}</p>
 		</div>
 	{% endfor %}
@@ -25,9 +25,9 @@
 			<span class="glyphicon glyphicon-ok"></span>
 		{% endif %}
 		{% if response.is_staff %}
-			<p class="staff-question">{{ response.text }}</p>
+			<p class="staff-question">{{ response.text|safe }}</p>
 		{% else %}
-			<p>{{ response.text }}</p>
+			<p>{{ response.text|safe }}</p>
 		{% endif %}
 		<p><em>Answered {{ response.modified_date }} by {{ response.get_user }}</em></p>
 
@@ -36,7 +36,7 @@
 		{% endif %}
 		{% for comment in response.get_comments %}
 			<div style="margin-left:20px;">
-				<p>{{ comment.text }}</p>
+				<p>{{ comment.text|safe }}</p>
 				<p>{{ comment.create_date }}</p>
 			</div>
 		{% endfor %}
