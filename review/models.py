@@ -202,6 +202,10 @@ class Question(models.Model):
 		""" Returns a list of all comments for this question. """
 		return QuestionComment.objects.filter(question=self)
 
+	def edited(self):
+		""" Return true if the question has been edited, false otherwise. """
+		return self.create_date != self.modified_date
+
 class Response(models.Model):
 	""" A response to a Question posted by a user. """
 	user = models.ForeignKey(User)

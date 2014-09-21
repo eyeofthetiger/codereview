@@ -1,0 +1,148 @@
+{% extends "review/base.html" %}
+{% block content %}
+	<p><a class="btn btn-default" href="{% url 'question' question.id %}">&laquo; back</a></p>
+	<h1>Edit Question</h1>
+	<hr>
+
+	{% if error_message %}
+	<div class="alert alert-danger" role="alert">
+			<p><strong>{{ error_message }}</strong></p>
+	</div>
+	{% endif %}
+
+	<form method="post" enctype="multipart/form-data">
+		<div class="form-group">
+		    {% csrf_token %}
+		    {{ form.as_p }}
+			<input type="submit" value="Post" />
+		</div>
+	</form>
+	
+	<article id="markdown">
+				<section>
+					<h2>Italics</h2>
+					<pre><code>
+*Italicised*
+					</code></pre>
+					<p>or</p>
+					<pre><code>
+_Italicised_
+					</code></pre>
+				</section>
+				<section>
+					<h2>Bold</h2>
+					<pre><code>
+**Bold**
+					</code></pre>
+					<p>or</p>
+					<pre><code>
+__Bold__
+					</code></pre>
+				</section>
+				<section>
+					<h2>Strikethrough</h2>
+					<pre><code>
+~~Oh no~~
+					</code></pre>
+				</section>
+				<section>
+					<h2>Blockquotes</h2>
+					<pre><code>
+> This is a block quote.
+>> This is a nested block quote.
+					</code></pre>
+				</section>
+				<section>
+					<h2>Unordered Lists</h2>
+					<pre><code>
+* Gibson
+* Fender
+  * Stratocaster
+  * Telecaster
+					</code></pre>
+					<p>or</p>
+					<pre><code>
++ Gibson
++ Fender
+  + Stratocaster
+  + Telecaster
+					</code></pre>
+					<p>or</p>
+					<pre><code>
+- Gibson
+- Fender
+  - Stratocaster
+  - Telecaster
+					</code></pre>
+				</section>
+				<section>
+					<h2>Ordered Lists</h2>
+					<pre><code>
+1. Led Zeppelin
+2. Led Zeppelin II
+3. Led Zeppelin III
+  1. Side A
+  2. Side B
+					</code></pre>
+				</section>
+				<section>
+					<h2>Code Blocks</h2>
+					<pre><code>
+    Code is indented by four spaces or a tab.
+					</code></pre>
+					<p>or</p>
+					<pre><code>
+```
+print("Fence it in.")
+```
+					</code></pre>
+				</section>
+				<section>
+					<h2>Code Spans</h2>
+					<pre><code>
+To print Hello world, `print "Hello world"`
+					</code></pre>
+				</section>
+				<section>
+					<h2>Syntax Highlighting</h2>
+					<pre><code>
+```python
+if language == 'python':
+    show_syntax_highlighting()
+```
+					</code></pre>
+				</section>
+				<section>
+					<h2>Horizontal Rules</h2>
+					<pre><code>
+***
+					</code></pre>
+					<p>or</p>
+					<pre><code>
+---
+					</code></pre>
+				</section>
+				<section>
+					<h2>Tables</h2>
+					<pre><code>
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+					</code></pre>
+				</section>
+				<section>
+					<h2>Links</h2>
+					<pre><code>
+[Link text](http://link.com/ "Opt. title")
+					</code></pre>
+				</section>
+				<section>
+					<h2>Images</h2>
+					<pre><code>
+![Alt text](/path/to/img.jpg "Opt. title")
+				</code></pre>
+				</section>
+			</article>
+
+{% endblock %}

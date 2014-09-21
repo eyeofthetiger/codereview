@@ -1,6 +1,6 @@
 from django import forms
 
-from review.models import Assignment, EmailPreferences
+from review.models import Assignment, EmailPreferences, Question
 
 
 """ This file contains forms to be used throughout the codereview app. """
@@ -9,11 +9,16 @@ class UploadForm(forms.Form):
 	""" A form for the uploading of a Submission. """
 	file = forms.FileField(label='Select a file')
 
-class QuestionForm(forms.Form):
+class QuestionForm(forms.ModelForm):
 	""" A form for the creation of Questions in the question forum. """
-	title = forms.CharField(label='Title')
-	text = forms.CharField(label='Question', widget=forms.Textarea)
-
+	class Meta:
+		""" Builds the form from the Question model. """
+		model = Question
+		fields = [
+			'title',
+			'text'
+		]
+		
 class ResponseForm(forms.Form):
 	""" A form for the creation of a Response to a Question in the  forum. """
 	text = forms.CharField(label='Response', widget=forms.Textarea)

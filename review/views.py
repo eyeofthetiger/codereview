@@ -375,12 +375,13 @@ def add_question(request):
 	if request.method == 'POST':
 		form = QuestionForm(request.POST)
 		if form.is_valid():
+			now = timezone.now()
 			question = Question(
 				user=user,
 				title=form.data['title'], 
 				text=markdown_to_html(form.data['text']), 
-				create_date=timezone.now(), 
-				modified_date=timezone.now(),
+				create_date=now, 
+				modified_date=now,
 			)
 			question.save()
 		return redirect('index')
@@ -393,6 +394,35 @@ def add_question(request):
 	}
 
 	return render(request, 'review/add_question.html', context)
+
+@login_required
+def edit_question(request, question_pk):
+	""" Displays a form for creating a new Question on the forum. """
+
+	user = request.user
+	question = get_object_or_404(Question, pk = question_pk)
+
+	if question.user != user:
+		return redirect('index')
+
+	if request.method == 'POST':
+		form = QuestionForm(request.POST)
+		if form.is_valid():
+			question.title=form.data['title']
+			question.text=markdown_to_html(form.data['text'])
+			question.modified_date=timezone.now()
+			question.save()
+		return redirect('question', question_pk=question.id)
+	else:
+		form = QuestionForm(instance=question)
+
+	context = {
+		'title': 'Edit question',
+		'question': question,
+		'form': form
+	}
+
+	return render(request, 'review/edit_question.html', context)
 
 @login_required
 def question(request, question_pk):

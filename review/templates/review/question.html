@@ -10,7 +10,17 @@
 	</div>
 	{% endif %}
 
-	<p><em>{{ question.text|safe }}</em></p>
+	<p>{{ question.text|safe }}</p>
+
+	<p>{{ question.create_date }}</p>
+	{% if question.edited %}
+		<p><em>Edited {{ question.modified_date }}</em></p>
+	{% endif %}
+
+	{% if question.user == user %}
+		<a class="btn btn-primary" href="{% url 'edit_question' question.id %}"> Edit &raquo;</a>
+	{% endif %}
+
 	{% for comment in question.get_comments %}
 		<div style="margin-left:20px;">
 			<p>{{ comment.text|safe }}</p>

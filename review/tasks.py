@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 
 # from review.models import EmailPreferences
 from review.email import send_email
+from review.allocation import allocation
+
+# TODO: remove old tasks when adding new ones - http://stackoverflow.com/questions/15575826/how-to-inspect-and-cancel-celery-tasks-by-task-name
 
 @shared_task
 def due_date_reached(assignment):
@@ -16,15 +19,20 @@ def due_date_reached(assignment):
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)
 
-	# Get submissions
+	# Get submissions and submitting students
 	students = User.objects.filter(is_staff=False)
 	submissions = []
+	students_with_submissions = []
 	for student in students:
 		submission = assignment.get_submission(student)
 		if submission != None:
-			submissions.append(submission)
+			submissions.append(submission.id)
+			students_with_submissions.append(student.id)
 
 	#Assign reviews
+	assignment_authors = [ s.user.id for s in submissions ]
+	num_reviews = assignment.number_of_peer_reviews
+	allocations = allocation(assignment_authors, students_with_submissions, submissions, num_reviews)
 
 
 @shared_task

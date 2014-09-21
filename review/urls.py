@@ -31,6 +31,7 @@ urlpatterns = patterns('',
 
     # Forum URLs
     url(r'^add_question/$', views.add_question, name='add_question'),
+    url(r'^edit_question/(?P<question_pk>\d+)/$', views.edit_question, name='edit_question'),
     url(r'^question/(?P<question_pk>\d+)/$', views.question, name='question'),
     url(r'^sticky/(?P<question_pk>\d+)/$', views.sticky, name='sticky'),
     url(r'^set_as_answer/(?P<response_pk>\d+)/$', views.set_as_answer, name='set_as_answer'),
