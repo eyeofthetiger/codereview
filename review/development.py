@@ -66,6 +66,7 @@ def reset_test_database(request):
 		open_date=long_before, 
 		due_date=just_after, 
 		description="This is assignment 1. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
+		description_raw="This is assignment 1. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		allow_multiple_uploads=True,
 		allow_help_centre=True,
 		number_of_peer_reviews=3,
@@ -86,6 +87,7 @@ def reset_test_database(request):
 		open_date=before, 
 		due_date=after, 
 		description="This is assignment 2. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
+		description_raw="This is assignment 2. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		allow_multiple_uploads=True,
 		allow_help_centre=True,
 		number_of_peer_reviews=3,
@@ -106,6 +108,7 @@ def reset_test_database(request):
 		open_date=just_after, 
 		due_date=long_after, 
 		description="This is assignment 3. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
+		description_raw="This is assignment 3. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		allow_multiple_uploads=True,
 		allow_help_centre=True,
 		number_of_peer_reviews=3,
@@ -192,6 +195,7 @@ def reset_test_database(request):
 		user = user4,
 		title = "Why is the sky blue?",
 		text = "Tell me why.",
+		text_raw = "Tell me why.",
 		create_date = long_before,
 		modified_date = just_before,
 	)
@@ -201,6 +205,7 @@ def reset_test_database(request):
 		user = user4,
 		title = "Why did the chicken cross the road?",
 		text = "Bacon ipsum dolor sit amet short loin jowl swine.",
+		text_raw = "Bacon ipsum dolor sit amet short loin jowl swine.",
 		create_date = long_before,
 		modified_date = long_before,
 	)
@@ -210,6 +215,7 @@ def reset_test_database(request):
 		user = user2,
 		question = question2,
 		text = "Just because.",
+		text_raw = "Just because.",
 		create_date = before,
 		modified_date = before,
 	)
@@ -219,6 +225,7 @@ def reset_test_database(request):
 		user = user2,
 		question = question2,
 		text = "Egg.",
+		text_raw = "Egg.",
 		create_date = before,
 		modified_date = before,
 	)

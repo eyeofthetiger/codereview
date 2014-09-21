@@ -16,8 +16,11 @@ class QuestionForm(forms.ModelForm):
 		model = Question
 		fields = [
 			'title',
-			'text'
+			'text_raw'
 		]
+		labels = {
+            'text_raw': "Text",
+        }
 		
 class ResponseForm(forms.Form):
 	""" A form for the creation of a Response to a Question in the  forum. """
@@ -48,7 +51,7 @@ class AssignmentForm(forms.ModelForm):
 		fields = [
 			'assignment_id',
 			'name', 
-			'description', 
+			'description_raw', 
 			'open_date', 
 			'due_date', 
 			'allow_multiple_uploads', 
@@ -60,3 +63,6 @@ class AssignmentForm(forms.ModelForm):
 			'has_tests',
 			'test_required',
 		]
+		labels = {
+            'decsription_raw': "Description",
+        }

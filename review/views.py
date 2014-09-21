@@ -288,7 +288,8 @@ def edit_assignment(request, assignment_pk):
 		form = AssignmentForm(request.POST)
 		if form.is_valid():
 			assignment.name = form.data['name']
-			assignment.description = markdown_to_html(form.data['description'])
+			assignment.description = markdown_to_html(form.data['description_raw'])
+			assignment.description_raw = form.data['description_raw']
 			assignment.open_date = form.data['open_date']
 			assignment.due_date = form.data['due_date']
 			assignment.modified_date = timezone.now()
@@ -325,7 +326,8 @@ def add_assignment(request):
 				modified_date=timezone.now(), 
 				open_date=form.data['open_date'], 
 				due_date=form.data['due_date'], 
-				description=markdown_to_html(form.data['description']),
+				description=markdown_to_html(form.data['description_raw']),
+				description_raw=form.data['description_raw'],
 				number_of_peer_reviews=form.data['number_of_peer_reviews'],
 				review_open_date=form.data['review_open_date'],
 				review_due_date=form.data['review_due_date'],
@@ -379,7 +381,8 @@ def add_question(request):
 			question = Question(
 				user=user,
 				title=form.data['title'], 
-				text=markdown_to_html(form.data['text']), 
+				text=markdown_to_html(form.data['text_raw']),
+				text_raw=form.data['text_raw'],
 				create_date=now, 
 				modified_date=now,
 			)
@@ -409,7 +412,8 @@ def edit_question(request, question_pk):
 		form = QuestionForm(request.POST)
 		if form.is_valid():
 			question.title=form.data['title']
-			question.text=markdown_to_html(form.data['text'])
+			question.text=markdown_to_html(form.data['text_raw'])
+			question.text_raw=str(form.data['text_raw']),
 			question.modified_date=timezone.now()
 			question.save()
 		return redirect('question', question_pk=question.id)
@@ -439,6 +443,7 @@ def question(request, question_pk):
 				user=user,
 				question=question,
 				text=markdown_to_html(form.data['text']), 
+				text_raw=form.data['text'],
 				create_date=timezone.now(), 
 				modified_date=timezone.now(),
 			)
