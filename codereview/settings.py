@@ -81,7 +81,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/admin/codereview/static/'
+STATIC_ROOT = '/home/django/codereview/static/'
 
 # Email Settings - TODO: This is just a local email server for testing.
 
