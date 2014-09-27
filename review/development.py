@@ -126,7 +126,7 @@ def reset_test_database(request):
 		user = user1,
 		assignment = a1,
 		upload_date = before,
-		upload_path = "./test_submission/0/",
+		upload_path = "codereview/test_submission/0/",
 		has_been_submitted = True,
 		unviewed_reviews = 1
 	)
@@ -152,7 +152,7 @@ def reset_test_database(request):
 		user = user2,
 		assignment = a1,
 		upload_date = just_before,
-		upload_path = "./test_submission/1/",
+		upload_path = "codereview/test_submission/1/",
 		has_been_submitted = True,
 		unviewed_reviews = 0
 	)
@@ -169,7 +169,7 @@ def reset_test_database(request):
 		user = user3,
 		assignment = a2,
 		upload_date = just_before,
-		upload_path = "./test_submission/2/",
+		upload_path = "codereview/test_submission/2/",
 		has_been_submitted = True,
 		unviewed_reviews = 0
 	)
@@ -182,7 +182,7 @@ def reset_test_database(request):
 		user = user4,
 		assignment = a2,
 		upload_date = just_before,
-		upload_path = "./test_submission/3/",
+		upload_path = "codereview/test_submission/3/",
 		has_been_submitted = True,
 		unviewed_reviews = 0
 	)
