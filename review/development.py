@@ -30,6 +30,10 @@ def load_student(request):
 def reset_test_database(request):
 	""" Loads a database with fake data for testing. """
 
+
+	#Delete all users except admin
+	User.objects.filter(username__contains='user').delete()
+	
 	# Delete current database
 	Submission.objects.all().delete()
 	SubmissionFile.objects.all().delete()
@@ -41,9 +45,6 @@ def reset_test_database(request):
 	EmailPreferences.objects.all().delete()
 	Question.objects.all().delete()
 	Response.objects.all().delete()
-
-	#Delete all users except admin
-	User.objects.filter(username__contains='user').delete()
 
 
 	now = timezone.now()
