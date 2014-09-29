@@ -32,7 +32,7 @@ def load_student(request):
 def reset_test_database(request):
 	""" Loads a database with fake data for testing. """
 
-	flush()
+	cache.clear()
 
 	# Delete current database
 	Submission.objects.all().delete()
@@ -256,13 +256,3 @@ def reset_test_database(request):
 	answer2.save()
 
 	return redirect('index')
-
-
-def flush():
-    # This works as advertised on the memcached cache:
-    cache.clear()
-    # This manually purges the SQLite cache:
-    if connections.get('cache_database', False):
-    	cursor = connections['cache_database'].cursor()
-	    cursor.execute('DELETE FROM cache_table')
-	    transaction.commit_unless_managed(using='cache_database')
