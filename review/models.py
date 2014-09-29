@@ -5,7 +5,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 
-from review.tasks import due_date_reached, open_date_reached, due_date_tomorrow
+import tasks
+# from review.tasks import due_date_reached, open_date_reached, due_date_tomorrow
 
 """ This file contains Model descriptions for database tables. """
 
@@ -60,13 +61,14 @@ class Assignment(models.Model):
 
 	def set_async(self):
 		""" Set the async triggers for this Assignment. """
+		print "Setting async"
 		now = timezone.now()
 		if self.open_date >= now:
-			open_date_reached.apply_async(args=(self,), eta=self.open_date)
+			tasks.open_date_reached.apply_async(args=(self,), eta=self.open_date)
 		if self.get_before_due_date() >= now:
-			due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
+			tasks.due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
 		if self.due_date >= now:
-			due_date_reached.apply_async(args=(self,), eta=self.due_date)
+			tasks.due_date_reached.apply_async(args=(self,), eta=self.due_date)
 
 	def get_before_due_date(self):
 		""" Return the datetime 24 hours before the due date. """

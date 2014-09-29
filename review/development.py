@@ -31,9 +31,6 @@ def reset_test_database(request):
 	""" Loads a database with fake data for testing. """
 
 
-	#Delete all users
-	User.objects.all().delete()
-
 	# Delete current database
 	Submission.objects.all().delete()
 	SubmissionFile.objects.all().delete()
@@ -46,35 +43,43 @@ def reset_test_database(request):
 	Question.objects.all().delete()
 	Response.objects.all().delete()
 
-	admin = User(username="admin", is_staff=True, is_superuser=True)
-	admin.set_password('admin')
-	admin.save()
-
 	now = timezone.now()
 	just_before = timezone.now() - datetime.timedelta(seconds=10)
 	before = timezone.now() - datetime.timedelta(days=1)
 	long_before = timezone.now() - datetime.timedelta(days=30)
-	just_after = timezone.now() + datetime.timedelta(seconds=10)
+	just_after = timezone.now() + datetime.timedelta(seconds=30)
 	after = timezone.now() + datetime.timedelta(days=1)
 	long_after = timezone.now() + datetime.timedelta(days=30)
-	user1 = User(username="user1")
-	user1.set_password('user1')
-	user1.save()
+
+	#Deal with users
+	if len(User.objects.all()) <= 1:
+		user1 = User(username="user1")
+		user1.set_password('user1')
+		user1.save()
+		user2 = User(username="user2")
+		user2.set_password('user2')
+		user2.save()
+		user3 = User(username="user3")
+		user3.set_password('user3')
+		user3.save()
+		user4 = User(username="user4")
+		user4.set_password('user4')
+		user4.save()
+	else:
+		user1 = User.objects.filter(username="user1")[0]
+		user2 = User.objects.filter(username="user2")[0]
+		user3 = User.objects.filter(username="user3")[0]
+		user4 = User.objects.filter(username="user4")[0]
+
 	user1prefs = EmailPreferences(user=user1, on_day_before_due=True, on_due_date=True)
 	user1prefs.save()
-	user2 = User(username="user2")
-	user2.set_password('user2')
-	user2.save()
+	
 	user2prefs = EmailPreferences(user=user2)
 	user2prefs.save()
-	user3 = User(username="user3")
-	user3.set_password('user3')
-	user3.save()
+	
 	user3prefs = EmailPreferences(user=user3)
 	user3prefs.save()
-	user4 = User(username="user4")
-	user4.set_password('user4')
-	user4.save()
+	
 	user4prefs = EmailPreferences(user=user4)
 	user4prefs.save()
 	course = Course(course_name="Test Course", course_code="TEST1000", course_id="201402TEST1000", year=2014, semester='2', institution="UQ")
@@ -85,13 +90,13 @@ def reset_test_database(request):
 		create_date=long_before, 
 		modified_date=long_before, 
 		open_date=long_before, 
-		due_date=just_after, 
+		due_date=just_before, 
 		description="This is assignment 1. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		description_raw="This is assignment 1. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		allow_multiple_uploads=True,
 		allow_help_centre=True,
 		number_of_peer_reviews=3,
-		review_open_date=just_after,
+		review_open_date=just_before,
 		review_due_date=after,
 		weighting=20,
 		has_tests=False,
@@ -106,13 +111,13 @@ def reset_test_database(request):
 		create_date=before, 
 		modified_date=before, 
 		open_date=before, 
-		due_date=after, 
+		due_date=just_after, 
 		description="This is assignment 2. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		description_raw="This is assignment 2. Bacon ipsum dolor sit amet short loin jowl swine, drumstick hamburger meatball prosciutto frankfurter chuck. Shank sausage doner meatball shankle flank, t-bone venison turkey jerky bacon strip steak ribeye chicken pastrami. Capicola ground round corned beef turducken frankfurter. Jowl landjaeger bacon, sausage frankfurter meatball rump bresaola strip steak fatback short loin jerky pancetta turducken.",
 		allow_multiple_uploads=True,
 		allow_help_centre=True,
 		number_of_peer_reviews=3,
-		review_open_date=after,
+		review_open_date=just_after,
 		review_due_date=long_after,
 		weighting=20,
 		has_tests=False,
@@ -171,7 +176,7 @@ def reset_test_database(request):
 
 	submission1 = Submission(
 		user = user2,
-		assignment = a1,
+		assignment = a2,
 		upload_date = just_before,
 		upload_path = "codereview/test_submission/1/",
 		has_been_submitted = True,
@@ -181,11 +186,6 @@ def reset_test_database(request):
 
 	sf1 = SubmissionFile(submission=submission1, file_path="email.py")
 	sf1.save()
-
-	assigned_review3 = AssignedReview(assigned_user=user1, 
-		assigned_submission=submission1, has_been_reviewed=False)
-	assigned_review3.save()
-
 	submission2 = Submission(
 		user = user3,
 		assignment = a2,
