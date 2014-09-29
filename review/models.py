@@ -61,12 +61,12 @@ class Assignment(models.Model):
 	def set_async(self):
 		""" Set the async triggers for this Assignment. """
 		now = timezone.now()
-		# if self.open_date >= now:
-		# 	open_date_reached.apply_async(args=(self,), eta=self.open_date)
-		# if self.get_before_due_date() >= now:
-		# 	due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
-		# if self.due_date >= now:
-		# 	due_date_reached.apply_async(args=(self,), eta=self.due_date)
+		if self.open_date >= now:
+			open_date_reached.apply_async(args=(self,), eta=self.open_date)
+		if self.get_before_due_date() >= now:
+			due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
+		if self.due_date >= now:
+			due_date_reached.apply_async(args=(self,), eta=self.due_date)
 
 	def get_before_due_date(self):
 		""" Return the datetime 24 hours before the due date. """

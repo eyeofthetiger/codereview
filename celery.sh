@@ -1,0 +1,1 @@
+celery -A codereview worker
