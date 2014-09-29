@@ -6,8 +6,6 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.db import connections, transaction
-from django.core.cache import cache # This is the memcache cache.
 
 from review.models import Submission, SubmissionFile, Course, Assignment, \
 	AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
@@ -31,8 +29,6 @@ def load_student(request):
 
 def reset_test_database(request):
 	""" Loads a database with fake data for testing. """
-
-	cache.clear()
 
 	# Delete current database
 	Submission.objects.all().delete()
