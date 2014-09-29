@@ -31,9 +31,9 @@ def reset_test_database(request):
 	""" Loads a database with fake data for testing. """
 
 
-	#Delete all users except admin
-	User.objects.filter(username__contains='user').delete()
-	
+	#Delete all users
+	User.objects.all().delete()
+
 	# Delete current database
 	Submission.objects.all().delete()
 	SubmissionFile.objects.all().delete()
@@ -46,6 +46,9 @@ def reset_test_database(request):
 	Question.objects.all().delete()
 	Response.objects.all().delete()
 
+	admin = User(username="admin", is_staff=True, is_superuser=True)
+	admin.set_password('admin')
+	admin.save()
 
 	now = timezone.now()
 	just_before = timezone.now() - datetime.timedelta(seconds=10)
