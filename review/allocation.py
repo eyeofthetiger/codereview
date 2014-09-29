@@ -159,6 +159,4 @@ def allocation(assignment_authors, students, assignments, nbr_reviews):
                              assignments, students_allocated, reviews_per_assn,
                              nbr_reviews, alloc_mapping, j)  
 
-    for k in alloc_mapping.items():
-        print k
     return alloc_mapping

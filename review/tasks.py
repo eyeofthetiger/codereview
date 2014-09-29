@@ -4,9 +4,9 @@ from celery import shared_task
 
 from django.contrib.auth.models import User
 
-# from review.models import EmailPreferences
 from review.email import send_email
 from review.allocation import allocation
+import review.models
 
 # TODO: remove old tasks when adding new ones - http://stackoverflow.com/questions/15575826/how-to-inspect-and-cancel-celery-tasks-by-task-name
 
@@ -18,22 +18,40 @@ def due_date_reached(assignment):
 	recipients = assignment.get_due_date_email_recipients()
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)
-
 	# Get submissions and submitting students
 	students = User.objects.filter(is_staff=False)
+
 	submissions = []
 	students_with_submissions = []
+	assignment_authors = {}
 	for student in students:
 		submission = assignment.get_submission(student)
 		if submission != None:
 			submissions.append(submission.id)
 			students_with_submissions.append(student.id)
+			assignment_authors[student.id] = submission.id
 
-	#Assign reviews
-	assignment_authors = [ s.user.id for s in submissions ]
 	num_reviews = assignment.number_of_peer_reviews
 	allocations = allocation(assignment_authors, students_with_submissions, submissions, num_reviews)
 
+	#Assign reviews
+	for user_id in allocations.keys():
+		user = User.objects.get(id=user_id)
+		for submission_id in allocations[user_id]:
+			submission = review.models.Submission.objects.get(id=submission_id)
+			assigned_review = review.models.AssignedReview(
+				assigned_user=user, 
+				assigned_submission=submission,
+				has_been_reviewed=False,
+			)
+			assigned_review.save()
+
+		prefs = review.models.EmailPreferences.objects.filter(user=user)[0]
+		#Send email about review being assigned if preferences are correct.
+		if prefs.on_review_assigned:
+			subject = "You've been assigned a review"
+			message = "You've been assigned a review"
+			send_email(subject, message, [user.email])
 
 @shared_task
 def open_date_reached(assignment):
