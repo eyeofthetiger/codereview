@@ -1,6 +1,7 @@
 import os.path
+from subprocess import call
 
-import docker
+# import docker
 
 def save_file(upload, directory):
 	""" Receives an uploaded file, and a directory to place it in. Writes the
@@ -12,8 +13,9 @@ def save_file(upload, directory):
 	return path
 
 def build_dockerfile(path):
-	client = docker.Client(base_url='unix://var/run/docker.sock')
-	return client.build(path=path)
+	print call(['sudo', 'docker', 'build', '-t', 'lhansford/testing', path])
+	# client = docker.Client(base_url='unix://var/run/docker.sock')
+	# return client.build(path=path)
 
 def run_docker(image, testpath, command):
 	client = docker.Client(base_url='unix://var/run/docker.sock')
