@@ -42,27 +42,21 @@ class EmailPreferencesForm(forms.ModelForm):
 			'on_question_asked',
 		]
 
-class AssignmentForm(forms.ModelForm):
+class AssignmentForm(forms.Form):
 	""" A form for the creation or editing of an assignment. """
 
-	class Meta:
-		""" Builds the form from the Assignment model. """
-		model = Assignment
-		fields = [
-			'assignment_id',
-			'name', 
-			'description_raw', 
-			'open_date', 
-			'due_date', 
-			'allow_multiple_uploads', 
-			'allow_help_centre',
-			'number_of_peer_reviews',
-			'review_open_date',
-			'review_due_date',
-			'weighting',
-			'has_tests',
-			'test_required',
-		]
-		labels = {
-            'decsription_raw': "Description",
-        }
+	assignment_id = forms.CharField(max_length=140) #Unique ID for assignment
+	name = forms.CharField(max_length=140)
+	open_date = forms.DateTimeField()
+	due_date = forms.DateTimeField()
+	description_raw = forms.CharField(label='Description', widget=forms.Textarea)
+	allow_multiple_uploads = forms.BooleanField(required=False)
+	allow_help_centre = forms.BooleanField(required=False)
+	number_of_peer_reviews = forms.IntegerField()
+	review_open_date = forms.DateTimeField()
+	review_due_date = forms.DateTimeField()
+	weighting = forms.IntegerField()
+	test_zip = forms.FileField(required=False)
+	dockerfile = forms.FileField(required=False)
+	docker_command = forms.CharField(required=False)
+	test_required = forms.BooleanField(required=False)

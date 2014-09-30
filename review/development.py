@@ -98,7 +98,9 @@ def reset_test_database(request):
 		review_open_date=just_before,
 		review_due_date=after,
 		weighting=20,
-		has_tests=False,
+		test_zip="",
+		dockerfile="",
+		docker_command="",
 		test_required=False
 	)
 	a1.save()
@@ -119,7 +121,9 @@ def reset_test_database(request):
 		review_open_date=just_after,
 		review_due_date=long_after,
 		weighting=20,
-		has_tests=False,
+		test_zip="",
+		dockerfile="",
+		docker_command="",
 		test_required=False
 	)
 	a2.save()
@@ -140,7 +144,9 @@ def reset_test_database(request):
 		review_open_date=long_after,
 		review_due_date=long_after,
 		weighting=20,
-		has_tests=False,
+		test_zip="",
+		dockerfile="",
+		docker_command="",
 		test_required=False
 	)
 	a3.save()

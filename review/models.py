@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime
 import time
+import os.path
 
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -39,7 +40,9 @@ class Assignment(models.Model):
 	review_open_date = models.DateTimeField()
 	review_due_date = models.DateTimeField()
 	weighting = models.IntegerField()
-	has_tests = models.BooleanField()
+	test_zip = models.TextField()
+	dockerfile = models.TextField()
+	docker_command = models.TextField()
 	test_required = models.BooleanField()
 
 	def __unicode__(self):
