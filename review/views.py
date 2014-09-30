@@ -17,6 +17,7 @@ from review.forms import UploadForm, AssignmentForm, QuestionForm, ResponseForm,
 from review.email import send_email
 from review.submission import zip_submission, get_directory_contents, get_file_contents, save_zip, save_file, is_zipfile
 from review.markdown import markdown_to_html
+import review.testing
 
 
 @login_required
@@ -285,19 +286,57 @@ def edit_assignment(request, assignment_pk):
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 
 	if request.method == 'POST':
-		form = AssignmentForm(request.POST)
+		form = AssignmentForm(request.POST, request.FILES)
 		if form.is_valid():
-			assignment.name = form.data['name']
-			assignment.description = markdown_to_html(form.data['description_raw'])
-			assignment.description_raw = form.data['description_raw']
-			assignment.open_date = form.data['open_date']
-			assignment.due_date = form.data['due_date']
+			print request.FILES
+			assignment.assignment_id = form.cleaned_data['assignment_id']
+			assignment.name = form.cleaned_data['name']
+			assignment.description = markdown_to_html(form.cleaned_data['description_raw'])
+			assignment.description_raw = form.cleaned_data['description_raw']
+			assignment.open_date = form.cleaned_data['open_date']
+			assignment.due_date = form.cleaned_data['due_date']
 			assignment.modified_date = timezone.now()
+			assignment.review_open_date = form.cleaned_data['review_open_date']
+			assignment.review_due_date = form.cleaned_data['review_due_date']
+			assignment.number_of_peer_reviews = form.cleaned_data['number_of_peer_reviews']
+			assignment.weighting = form.cleaned_data['weighting']
+			assignment.test_required = form.cleaned_data['test_required']
+
+			# Check if test were uploaded
+			test_zip = request.FILES.get('test_zip', None)
+			dockerfile = request.FILES.get('dockerfile', None)
+			if test_zip and dockerfile and form.cleaned_data['docker_command'] != "":
+				# Deal with uploads
+				directory = os.path.join("uploads", "assignment", str(assignment.id))
+				if not os.path.exists(directory):
+					os.makedirs(directory)
+				assignment.test_zip = review.testing.save_file(test_zip, directory)
+				assignment.dockerfile = review.testing.save_file(dockerfile, directory)
+				assignment.docker_command = form.cleaned_data['docker_command']
+
+				# Build the dockerfile
+				container_id = review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile))
+				print container_id
+
 			assignment.save()
 			assignment.set_async()
-		return redirect('staff')
-	else:
-		form = AssignmentForm(instance=assignment)
+			return redirect('staff')
+	
+	form = AssignmentForm(initial={
+			'assignment_id': assignment.assignment_id,
+			'name': assignment.name,
+			'description_raw': assignment.description_raw,
+			'open_date': assignment.open_date,
+			'due_date': assignment.due_date,
+			'allow_multiple_uploads': assignment.allow_multiple_uploads,
+			'allow_help_centre': assignment.allow_help_centre,
+			'review_open_date': assignment.review_open_date,
+			'review_due_date': assignment.review_due_date,
+			'number_of_peer_reviews': assignment.number_of_peer_reviews,
+			'weighting': assignment.weighting,
+			'test_required': assignment.test_required,
+			'docker_command': assignment.docker_command,
+		})
 
 	context = { 
 		'title': "Editing " + assignment.name,
@@ -317,32 +356,46 @@ def add_assignment(request):
 		return redirect('index')
 
 	if request.method == 'POST':
-		form = AssignmentForm(request.POST)
+		form = AssignmentForm(request.POST, request.FILES)
 		if form.is_valid():
 			assignment = Assignment(
-				assignment_id=form.data['assignment_id'], 
-				name=form.data['name'], 
+				assignment_id=form.cleaned_data['assignment_id'], 
+				name=form.cleaned_data['name'], 
 				create_date=timezone.now(), 
 				modified_date=timezone.now(), 
-				open_date=form.data['open_date'], 
-				due_date=form.data['due_date'], 
-				description=markdown_to_html(form.data['description_raw']),
-				description_raw=form.data['description_raw'],
-				number_of_peer_reviews=form.data['number_of_peer_reviews'],
-				review_open_date=form.data['review_open_date'],
-				review_due_date=form.data['review_due_date'],
-				weighting=form.data['weighting'],	
+				open_date=form.cleaned_data['open_date'], 
+				due_date=form.cleaned_data['due_date'], 
+				description=markdown_to_html(form.cleaned_data['description_raw']),
+				description_raw=form.cleaned_data['description_raw'],
+				number_of_peer_reviews=form.cleaned_data['number_of_peer_reviews'],
+				review_open_date=form.cleaned_data['review_open_date'],
+				review_due_date=form.cleaned_data['review_due_date'],
+				weighting=form.cleaned_data['weighting'],
+				test_required=form.cleaned_data['test_required'],
+				allow_multiple_uploads=form.cleaned_data['allow_multiple_uploads'],
+				allow_help_centre=form.cleaned_data['allow_help_centre'],	
 			)
-			# Get booleans. If false they aren't in the form dict.
-			assignment.test_required = form.data.get('test_required', False)
-			assignment.has_tests = form.data.get('has_tests', False)
-			assignment.allow_multiple_uploads = form.data.get(
-				'allow_multiple_uploads', False)
-			assignment.allow_help_centre = form.data.get(
-				'allow_help_centre', False)
+			assignment.save()
+
+			# Check if test were uploaded
+			test_zip = request.FILES.get('test_zip', None)
+			dockerfile = request.FILES.get('dockerfile', None)
+			if test_zip and dockerfile and form.cleaned_data['docker_command'] != "":
+				# Deal with uploads
+				directory = os.path.join("uploads", "assignment", str(assignment.id))
+				if not os.path.exists(directory):
+					os.makedirs(directory)
+				assignment.test_zip = review.testing.save_file(test_zip, directory)
+				assignment.dockerfile = review.testing.save_file(dockerfile, directory)
+				assignment.docker_command = form.cleaned_data['docker_command']
+
+				# Build the dockerfile
+				container_id = reviews.testing.build_dockerfile(os.path.dirname(assignment.dockerfile))
+				print container_id
+
 			assignment.save()
 			assignment.set_async()
-		return redirect('staff')
+			return redirect('staff')
 	else:
 		form = AssignmentForm()
 
