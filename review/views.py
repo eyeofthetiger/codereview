@@ -315,8 +315,7 @@ def edit_assignment(request, assignment_pk):
 				assignment.docker_command = form.cleaned_data['docker_command']
 
 				# Build the dockerfile
-				container_id = review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile))
-				print container_id
+				review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile, assignment.id))
 
 			assignment.save()
 			assignment.set_async()
@@ -390,8 +389,7 @@ def add_assignment(request):
 				assignment.docker_command = form.cleaned_data['docker_command']
 
 				# Build the dockerfile
-				container_id = reviews.testing.build_dockerfile(os.path.dirname(assignment.dockerfile))
-				print container_id
+				review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile, assignment.id))
 
 			assignment.save()
 			assignment.set_async()

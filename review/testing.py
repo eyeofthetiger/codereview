@@ -12,13 +12,16 @@ def save_file(upload, directory):
 		f.write(upload.read())
 	return path
 
-def build_dockerfile(path):
-	print call(['sudo', 'docker', 'build', '-t', 'lhansford/testing', path])
-	# client = docker.Client(base_url='unix://var/run/docker.sock')
-	# return client.build(path=path)
+def build_dockerfile(path, assignment_id):
+	call(['sudo', 'docker', 'build', '-t', 'enkidu/' + str(assignment_id), path])
 
-def run_docker(image, testpath, command):
-	client = docker.Client(base_url='unix://var/run/docker.sock')
-	container = client.create_container(image, command=command)
-	binds = { testpath: { 'bind': '/opt/testing', 'ro': False } }
-	client.start(container, binds=binds)
+def run_docker(assignment_id, testpath, command):
+	call([
+		'sudo', 
+		'docker', 
+		'run', 
+		'-v', 
+		testpath + ":/opt/testing", 
+		'enkidu/' + str(assignment_id),
+		command
+	])
