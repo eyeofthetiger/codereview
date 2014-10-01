@@ -17,16 +17,9 @@ def build_dockerfile(path, assignment_id):
 	call(['sudo', 'docker', 'build', '-t', 'enkidu/' + str(assignment_id), path])
 
 def run_docker(assignment_id, testpath, command):
-	print 'sudo docker run -v ' + testpath + ":/opt/testing" + ' enkidu/' + str(assignment_id) + ' ' + command
-	call([
-		'sudo', 
-		'docker', 
-		'run', 
-		'-v', 
-		testpath + ":/opt/testing", 
-		'enkidu/' + str(assignment_id),
-		command
-	])
+	cmd = 'sudo docker run -v ' + testpath + ":/opt/testing" + ' enkidu/' + str(assignment_id) + ' ' + command
+	print cmd
+	call(cmd)
 
 def create_temp_files(assignment, submission_file):
 	""" Puts a submission and the testing files into the same directory. """
