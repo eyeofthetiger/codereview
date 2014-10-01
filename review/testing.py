@@ -18,6 +18,9 @@ def build_dockerfile(path, assignment_id):
 
 def run_docker(assignment_id, testpath, command):
 	cmd = 'sudo docker run -v ' + testpath + ":/opt/testing" + ' enkidu/' + str(assignment_id) + ' ' + command
+	print cmd
+	# Hacky workaround of writing to shell file because pytohn thinks the mount 
+	# volume for Docker is acutally a local dir
 	sh_file = os.path.join(testpath, 'docker.sh')
 	with open(sh_file, 'w') as f:
 		f.write(cmd)

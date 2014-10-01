@@ -118,7 +118,7 @@ def email_preferences(request):
 
 
 @login_required
-def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp_path=None):
+def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp_path=None, test_output=None):
 	""" Displays an assignment upload form."""
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 
@@ -167,13 +167,15 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 		else:
 			# Test button clicked
 			# Build context
-			temp_path = os.path.join(os.getcwd(), request.POST['temp_path'])
+			temp_path = request.POST['temp_path']
+			abs_temp_path = os.path.join(os.getcwd(), temp_path)
 			upload = request.POST['upload']
 			submission = get_object_or_404(Submission, pk=request.POST['submission_id'])
 			upload_form = UploadForm()
+			test_output = os.path.join(temp_path, 'output.txt')
 
 			# Run tests
-			review.testing.run_docker(assignment.id, temp_path, assignment.docker_command)
+			review.testing.run_docker(assignment.id, abs_temp_path, assignment.docker_command)
 
 	else:
 		upload_form = UploadForm()
@@ -185,6 +187,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 		'upload': uploaded_file, 
 		'submission': submission,
 		'temp_path': temp_path
+		'test_output': test_output
 	}
 
 	return render(request, 'review/assignment.html', context)
