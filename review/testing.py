@@ -49,8 +49,9 @@ def create_temp_files(assignment, submission_file):
 				zip_object.extract(f, path=path)
 	else:
 		temp_file = os.path.join(path, submission_file.name)
+		submission_file.seek(0) # Reset cursor
 		with open(temp_file, 'w') as f:
-			f.write(submission_file.file.read())
+			f.write(submission_file.read())
 	return path
 
 
