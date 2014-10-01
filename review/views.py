@@ -167,7 +167,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 		else:
 			# Test button clicked
 			# Build context
-			temp_path = request.POST['temp_path']
+			temp_path = os.path.join(os.getcwd(), request.POST['temp_path'])
 			upload = request.POST['upload']
 			submission = get_object_or_404(Submission, pk=request.POST['submission_id'])
 			upload_form = UploadForm()
