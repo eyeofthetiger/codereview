@@ -186,7 +186,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 		'upload_form': upload_form, 
 		'upload': uploaded_file, 
 		'submission': submission,
-		'temp_path': temp_path
+		'temp_path': temp_path,
 		'test_output': test_output
 	}
 
