@@ -166,13 +166,14 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 				temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
 		else:
 			# Test button clicked
-			print request.POST
-			print temp_path
-			upload_form = UploadForm(request.POST, request.FILES)
-			if upload_form.is_valid():
-				pass
-				# temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
-				# review.testing.run_docker(assignment.id, temp_path, assignment.docker_command)
+			# Build context
+			temp_path = request.POST['temp_path']
+			upload = request.POST['upload']
+			submission = get_object_or_404(Submission, pk=request.POST['submission_id'])
+			upload_form = UploadForm()
+
+			# Run tests
+			review.testing.run_docker(assignment.id, temp_path, assignment.docker_command)
 
 	else:
 		upload_form = UploadForm()
