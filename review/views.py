@@ -404,7 +404,7 @@ def add_assignment(request):
 				assignment.docker_command = form.cleaned_data['docker_command']
 
 				# Build the dockerfile
-				review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile, assignment.id))
+				review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile), assignment.id)
 
 			assignment.save()
 			assignment.set_async()
