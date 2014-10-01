@@ -50,7 +50,7 @@ def create_temp_files(assignment, submission_file):
 	else:
 		temp_file = os.path.join(path, submission_file.name)
 		with open(temp_file, 'w') as f:
-			f.write(submission_file.read())
+			f.write(submission_file.file.read())
 	return path
 
 

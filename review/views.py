@@ -143,6 +143,9 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 				submission.upload_path = directory
 				submission.save()
 
+				# Create temp files for testing
+				temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
+
 				#Check if upload is zip file and take appropriate action
 				u_file = request.FILES['file']
 				if u_file.name.endswith('.zip'):
@@ -162,8 +165,6 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 				else:
 					uploaded_file = save_file(request.FILES['file'], submission)
 
-				# Create temp files for testing
-				temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
 		else:
 			# Test button clicked
 			# Build context
