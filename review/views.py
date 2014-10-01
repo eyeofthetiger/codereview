@@ -167,6 +167,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 		else:
 			# Test button clicked
 			# Build context
+			print request.POST
 			temp_path = request.POST['temp_path']
 			abs_temp_path = os.path.join(os.getcwd(), temp_path)
 			upload = request.POST['upload']
