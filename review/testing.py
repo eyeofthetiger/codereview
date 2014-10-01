@@ -29,9 +29,10 @@ def run_docker(assignment_id, testpath, command):
 	print output
 	# Append Docker output to stdout
 	output_file = os.path.join(testpath, 'output.txt')
-	with open(output_file, 'r') as f:
-		for line in f.readlines():
-			output += line
+	if os.path.isfile(output_file):
+		with open(output_file, 'r') as f:
+			for line in f.readlines():
+				output += line
 	return output
 
 def create_temp_files(assignment, submission_file):
