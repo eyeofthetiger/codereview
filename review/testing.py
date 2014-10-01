@@ -26,8 +26,7 @@ def run_docker(assignment_id, testpath, command):
 		f.write(cmd)
 	p = Popen(['timeout', '-s', 'SIGKILL', '2', 'sh', sh_file], stdout=PIPE)
 	output, err = p.communicate()
-	output = output[:]
-	print output
+	output = err + output
 	# Append Docker output to stdout
 	output_file = os.path.join(testpath, 'output.txt')
 	if os.path.isfile(output_file):
