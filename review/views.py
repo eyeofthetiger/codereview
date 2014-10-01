@@ -189,6 +189,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 		'temp_path': temp_path,
 		'test_output': test_output
 	}
+	print context
 
 	return render(request, 'review/assignment.html', context)
 
