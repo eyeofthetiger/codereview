@@ -32,9 +32,9 @@
 	{% if assignment.has_tests %}
 		<h2><strong>2.</strong> Unit Test</h2>
 
-		<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
-
 		{% if not test_output %}	
+			<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
+
 			{% if upload %}
 				<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
 					{% csrf_token %}
@@ -47,7 +47,9 @@
 				<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
 				<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
 			{% endif %}
+
 		{% else %}
+			<h3>Test Results</h3>
 			<pre>{{ test_output }}</pre>
 		{% endif %}
 
