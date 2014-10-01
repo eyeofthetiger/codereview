@@ -19,9 +19,9 @@ def build_dockerfile(path, assignment_id):
 def run_docker(assignment_id, testpath, command):
 	cmd = 'sudo docker run -v ' + testpath + ":/opt/testing" + ' enkidu/' + str(assignment_id) + ' ' + command
 	ctr_name = 'some_random_name'
-    p = Popen(['timeout', '-s', 'SIGKILL', '2', cmd], stdout=PIPE)
-    out = p.stdout.read()
-    print out
+	p = Popen(['timeout', '-s', 'SIGKILL', '2', cmd], stdout=PIPE)
+	out = p.stdout.read()
+	print out
 
 def create_temp_files(assignment, submission_file):
 	""" Puts a submission and the testing files into the same directory. """
