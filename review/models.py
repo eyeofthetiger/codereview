@@ -40,13 +40,18 @@ class Assignment(models.Model):
 	review_open_date = models.DateTimeField()
 	review_due_date = models.DateTimeField()
 	weighting = models.IntegerField()
-	test_zip = models.TextField()
-	dockerfile = models.TextField()
-	docker_command = models.TextField()
+	test_zip = models.TextField(blank=True)
+	dockerfile = models.TextField(blank=True)
+	docker_command = models.TextField(blank=True)
 	test_required = models.BooleanField()
 
 	def __unicode__(self):
 		return str(self.name)
+
+	def has_tests(self):
+		if len(self.test_zip) == 0 or len(self.dockerfile) == 0 or len(self.docker_command) == 0:
+			return False
+		return True
 
 	def due_date_passed(self):
 		""" Returns true if due date has passed, false otherwise. """

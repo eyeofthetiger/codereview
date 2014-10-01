@@ -118,47 +118,61 @@ def email_preferences(request):
 
 
 @login_required
-def assignment(request, assignment_pk, submission=None, uploaded_file=None):
+def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp_path=None):
 	""" Displays an assignment upload form."""
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
 
 	if request.method == 'POST':
-		upload_form = UploadForm(request.POST, request.FILES)
-		if upload_form.is_valid():
-			user = request.user
-			submission = Submission(
-				user=user,
-				assignment=assignment,
-			 	upload_date=timezone.now(),
-			 	has_been_submitted=False,
-			 	unviewed_reviews=0,
-			)
-			submission.save()
-			#Directory for submission upload
-			directory = os.path.join("submissions", user.username,
-			 assignment.assignment_id, str(submission.id))
-			os.makedirs(directory)
-			submission.upload_path = directory
-			submission.save()
+		if not 'test' in request.POST.keys():
+			# Upload button clicked
+			upload_form = UploadForm(request.POST, request.FILES)
+			if upload_form.is_valid():
+				user = request.user
+				submission = Submission(
+					user=user,
+					assignment=assignment,
+				 	upload_date=timezone.now(),
+				 	has_been_submitted=False,
+				 	unviewed_reviews=0,
+				)
+				submission.save()
+				#Directory for submission upload
+				directory = os.path.join("submissions", user.username,
+				 assignment.assignment_id, str(submission.id))
+				os.makedirs(directory)
+				submission.upload_path = directory
+				submission.save()
 
-			#Check if upload is zip file and take appropriate action
-			u_file = request.FILES['file']
-			if u_file.name.endswith('.zip'):
-				if is_zipfile(u_file):
-					uploaded_file = save_zip(u_file, submission)
+				#Check if upload is zip file and take appropriate action
+				u_file = request.FILES['file']
+				if u_file.name.endswith('.zip'):
+					if is_zipfile(u_file):
+						uploaded_file = save_zip(u_file, submission)
+					else:
+						return render(request, 'review/assignment.html', 
+							{	
+								'title': "Submission for " + assignment,
+								'assignment': assignment,
+								'upload_form': upload_form, 
+								'upload': None,
+								'submission': None,
+								'error_message': "The file '" + u_file.name + 
+								"' is not a valid Zip file."
+							})
 				else:
-					return render(request, 'review/assignment.html', 
-						{	
-							'title': "Submission for " + assignment,
-							'assignment': assignment,
-							'upload_form': upload_form, 
-							'upload': None,
-							'submission': None,
-							'error_message': "The file '" + u_file.name + 
-							"' is not a valid Zip file."
-						})
-			else:
-				uploaded_file = save_file(request.FILES['file'], submission)
+					uploaded_file = save_file(request.FILES['file'], submission)
+
+				# Create temp files for testing
+				temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
+		else:
+			# Test button clicked
+			print request.POST
+			print temp_path
+			upload_form = UploadForm(request.POST, request.FILES)
+			if upload_form.is_valid():
+				pass
+				# temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
+				# review.testing.run_docker(assignment.id, temp_path, assignment.docker_command)
 
 	else:
 		upload_form = UploadForm()
@@ -169,6 +183,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None):
 		'upload_form': upload_form, 
 		'upload': uploaded_file, 
 		'submission': submission,
+		'temp_path': temp_path
 	}
 
 	return render(request, 'review/assignment.html', context)
@@ -315,7 +330,7 @@ def edit_assignment(request, assignment_pk):
 				assignment.docker_command = form.cleaned_data['docker_command']
 
 				# Build the dockerfile
-				review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile, assignment.id))
+				review.testing.build_dockerfile(os.path.dirname(assignment.dockerfile), assignment.id)
 
 			assignment.save()
 			assignment.set_async()

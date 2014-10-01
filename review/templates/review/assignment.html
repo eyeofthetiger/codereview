@@ -28,19 +28,31 @@
 	{% endif %}
 
 	<hr>
-	<h2><strong>2.</strong> Unit Test</h2>
 
-	<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
+	{% if assignment.has_tests %}
+		<h2><strong>2.</strong> Unit Test</h2>
 
-	{% if upload %}
-		<button type="button" class="btn btn-primary">Start test</button>
-	{% else %}
-		<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
-		<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
-	{% endif %}
+		<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
+
+		
+		{% if upload %}
+			<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input type="hidden" name="upload_file" value="{{ temp_path }}" />
+				<input type="submit" class="btn btn-primary" name="test" value="Start Test" />
+			</form>
+		{% else %}
+			<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
+			<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
+		{% endif %}
+	
 
 	<hr>
 	<h2><strong>3.</strong> Submit</h2>
+
+	{% else %}
+		<h2><strong>2.</strong> Submit</h2>
+	{% endif %}
 
 	<p>In order to submit your file for assessment by your instructor and for review by a peer, you need to press the following 'Submit' button. You can only do this after succesfully uploading your file.</p>
 
