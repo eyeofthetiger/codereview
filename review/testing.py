@@ -17,6 +17,7 @@ def build_dockerfile(path, assignment_id):
 	call(['sudo', 'docker', 'build', '-t', 'enkidu/' + str(assignment_id), path])
 
 def run_docker(assignment_id, testpath, command):
+	print 'sudo docker run -v ' + testpath + ":/opt/testing" + ' enkidu/' + str(assignment_id) + ' ' + command
 	call([
 		'sudo', 
 		'docker', 
