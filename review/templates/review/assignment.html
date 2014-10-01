@@ -34,20 +34,22 @@
 
 		<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
 
-		
-		{% if upload %}
-			<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
-				{% csrf_token %}
-				<input type="hidden" name="temp_path" value="{{ temp_path }}" />
-				<input type="hidden" name="upload" value="{{ upload }}" />
-				<input type="hidden" name="submission_id" value="{{ submission.id }}" />
-				<input type="submit" class="btn btn-primary" name="test" value="Start Test" />
-			</form>
+		{% if not test_output %}	
+			{% if upload %}
+				<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					<input type="hidden" name="temp_path" value="{{ temp_path }}" />
+					<input type="hidden" name="upload" value="{{ upload }}" />
+					<input type="hidden" name="submission_id" value="{{ submission.id }}" />
+					<input type="submit" class="btn btn-primary" name="test" value="Start Test" />
+				</form>
+			{% else %}
+				<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
+				<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
+			{% endif %}
 		{% else %}
-			<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
-			<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
+			<pre>{{ test_output }}</pre>
 		{% endif %}
-	
 
 	<hr>
 	<h2><strong>3.</strong> Submit</h2>

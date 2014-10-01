@@ -25,8 +25,14 @@ def run_docker(assignment_id, testpath, command):
 	with open(sh_file, 'w') as f:
 		f.write(cmd)
 	p = Popen(['timeout', '-s', 'SIGKILL', '2', 'sh', sh_file], stdout=PIPE)
-	out = p.stdout.read()
-	print out
+	output = p.stdout.read()
+	print output
+	# Append Docker output to stdout
+	output_file = os.path.join(testpath, 'output.txt')
+	with open(output_file, 'r') as f:
+		for line in f.readlines():
+			output += line
+	return output
 
 def create_temp_files(assignment, submission_file):
 	""" Puts a submission and the testing files into the same directory. """

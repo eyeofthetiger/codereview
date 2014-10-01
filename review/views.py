@@ -170,13 +170,12 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 			print request.POST
 			temp_path = request.POST['temp_path']
 			abs_temp_path = os.path.join(os.getcwd(), temp_path)
-			upload = request.POST['upload']
+			uploaded_file = request.POST['upload']
 			submission = get_object_or_404(Submission, pk=request.POST['submission_id'])
 			upload_form = UploadForm()
-			test_output = os.path.join(temp_path, 'output.txt')
 
 			# Run tests
-			review.testing.run_docker(assignment.id, abs_temp_path, assignment.docker_command)
+			test_output = review.testing.run_docker(assignment.id, abs_temp_path, assignment.docker_command)
 
 	else:
 		upload_form = UploadForm()
