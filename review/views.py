@@ -163,7 +163,8 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 					uploaded_file = save_file(request.FILES['file'], submission)
 
 				# Create temp files for testing
-				temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
+				if assignment.has_tests():
+					temp_path = review.testing.create_temp_files(assignment, request.FILES['file'])
 		else:
 			# Test button clicked
 			# Build context
