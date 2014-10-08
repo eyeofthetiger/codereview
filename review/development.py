@@ -34,10 +34,10 @@ def reset_test_database(request):
 
 	# Delete Submissions
 	for root, dirs, files in os.walk('submissions'):
-	for f in files:
-		os.unlink(os.path.join(root, f))
-	for d in dirs:
-		shutil.rmtree(os.path.join(root, d))
+		for f in files:
+			os.unlink(os.path.join(root, f))
+		for d in dirs:
+			shutil.rmtree(os.path.join(root, d))
 
 
 	# Delete current database
