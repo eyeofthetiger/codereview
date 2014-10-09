@@ -177,6 +177,7 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 
 			# Run tests
 			test_output = review.testing.run_docker(assignment.id, abs_temp_path, assignment.docker_command)
+			print test_output
 
 	else:
 		upload_form = UploadForm()
