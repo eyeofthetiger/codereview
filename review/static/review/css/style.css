@@ -28,74 +28,152 @@
 html {
   margin: 0;
 }
-
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   line-height: 20px;
-  padding-bottom: 40px
+  padding-bottom: 40px;
+  color: #959595;
 }
-
-body h1, body h2, body h3, body h4, body h5, body h6, body .h1, body .h2,
-body .h3, body .h4, body .h5, body .h6 {
-  font-family: Arial, sans-serif;
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6,
+body .h1,
+body .h2,
+body .h3,
+body .h4,
+body .h5,
+body .h6 {
+  font-family: 'Roboto', Arial, sans-serif;
   font-weight: bold;
   color: inherit;
 }
-
-body h1, body h2, body h3 {
-  line-height: 34px;
-}
-
 body h1 {
   font-size: 34px;
-  margin-bottom: 20px 
+  margin-bottom: 20px;
 }
-
 body h2 {
-  font-size: 26px; 
+  font-size: 34px;
+  line-height: normal;
 }
-
 body h3 {
-  font-size: 18px; 
+  font-size: 18px;
 }
-
 a:hover {
-  text-decoration: none; 
+  text-decoration: none;
 }
-
 input[type="text"],
 input[type="password"],
 input[type="submit"],
-textarea { font-family: Arial, sans-serif; }
-
-
+textarea {
+  font-family: 'Roboto', Arial, sans-serif;
+}
 /*
 // END: MAIN LAYOUT STYLES
 // -------------------------------------------------- */
-
 
 /*
 // 2. GENERAL STYLES
 // -------------------------------------------------- */
 
-body h2{
-  color: #666;
-  padding-top: 20px;
+body h2 {
+  color: #434244;
+  font-weight: 400;
 }
-body h3{
-  color: #666;
+body h3 {
+  color: #666666;
   font-weight: normal;
 }
-header{
-  background-color: #CCC;
+header {
+  background-color: #006fb9;
 }
-footer{
-  background-color: #E2E5E4;
+footer {
+  background-color: #e2e5e4;
+}
+.card {
+  background-color: #f9f9f9;
+  padding: 10px 25px 20px 25px;
+  margin-bottom: 40px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 1px #d9d9d9;
+  -moz-box-shadow: 0px 1px #d9d9d9;
+  -o-box-shadow: 0px 1px #d9d9d9;
+  box-shadow: 0px 1px 5px #d9d9d9;
+}
+.heading {
+  padding-left: 80px;
+}
+.i-assignment {
+  background: url(../images/icon-lg-assignment.png) no-repeat left bottom;
+}
+.i-review {
+  background: url(../images/icons-lg-review.png) no-repeat left bottom;
+}
+th {
+  font-weight: 500;
+  color: #999999;
+}
+.ass-title {
+  color: #444444;
+  font-weight: 500;
+  margin-top: 10px;
+  display: inline-block;
+}
+.info {
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -o-border-radius: 25px;
+  border-radius: 25px;
+  display: inline-block;
+  padding: 0 8px;
+  margin-top: 10px;
+}
+.info:link,
+.info:visited {
+  background-color: #c1c3c5;
+  color: white;
+}
+.info:hover {
+  background-color: #2196f3;
+  color: white;
+}
+.btn {
+  text-transform: uppercase;
+  border: none;
+  font-weight: 500;
+}
+.btn-default {
+  background-color: #e3e4e5 !important;
+  color: #808284;
+}
+.btn-primary {
+  background-color: #076fb8 !important;
+  color: white;
+}
+.btn:hover {
+  background-color: #2196f3 !important;
+  color: white;
+}
+.btn-default.btn-secondary {
+  background-color: #f9f9f9 !important;
+  color: #808284;
+}
+.btn.btn-secondary:hover {
+  background-color: white !important;
+  color: #2196f3;
+}
+.btn-primary.btn-secondary {
+  background-color: #f9f9f9 !important;
+  color: #076fb8;
 }
 /*
 // END: GENERAL STYLES
 // -------------------------------------------------- */
-
 
 /*
 // 3. PAGE STYLES
@@ -104,41 +182,50 @@ footer{
 /*
 // 3.1. BASE - PAGE STYLES
 // -------------------------------------------------- */
-header .container{
-  padding: 20px 0;
+
+header .container {
+  padding: 15px 0;
   margin-bottom: 20px;
 }
-.temporal{
+.temporal {
   float: right;
-  padding-top: 5px; 
+  padding-top: 5px;
 }
-.table{
+.table {
   margin: 10px 0;
+  width: 92%;
+}
+.header-icon {
+  float: right;
+  display: inline-block;
+  padding: 5px 0  0 10px;
 }
 /*
 // END: BASE - PAGE STYLES
 // -------------------------------------------------- */
 
-
 /*
 // 3.2. INDEX - PAGE STYLES
 // -------------------------------------------------- */
 
-p.status{
+p.status {
   font-weight: bold;
   text-transform: uppercase;
+  width: 40px;
+  height: 40px;
 }
-p.status.positive{
-  color: green;
+p.status.positive {
+  background: url(../images/icons-md-unlocked.png) no-repeat center top;
 }
-p.status.negative{
-  color: red;
+p.status.negative {
+  background: url(../images/icons-md-locked.png) no-repeat center top;
 }
-
+p.status.code {
+  background: url(../images/icons-md-code.png) no-repeat center top;
+}
 /*
 // END: INDEX - PAGE STYLES
 // -------------------------------------------------- */
-
 
 /*
 // 3.3. ASSIGNMENT - PAGE STYLES
@@ -147,91 +234,82 @@ p.status.negative{
 .file-upload {
   padding-left: 20px;
 }
-
-.file-upload label, .file-upload input{
+.file-upload label,
+.file-upload input {
   display: inline-block;
 }
-
-.file-upload label{
+.file-upload label {
   font-weight: normal;
   padding-right: 10px;
 }
-
 .file-uploaded.alert {
   padding: 10px;
   margin-left: 20px;
   margin-top: 20px;
 }
-
-.form-group p label{
+.form-group p label {
   display: block;
   margin-top: 15px;
 }
-
-.form-group p input[type="text"], .form-group p textarea{
+.form-group p input[type="text"],
+.form-group p textarea {
   width: 40%;
 }
-
-
 /*
 // END: ASSIGNMENT - PAGE STYLES
 // -------------------------------------------------- */
-
 
 /*
 // 3.4. ASSIGNMENT DESCRIPTION - PAGE STYLES
 // -------------------------------------------------- */
 
-
-
 /*
 // END: ASSIGNMENT DESCRIPTION - PAGE STYLES
 // -------------------------------------------------- */
 
-
 /*
 // 3.5. SUBMISSION - PAGE STYLES
 // -------------------------------------------------- */
-p.instructions{
+
+p.instructions {
   font-weight: bold;
   padding-top: 10px;
   font-size: 12px;
 }
-p.instructions span{
-  border-radius:250px;
-  font-size:18px;
-  color:#fff;
-  text-align:center;
-  background:#000;
+p.instructions span {
+  border-radius: 250px;
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  background: black;
   padding: 5px 9px;
   font-size: 14px;
   margin-right: 5px;
-
 }
-.nav-tabs{
+.nav-tabs {
   position: relative;
   top: 21px;
   z-index: 9999;
 }
-span.glyphicon{
+span.glyphicon {
   font-size: 18px;
   margin-right: 5px;
 }
-i.glyphicon-file{
+i.glyphicon-file {
   padding-right: 5px;
 }
-div#filetree{
+div#filetree {
   margin-bottom: 10px;
   overflow-x: auto;
 }
-pre#filecontents{
+pre#filecontents {
   overflow: visible;
   word-wrap: auto;
   width: 100%;
   background: url(../../static/review/images/80char.png) repeat-y left top local;
   padding-bottom: 20px;
 }
-.review-buttons{
+.review-buttons {
   text-align: right;
   padding-right: 15px;
 }
@@ -245,10 +323,9 @@ pre#filecontents{
 
 .staff-question {
   /*border: 1px solid orange;*/
-  background: #FFF135;
+  background: #fff135;
   padding: 10px;
 }
-
 /*
 // END: SUBMISSION - PAGE STYLES
 // -------------------------------------------------- */

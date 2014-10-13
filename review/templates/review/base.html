@@ -15,6 +15,9 @@
         <link rel="stylesheet" href="{% static 'review/css/fonts.css' %}" />  
         {% block css %}{% endblock %}
 
+        <!-- Google Web Fonts: Roboto (Light, Regular, Normal, Bold) -->
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,700' rel='stylesheet' type='text/css'>
+
         <!-- Scott Jehl's IE Compatibility: Works with older versions of IE, has to be inside the HEAD tag -->
         <script src="{% static 'review/js/respond.js' %}"></script> 
         {% block js %}{% endblock %}
@@ -27,13 +30,27 @@
         <header>
             <div class="container"> 
                 <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                       <img src="" alt="LOGO" class="img-thumbnail"> <strong>ENKIDU</strong>
+                    <div class="col-md-10 col-sm-10">
+                       <img src="{% static 'review/images/enkidu-logo.jpg' %}" alt="Enkidu Logo" class="">
+                        
+                        
+                    </div>
+
+                    <div class="col-md-2 col-sm-2">
+                       
+
                        {% if not user.is_staff %}
-                            <a href="/app/settings">Settings</a>
+
+                            <a class="header-icon" href="/app/settings"><img src="{% static 'review/images/icon-settings.jpg' %}" title="Settings"></a>
+
+                            <!-- THE BELOW LINK HAS TO BE LINKED TO THE 'HELP FORUM' SECTION -->
+                            <a class="header-icon" href=""><img src="{% static 'review/images/icon-forum.jpg' %}" title="Help Forum"></a>
+
                        {% endif %}
-                       <!-- THE BELOW LINK IS JUST FOR TESTING -->
-                       <a class="temporal" href="/app/choose_user">Change user</a>
+
+                        <!-- THE BELOW LINK IS JUST FOR TESTING -->
+                       <a class="temporal header-icon" href="/app/choose_user"><span class="glyphicon glyphicon-user"></span></a>
+                       
                     </div>
                 </div>
             </div>
