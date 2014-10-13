@@ -173,10 +173,27 @@ def reset_test_database(request): # pragma: no cover
 	)
 	submission0.save()
 
+	submission0b = Submission(
+		user = user2,
+		assignment = a1,
+		upload_date = before,
+		upload_path = "codereview/test_submission/0/",
+		has_been_submitted = True,
+		unviewed_reviews = 1
+	)
+	submission0b.save()
+
 	sf0 = SubmissionFile(submission=submission0, file_path="test.py")
 	sf0.save()
+
+	sf0b = SubmissionFile(submission=submission0b, file_path="test.py")
+	sf0b.save()
+
 	assigned_review = AssignedReview(assigned_user=user2, assigned_submission=submission0, has_been_reviewed=True)
 	assigned_review.save()
+	assigned_review2 = AssignedReview(assigned_user=user1, assigned_submission=submission0b, has_been_reviewed=False)
+	assigned_review2.save()
+
 	comment = Comment(commenter=user2, commented_file=sf0, comment="Wow, much deep!", selected_text="print")
 	comment.save()
 	comment_range = CommentRange(comment=comment, start='', end='',startOffset=0, endOffset=5)
