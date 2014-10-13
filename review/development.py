@@ -13,23 +13,23 @@ from review.models import Submission, SubmissionFile, Course, Assignment, \
 	AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
 
 @csrf_exempt
-def choose_user(request):
+def choose_user(request): # pragma: no cover
 	""" Loads the page for selecting a user. """
 	return render(request, 'review/login.html')
 
-def load_admin(request):
+def load_admin(request): # pragma: no cover
 	""" Changes the user to account to be a staff member. """
 	user = authenticate(username='admin', password='admin')
 	login(request, user)
 	return redirect('index')
 
-def load_student(request):
+def load_student(request): # pragma: no cover
 	""" Changes the user to account to be a student. """
 	user = authenticate(username='user1', password='user1')
 	login(request, user)
 	return redirect('index')
 
-def reset_test_database(request):
+def reset_test_database(request): # pragma: no cover
 	""" Loads a database with fake data for testing. """
 
 	# Delete Submissions

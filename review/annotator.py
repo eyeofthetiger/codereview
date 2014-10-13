@@ -16,7 +16,7 @@ def api_root(request):
 
 @csrf_exempt
 def api_index(request):
-	""" If request type is GET, returns a list of all annotations. If request 
+	""" If request type is GET, returns 404. If request 
 		type is POST, stores posted annotation.
 	"""
 	if request.method == 'POST':
@@ -46,6 +46,8 @@ def api_index(request):
 		response["Location"] = "/app/annotator_api/annotations/" + \
 			str(comment.id)
 		return response
+	else:
+		return HttpResponse(status=404)
 
 def api_search(request):
 	""" Receives a search query and returns the annotations that match the 

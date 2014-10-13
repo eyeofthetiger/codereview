@@ -36,7 +36,8 @@ def get_directory_contents(path, parent="#"):
 			contents.append({'id':f, 'parent':parent, 'text':f, 'icon':False})
 			contents += (get_directory_contents(new_path, f))
 		else:
-			contents.append({'id':f, 'parent':parent, 'text':f, 'icon':False})
+			if is_valid_file(f):
+				contents.append({'id':f, 'parent':parent, 'text':f, 'icon':False})
 	return contents
 
 def get_submission_file(request):
