@@ -1,7 +1,7 @@
 {% extends "review/base.html" %}
 {% block content %}
-	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
-	<h1>{{ assignment.name }}</h1>
+	<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+	<!--<h1>{{ assignment.name }}</h1>-->
 
 	
 	{% if error_message %}
@@ -9,67 +9,79 @@
 			<p><strong>{{ error_message }}</strong></p>
 		</div>
 	{% endif %}
-	<hr>
-	<h2><strong>1.</strong> File Upload</h2>
-	<p>You need to select your assignment file from your computer and upload it. Don't forget to press the 'Upload' button after selecting the file.</p>
+	
+	<section class="card">
+		<div class="heading i-check">
+			<h2>Assignment Submission</h2>
+			<p>Three steps to upload, test and submit your assignment files.</p>
+		</div>
+		<div class="container container-md">
+			<div class="tab-content">
+				<h3>{{ assignment.name }}</h3>
+		<h4><strong>1.</strong> File Upload</h4>
+		<p>You need to select your assignment file from your computer and upload it. Don't forget to press the 'Upload' button after selecting the file.</p>
 
-	<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data" class="file-upload"><br>
-		<p class='instructions'><span>A</span> Select the file you want to upload</p>
-		<br>
-	    {% csrf_token %}
-	    {{ upload_form }}
-		<p class='instructions'><br><span>B</span> Upload the file </p><br>
-		
-		<input type="submit" value="Upload" />
-	</form>
+		<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data" class="file-upload"><br>
+			<p class='instructions'><span>A</span> Select the file you want to upload</p>
+			<br>
+		    {% csrf_token %}
+		    {{ upload_form }}
+			<p class='instructions'><br><span>B</span> Upload the file </p><br>
+			
+			<input class="btn btn-primary" type="submit" value="Upload" />
+		</form>
 
-	{% if upload %}
-		<p class="file-uploaded alert bg-success">{{ upload }} has been uploaded.</p>
-	{% endif %}
-
-	<hr>
-
-	{% if assignment.has_tests %}
-		<h2><strong>2.</strong> Unit Test</h2>
-
-		{% if not test_output %}	
-			<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
-
-			{% if upload %}
-				<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
-					{% csrf_token %}
-					<input type="hidden" name="temp_path" value="{{ temp_path }}" />
-					<input type="hidden" name="upload" value="{{ upload }}" />
-					<input type="hidden" name="submission_id" value="{{ submission.id }}" />
-					<input type="submit" class="btn btn-primary" name="test" value="Start Test" />
-				</form>
-			{% else %}
-				<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
-				<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
-			{% endif %}
-
-		{% else %}
-			<h3>Test Results</h3>
-			<pre>{{ test_output }}</pre>
+		{% if upload %}
+			<p class="file-uploaded alert bg-success">{{ upload }} has been uploaded.</p>
 		{% endif %}
 
-	<hr>
-	<h2><strong>3.</strong> Submit</h2>
+		<hr>
 
-	{% else %}
-		<h2><strong>2.</strong> Submit</h2>
-	{% endif %}
+		{% if assignment.has_tests %}
+			<h4><strong>2.</strong> Unit Test</h4>
 
-	<p>In order to submit your file for assessment by your instructor and for review by a peer, you need to press the following 'Submit' button. You can only do this after succesfully uploading your file.</p>
+			{% if not test_output %}	
+				<p>After uploading your file, you can run an automated unit test. This can be done only if you succesfully uploaded your file.</p>
 
-	{% if upload %}
-		<form action="{% url 'submit_assignment' submission.id %}" method="post" enctype="multipart/form-data">
-			{% csrf_token %}
-			<input type="submit" class="btn btn-primary" name="submit" value="Submit" />
-		</form>
-	{% else %}
-		<p class="alert bg-danger"><strong>Please upload file first to enable the submission button.</strong></p>
-		<button type="button" class="btn btn-default" disabled="disabled">Submit</button>
-	{% endif %}
+				{% if upload %}
+					<form action="{% url 'assignment' assignment.id %}" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<input type="hidden" name="temp_path" value="{{ temp_path }}" />
+						<input type="hidden" name="upload" value="{{ upload }}" />
+						<input type="hidden" name="submission_id" value="{{ submission.id }}" />
+						<input type="submit" class="btn btn-primary" name="test" value="Start Test" />
+					</form>
+				{% else %}
+					<p class="alert bg-danger"><strong>Please upload file to enable Unit Test.</strong></p>
+					<button type="button" class="btn btn-default" disabled="disabled">Start test</button>
+				{% endif %}
+
+			{% else %}
+				<h3>Test Results</h3>
+				<pre>{{ test_output }}</pre>
+			{% endif %}
+
+		<hr>
+		<h4><strong>3.</strong> Submit</h4>
+
+		{% else %}
+			<h4><strong>2.</strong> Submit</h4>
+		{% endif %}
+
+		<p>In order to submit your file for assessment by your instructor and for review by a peer, you need to press the following 'Submit' button. You can only do this after succesfully uploading your file.</p>
+
+		{% if upload %}
+			<form action="{% url 'submit_assignment' submission.id %}" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input type="submit" class="btn btn-primary" name="submit" value="Submit" />
+			</form>
+		{% else %}
+			<p class="alert bg-danger"><strong>Please upload file first to enable the submission button.</strong></p>
+			<button type="button" class="btn btn-default" disabled="disabled">Submit</button>
+		{% endif %}
+
+			</div>
+		</div>
+	</section>
 
 {% endblock %}

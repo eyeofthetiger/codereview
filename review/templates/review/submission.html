@@ -11,12 +11,22 @@
 
 {% block content %}
 
-	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
+	<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+	
 
+	<section class="card">
 	{% if is_owner %}
-		<h1>Viewing submission for {{ submission.assignment.name }}</h1>
+		
 
-	<hr/>
+	<div class="heading i-review">
+		<h2>Code View</h2>
+		<p>Display code of assignment files and check for feedback.</p>
+	</div>
+
+	<div class="container container-md">
+
+
+				<h3>{{ submission.assignment.name }}</h3>
 
 		<div class="row">
 			<div class="col-lg-3 col-md-2 col-sm-2 col-xs-3">
@@ -41,10 +51,19 @@
 			</div>
 		</div>
 		<br>
+	</div>
 
 	{% elif user.is_staff %}	
-		<h1>Viewing submission for {{ submission.assignment.name }} from {{ submission.user }}</h1>
-<hr/>
+		
+
+<div class="heading i-review">
+		<h2>Code View</h2>
+		<p>Viewing submission from {{ submission.user }}</p>
+	</div>
+<div class="container container-md">
+
+
+				<h3>{{ submission.assignment.name }}</h3>
 <div class="row">
 			<div class="col-lg-3 col-md-2 col-sm-2 col-xs-3">
 
@@ -57,9 +76,20 @@
        		</div>
         </div>
         <br>
+    </div>
 	{% else %}
-		<h1>Reviewing submission for {{ submission.assignment.name }}</h1>
-<hr/>
+
+	<div class="heading i-review">
+		<h2>Code Review</h2>
+		<p>Review peer code and leave comments.</p>
+	</div>
+<div class="container container-md">
+
+
+				<h3>{{ submission.assignment.name }}</h3>
+
+		
+
 		<div class="row">
 			<div class="col-lg-3 col-md-2 col-sm-2 col-xs-3">
 
@@ -83,6 +113,9 @@
             <div id="filetree"></div>
         </div>
         <div class="col-lg-9 col-md-10 col-sm-10 col-xs-9">
+        	{% if not is_owner and not user.is_staff %}
+        	<div id="save-notification">All comments saved</div>
+        	{% endif %}
 			 <pre id="filecontents"><i class="glyphicon glyphicon-arrow-left"></i> No file selected. Please select a file from the list on the left.</pre>
         </div>
     </div>
@@ -90,15 +123,17 @@
 	{% if not is_owner and not user.is_staff %}
 		<div class="row">
 			<div class="review-buttons">
-				<div id="save-notification">All comments saved</div>
-			  <!-- <button type="button" class="btn btn-default">Save</button> -->
-			  <button type="button" class="btn btn-default">Reset</button>
-			  <button type="button" class="btn btn-default" onClick='alert("Your review has been submitted")'>Submit</button>
+				<!--<div id="save-notification">All comments saved</div>
+			   <button type="button" class="btn btn-default">Save</button> -->
+			  <button type="button" class="btn btn-primary">Reset</button>
+			  <button type="button" class="btn btn-primary" onClick='alert("Your review has been submitted")'>Submit</button>
 			</div>
 		</div>
 	{% endif %}
 
-	
+</div>
+
+	</section>
 {% endblock %}
 
 {% block jsEnd %}
@@ -249,4 +284,5 @@
 	}
 
 	</script>
+
 {% endblock %}

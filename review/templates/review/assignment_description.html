@@ -1,11 +1,44 @@
 {% extends "review/base.html" %}
 {% block content %}
-	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
-	<h1>{{ assignment.name }}</h1>
-	<hr/>
-	<h2>Description</h2>
-	<p>
-		{{ assignment.description|safe }}
-	</p>
+	<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+	<!--<h1>{{ assignment.name }}</h1>-->
+	<section class="card">
+		<div class="heading i-details">
+			<h2>Assignment Details</h2>
+			<p>Important information and description of the assignment.</p>
+		</div>
+		<div class="container container-md">
+			<div class="tab-content">
+				<h3>{{ assignment.name }}</h3>
+				<table class="content table">
+					<thead>
+						<tr>
+							<th>STATUS</th>
+							<th>DUE DATE</th>
+							<th>SUBMISSION</th>
+							<th>LAST FILE SUBMITTED</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<p class="status positive"></p>
+								<!-- *** LUKE *** //// FOR 'CLOSED' STATUS
+ 								<p class="status negative"></p>
+								-->
+							</td>
+							<td>{{ assignment.due_date }}</td>
+							<td><a class="btn btn-primary" href="{% url 'assignment' assignment.id %}">Submit now</a></td>
+							<td><a class="text" href="#">Sept. 20, 2014, 10:57 p.m.</a></td>
+						</tr>	
+					</tbody>
+				</table>
+				<h4>DESCRIPTION</h4>
+				<p>
+					{{ assignment.description|safe }}
+				</p>
+			</div>
+		</div>
+	</section
 {% endblock %}
 

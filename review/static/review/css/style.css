@@ -9,13 +9,10 @@
       3.3 ASSIGNMENT 
       3.4 ASSIGNMENT DESCRIPTION
       3.5 SUBMISSION
-      3.6 QUESTION
-    4. NAVBARS
-    5. FORMS
-    6. BUTTONS
-    7. MODALS
-    8. PLUGINS
-    9. MEDIA QUERIES
+      3.6 CODE VIEW/REVIEW
+      3.7 HELP FORUM
+    4. PLUGINS
+    5. MEDIA QUERIES
 /*
 //                      END: INDEX
 // -------------------------------------------------- 
@@ -61,6 +58,13 @@ body h2 {
 body h3 {
   font-size: 18px;
 }
+a.text:link,
+a.text:visited {
+  color: #006fb9;
+}
+a.text:hover {
+  color: #2196f3;
+}
 a:hover {
   text-decoration: none;
 }
@@ -69,6 +73,9 @@ input[type="password"],
 input[type="submit"],
 textarea {
   font-family: 'Roboto', Arial, sans-serif;
+}
+.glyphicon {
+  font-size: 12px !important;
 }
 /*
 // END: MAIN LAYOUT STYLES
@@ -114,6 +121,15 @@ footer {
 .i-review {
   background: url(../images/icons-lg-review.png) no-repeat left bottom;
 }
+.i-details {
+  background: url(../images/icons-lg-details.png) no-repeat left bottom;
+}
+.i-check {
+  background: url(../images/icons-lg-check.png) no-repeat left bottom;
+}
+.i-settings {
+  background: url(../images/icons-lg-settings.png) no-repeat left bottom;
+}
 th {
   font-weight: 500;
   color: #999999;
@@ -145,7 +161,8 @@ th {
 .btn {
   text-transform: uppercase;
   border: none;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 12px;
 }
 .btn-default {
   background-color: #e3e4e5 !important;
@@ -171,6 +188,30 @@ th {
   background-color: #f9f9f9 !important;
   color: #076fb8;
 }
+.container-md {
+  width: 98%;
+}
+.tab-content {
+  float: right;
+  padding-left: 53px;
+  padding-bottom: 15px;
+  padding-top: 10px;
+  width: 100%;
+}
+.container h3 {
+  font-weight: 400;
+  font-size: 20px;
+  padding: 0 0 15px 0;
+}
+.container table.content th {
+  color: #444444;
+}
+.container h4 {
+  padding: 10px 0 0 0;
+  font-weight: 500;
+  font-size: 14px;
+  color: #444444;
+}
 /*
 // END: GENERAL STYLES
 // -------------------------------------------------- */
@@ -193,7 +234,6 @@ header .container {
 }
 .table {
   margin: 10px 0;
-  width: 92%;
 }
 .header-icon {
   float: right;
@@ -281,8 +321,8 @@ p.instructions span {
   font-size: 18px;
   color: white;
   text-align: center;
-  background: black;
-  padding: 5px 9px;
+  background: #434244;
+  padding: 4px 9px;
   font-size: 14px;
   margin-right: 5px;
 }
@@ -306,8 +346,9 @@ pre#filecontents {
   overflow: visible;
   word-wrap: auto;
   width: 100%;
-  background: url(../../static/review/images/80char.png) repeat-y left top local;
+  background: url(../images/80char.png) repeat-y left top #434244;
   padding-bottom: 20px;
+  color: white;
 }
 .review-buttons {
   text-align: right;
@@ -321,9 +362,123 @@ pre#filecontents {
 // 3.5. SUBMISSION - PAGE STYLES
 // -------------------------------------------------- */
 
-.staff-question {
+/*
+// END: SUBMISSION - PAGE STYLES
+// -------------------------------------------------- */
+
+/*
+// 3.6. CODE VIEW/REVIEW - PAGE STYLES
+// -------------------------------------------------- */
+
+#save-notification {
+  font-size: 12px;
+  color: #808284;
+  position: absolute;
+  right: 16px;
+  top: -22px;
+}
+/*
+// END: SUBMISSION - PAGE STYLES
+// -------------------------------------------------- */
+
+/*
+// 3.7. HELP FORUM - PAGE STYLES
+// -------------------------------------------------- */
+
+.format {
+  background-color: #e4e5e6;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  padding: 0 20px;
+}
+.format h3 {
+  color: #444444;
+  font-size: 15px;
+  font-weight: 400;
+  background: url(../images/icons-sm-instructions.png) no-repeat left top;
+  padding: 5px 0 15px 35px;
+  border-bottom: solid 1px #bfc0c1;
+}
+.instruction-set {
+  width: 50%;
+  float: left;
+  padding-bottom: 5px;
+}
+.instruction-set pre {
+  background-color: transparent;
+  border: none;
+  color: #959595;
+  padding: 0;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+.set-row {
+  display: block;
+  width: 100%;
+}
+.instruction-set h4 {
+  color: #444444;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 0;
+}
+.instruction-set p {
+  font-size: 12px;
+}
+.form-group p label {
+  color: #444444;
+  font-size: 14px;
+  font-weight: 500;
+}
+.form-group p input[type="text"],
+.form-group p textarea {
+  background-color: white;
+  border: 1px solid #e3e4e5;
+  width: 100%;
+  padding: 5px 10px;
+  margin: 10px 0;
+}
+.form-group input[type="submit"] {
+  background-color: #076fb8 !important;
+  color: white;
+  border: none;
+  text-transform: uppercase;
+  padding: 5px 15px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+.form-group input[type="submit"]:hover {
+  background-color: #2196f3 !important;
+  color: white;
+}
+.form-group input[type="checkbox"] {
+  margin-bottom: 5px;
+}
+.settings-button {
+  margin-top: 15px;
+}
+.questions-user {
+  color: #444444;
+  font-weight: 500;
+  font-size: 14px;
+}
+.questions-small {
+  font-size: 11px;
+  color: #999999;
+}
+p span.questions-small {
+  padding-left: 10px;
+}
+span.glyphicon-ok {
+  color: #75bf8e;
+}
+p.staff-question + p {
   /*border: 1px solid orange;*/
-  background: #fff135;
+  background: #d3ecf4;
   padding: 10px;
 }
 /*
@@ -331,6 +486,24 @@ pre#filecontents {
 // -------------------------------------------------- */
 
 /*
-// END: GENERAL STYLES
+// 4. PLUGINS
+// -------------------------------------------------- */
+
+div.annotator-controls {
+  padding: 0 15px 5px 15px !important;
+}
+div.annotator-controls a {
+  display: inline-block;
+}
+div.annotator-controls a.annotator-cancel {
+  float: left;
+}
+div.annotator-controls a.annotator-save {
+  float: right;
+  position: relative;
+  top: -10px;
+}
+/*
+// END: PLUGINS
 // -------------------------------------------------- */
 

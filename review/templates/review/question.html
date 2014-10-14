@@ -1,7 +1,24 @@
 {% extends "review/base.html" %}
 {% block content %}
-	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
-	<h1>{{ question.title }}</h1>
+	<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back to forum</a></p>
+
+	<section class="card">
+		<div>
+			<h2>{{ question.title }}</h2>
+			<p class="questions-small">Created {{ question.create_date }}</p>
+			<p>{{ question.text|safe }}</p>
+
+			{% if question.edited %}
+				<p class="questions-small"><em>Edited {{ question.modified_date }}</em></p>
+			{% endif %}
+
+			{% if question.user == user %}
+		<a class="btn btn-primary" href="{% url 'edit_question' question.id %}"><span class="glyphicon glyphicon-edit"></span> Edit </a>
+	{% endif %}
+			
+		</div>
+		<div class="container container-md">
+	
 	
 
 	{% if error_message %}
@@ -10,16 +27,12 @@
 	</div>
 	{% endif %}
 
-	<p>{{ question.text|safe }}</p>
+	
 
-	<p>{{ question.create_date }}</p>
-	{% if question.edited %}
-		<p><em>Edited {{ question.modified_date }}</em></p>
-	{% endif %}
+	
+	
 
-	{% if question.user == user %}
-		<a class="btn btn-primary" href="{% url 'edit_question' question.id %}"> Edit &raquo;</a>
-	{% endif %}
+	
 
 	{% for comment in question.get_comments %}
 		<div style="margin-left:20px;">
@@ -29,20 +42,25 @@
 	{% endfor %}
 
 	<hr />
-	<div class="container">
+	<div class="container container-md">
 	{% for response in responses %}
-		{% if response.selected_answer %}
+		
+		<p class="questions-user">
+			{% if response.selected_answer %}
 			<span class="glyphicon glyphicon-ok"></span>
 		{% endif %}
+
+
+			{{ response.get_user }} <span class="questions-small">{{ response.modified_date }}</span>  </p>
 		{% if response.is_staff %}
 			<p class="staff-question">{{ response.text|safe }}</p>
 		{% else %}
 			<p>{{ response.text|safe }}</p>
 		{% endif %}
-		<p><em>Answered {{ response.modified_date }} by {{ response.get_user }}</em></p>
+		
 
 		{% if user == response.question.user and not response.question.has_answer%}
-			<a href="{% url 'set_as_answer' response.id %}"><p style="color: green">Set as answer</p></a>
+			<a class="btn btn-default" href="{% url 'set_as_answer' response.id %}"><span class="glyphicon glyphicon-check"></span>Set as answer</a>
 		{% endif %}
 		{% for comment in response.get_comments %}
 			<div style="margin-left:20px;">
@@ -62,5 +80,6 @@
 		</div>
 	</form>
 	
-
+</div>
+</section>
 {% endblock %}
