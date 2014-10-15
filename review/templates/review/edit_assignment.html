@@ -1,14 +1,22 @@
 {% extends "review/base.html" %}
 {% block content %}
-	<p><a class="btn btn-default" href="{% url 'staff' %}">&laquo; back</a></p>
-	<h1>Edit: {{ assignment.name }}</h1>
-	<hr/>
+	<p><a class="btn btn-default" href="{% url 'staff' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+
+
 
 	{% if error_message %}
 	<div class="alert alert-danger" role="alert">
 			<p><strong>{{ error_message }}</strong></p>
 	</div>
 	{% endif %}
+
+	<section class="card">
+		<div class="heading i-details">
+			<h2>Edit Assignment </h2>
+			<p>Change information of an assigment.</p>
+		</div>
+		<div class="container container-md">
+			<div class="tab-content">
 
 	<form method="post" enctype="multipart/form-data">
 		<div class="form-group">
@@ -18,5 +26,7 @@
 		</div>
 	</form>
 	
-
+</div>
+		</div>
+	</section>
 {% endblock %}

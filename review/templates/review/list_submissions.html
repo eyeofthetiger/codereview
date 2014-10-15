@@ -1,18 +1,24 @@
 {% extends "review/base.html" %}
 {% load template_tags %}
 {% block content %}
-	<p><a class="btn btn-default" href="{% url 'staff' %}">&laquo; back</a></p>
-	<h1>{{ course }}</h1>
-	<hr/>
-	<h2>Submissions for {{ assignment }}</h2>
-	<p>List of students and submission status.</p><br>
-
+	
+	<p><a class="btn btn-default" href="{% url 'staff' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+	
+	<section class="card">
+		<div class="heading i-check">
+			<h2>Assignment Submissions</h2>
+			<p>List of students and submission status.</p>
+		</div>
+		<div class="container container-md">
+			<div class="tab-content">
+				<h3>{{ assignment }}</h3>
 	<table class="table table-striped">
 		<thead>
 			<th>User</th>
 			<th>Submission</th>
-			<th></th>
 			<th>Submission date</th>
+			<th>Files</th>
+			
 		</thead>
 		<tbody>
 		{% for student in students %}
@@ -20,15 +26,21 @@
 				<td>{{ student }}</td>
 				{% if submissions|get_submission_date:student %}
 					<td><a class="btn btn-primary" href="{% url 'submission' submissions|get_item:student  %}">View submission</a></td>
-					<td><a class="btn btn-primary" href="{% url 'download' submissions|get_submission_id:student  %}"><i class="glyphicon glyphicon-arrow-down"></i> Download submission</a></td>
 					<td>{{ submissions|get_submission_date:student }}</td>
+					<td>
+					<a class="btn btn-secondary btn-primary" href="{% url 'download' submissions|get_submission_id:student  %}"><span class="glyphicon glyphicon-download"></span>  Download</a></td>
+					
 				{% else %}
-					<td></td>
-					<td></td>
+					<td><button type="button" class="btn btn-default" disabled="disabled">No Submission</button></td>
 					<td>No files submitted</td>
+					<td><a class="btn btn-secondary btn-default" disabled="disabled">Unavailable</a></td>
+					
 				{% endif %}
 			</tr>
 		{% endfor %}
 		</tbody>
 	</table>
+	</div>
+		</div>
+	</section>
 {% endblock %}

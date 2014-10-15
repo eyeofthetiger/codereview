@@ -1,9 +1,15 @@
 {% extends "review/base.html" %}
 
 {% block content %}
-	<h1>Select user</h1>
-	<hr>
-	<p>Start using ENKIDU as:</p><br>
+
+<section class="card">
+		<div class="heading i-check">
+			<h2>Select user</h2>
+			<p>Temporary section to switch between user types.</p>
+		</div>
+		<div class="container container-md">
+	<div class="tab-content">
+		<h3>Start using ENKIDU as:</h3>
 	<p>
 			<a class="btn btn-primary" href="/app/load_admin/" id="admin">
 				<span class="glyphicon glyphicon-user"></span> Admin
@@ -13,5 +19,7 @@
 				<span class="glyphicon glyphicon-user"></span> Student
 			</a>
 		</p>
+	</div></div>
+</section>
 	
 {% endblock %}

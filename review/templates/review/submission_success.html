@@ -1,11 +1,21 @@
 {% extends "review/base.html" %}
 {% block content %}
-	<p><a class="btn btn-default" href="{% url 'index' %}">&laquo; back</a></p>
-	<h1>Submission completed</h1>
-	<hr/>
+<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+
+
+	<section class="card">
+		<div class="heading i-check">
+			<h2>Submission completed</h2>
+			<p>Confirmation of submitted files.</p>
+		</div>
+		<div class="container container-md">
+	<div class="tab-content">
+		
+
+	
 	<p class="alert bg-success">The files have been submitted successfully.</p>
-	<hr/>
-	<h2>What's next?</h2>
+	
+	<h3>What's next?</h3>
 	<p>
 		These are recommended actions after submitting your assignment:
 	</p>
@@ -14,6 +24,9 @@
 		<li>Go back to <a href="{% url 'index' %}">My Assignments</a> to display the code submitted</li>
 		<li>Visit the <a href="#">Help Forum</a> to contribute with the community</li>
 	</ul>
+		</div></div>
+</section>
+	
 {% endblock %}
 
 
