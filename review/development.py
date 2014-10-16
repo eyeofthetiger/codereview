@@ -199,8 +199,8 @@ def reset_test_database(request): # pragma: no cover
 	comment_range = CommentRange(comment=comment, start='', end='',startOffset=0, endOffset=5)
 	comment_range.save()
 
-	assigned_review2 = AssignedReview(assigned_user=user3, assigned_submission=submission0, has_been_reviewed=True)
-	assigned_review2.save()
+	assigned_review3 = AssignedReview(assigned_user=user3, assigned_submission=submission0, has_been_reviewed=True)
+	assigned_review3.save()
 	comment2 = Comment(commenter=user3, commented_file=sf0, comment="Comment two", selected_text="print")
 	comment2.save()
 	comment_range2 = CommentRange(comment=comment2, start='', end='',startOffset=0, endOffset=5)
