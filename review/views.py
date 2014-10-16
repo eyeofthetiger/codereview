@@ -43,7 +43,7 @@ def index(request):
 	# Get all assigned reviews for the user
 	assigned_reviews = AssignedReview.objects.filter(assigned_user=user)
 	# Get all questions for forum
-	questions = Question.objects.order_by('create_date')
+	# questions = Question.objects.order_by('create_date')
 
 	context = {
 		"title": course,
@@ -52,7 +52,7 @@ def index(request):
 		"assignments": assignments,
 		"submissions": submissions,
 		"assigned_reviews": assigned_reviews,
-		"questions": questions
+		# "questions": questions
 	}
 
 	return render(request, 'review/index.html', context)
@@ -81,6 +81,23 @@ def staff(request):
 	}
 
 	return render(request, 'review/staff.html', context)
+
+@login_required
+def forum(request):
+	""" Displays the forum page. """
+	user = request.user
+	course = Course.objects.get(id=1)
+	# Get all questions for forum
+	questions = Question.objects.order_by('create_date')
+
+	context = {
+		"title": course,
+		"course": course,
+		"user": user,
+		"questions": questions,
+	}
+
+	return render(request, 'review/forum.html', context)
 
 @login_required
 def email_preferences(request):
@@ -460,7 +477,7 @@ def add_question(request):
 				modified_date=now,
 			)
 			question.save()
-		return redirect('index')
+		return redirect('forum')
 	else:
 		form = QuestionForm()
 

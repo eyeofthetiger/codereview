@@ -30,6 +30,7 @@ urlpatterns = patterns('',
         name='assignment_description'),
 
     # Forum URLs
+    url(r'^forum/$', views.forum, name='forum'),
     url(r'^add_question/$', views.add_question, name='add_question'),
     url(r'^edit_question/(?P<question_pk>\d+)/$', views.edit_question, name='edit_question'),
     url(r'^question/(?P<question_pk>\d+)/$', views.question, name='question'),
