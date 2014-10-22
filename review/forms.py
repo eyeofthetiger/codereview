@@ -60,3 +60,15 @@ class AssignmentForm(forms.Form):
 	dockerfile = forms.FileField(required=False)
 	docker_command = forms.CharField(required=False)
 	test_required = forms.BooleanField(required=False)
+
+	def due_open_date(self):
+		print self
+		data = self.cleaned_data['due_date']
+		print data
+		return data
+
+	def clean_open_date(self):
+		print self
+		data = self.cleaned_data['open_date']
+		print data
+		return data

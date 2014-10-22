@@ -82,6 +82,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/django/codereview/static/'
+MEDIA_ROOT = '/home/django/codereview/'
 
 # Email Settings - TODO: This is just a local email server for testing.
 

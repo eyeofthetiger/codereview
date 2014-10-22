@@ -11,7 +11,11 @@
 
 {% block content %}
 
-	<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+	{% if user.is_staff %}
+		<p><a class="btn btn-default" href="{% url 'list_submissions' submission.assignment.id %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+	{% else %}
+		<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
+	{% endif %}
 	
 
 	<section class="card">
