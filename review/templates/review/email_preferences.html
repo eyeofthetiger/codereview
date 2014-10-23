@@ -22,58 +22,62 @@
 		<div class="form-group">
 		    {% csrf_token %}
 		    {{ form.non_field_errors }}
+			<div class="row">
+				<div class="col-md-6">
+				    <div class="fieldWrapper">
+					    {{ form.on_upload.errors }}
+					    {{ form.on_upload }}
+					    <label for="id_on_upload">On Assignment Upload</label>
+					</div>
+				    
+				    <div class="fieldWrapper">
+					    {{ form.on_submission.errors }}
+					    {{ form.on_submission }}
+					    <label for="id_on_submission">On Assignment Submission</label>
+					</div>
+				    
+				    <div class="fieldWrapper">
+					    {{ form.on_due_date.errors }}
+					    {{ form.on_due_date }}
+					    <label for="id_on_due_date">On Assignment Due Date</label>
+					</div>
+				    
+				    <div class="fieldWrapper">
+					    {{ form.on_open_date.errors }}
+					    {{ form.on_open_date }}
+					    <label for="id_on_open_date">On Assignment Open Date</label>
+					</div>
+				</div>
+				<div class="col-md-6">   
+				    <div class="fieldWrapper">
+					    {{ form.on_review_received.errors }}
+					    {{ form.on_review_received }}
+						<label for="id_on_review_received">On Review Received</label>
+					</div>
 
-		    <div class="fieldWrapper">
-			    {{ form.on_upload.errors }}
-			    {{ form.on_upload }}
-			    <label for="id_on_upload">On Assignment Upload</label>
-			</div>
-		    
-		    <div class="fieldWrapper">
-			    {{ form.on_submission.errors }}
-			    {{ form.on_submission }}
-			    <label for="id_on_submission">On Assignment Submission</label>
-			</div>
-		    
-		    <div class="fieldWrapper">
-			    {{ form.on_due_date.errors }}
-			    {{ form.on_due_date }}
-			    <label for="id_on_due_date">On Assignment Due Date</label>
-			</div>
-		    
-		    <div class="fieldWrapper">
-			    {{ form.on_open_date.errors }}
-			    {{ form.on_open_date }}
-			    <label for="id_on_open_date">On Assignment Open Date</label>
-			</div>
-		    
-		    <div class="fieldWrapper">
-			    {{ form.on_review_received.errors }}
-			    {{ form.on_review_received }}
-				<label for="id_on_review_received">On Review Received</label>
-			</div>
+					<div class="fieldWrapper">
+					    {{ form.on_review_assigned.errors }}
+					    {{ form.on_review_assigned }}
+					    <label for="id_on_review_assigned">On Review Assigned</label>
+					</div>
 
-			<div class="fieldWrapper">
-			    {{ form.on_review_assigned.errors }}
-			    {{ form.on_review_assigned }}
-			    <label for="id_on_review_assigned">On Review Assigned</label>
-			</div>
+					<div class="fieldWrapper">
+					    {{ form.on_question_answered.errors }}
+					    {{ form.on_question_answered }}
+					    <label for="id_on_question_answered">On Question Answered</label>
+					</div>
 
-			<div class="fieldWrapper">
-			    {{ form.on_question_answered.errors }}
-			    {{ form.on_question_answered }}
-			    <label for="id_on_question_answered">On Question Answered</label>
+					<div class="fieldWrapper">
+					    {{ form.on_question_asked.errors }}
+					    {{ form.on_question_asked }}
+					    <label for="id_on_question_asked">On Question Asked</label>
+					</div>	
+				</div>
 			</div>
-
-			<div class="fieldWrapper">
-			    {{ form.on_question_asked.errors }}
-			    {{ form.on_question_asked }}
-			    <label for="id_on_question_asked">On Question Asked</label>
-			</div>
-
 			<input class="settings-button" type="submit" value="Save" />
 		</div>
 	</form>
+
 
 </div>
 </div>
