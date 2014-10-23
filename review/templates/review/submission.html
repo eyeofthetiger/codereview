@@ -129,7 +129,7 @@
 			<div class="review-buttons">
 				<!--<div id="save-notification">All comments saved</div>
 			   <button type="button" class="btn btn-default">Save</button> -->
-			  <button type="button" class="btn btn-primary">Reset</button>
+			  <button id="reset-button" type="button" class="btn btn-primary">Reset</button>
 			  <button type="button" class="btn btn-primary" onClick='alert("Your review has been submitted")'>Submit</button>
 			</div>
 		</div>
@@ -168,6 +168,9 @@
 				}
 			}
 		})
+
+		// Click listener for reset
+		$('#reset-button').click(resetComments);
 
 		$(document).ready( function() {
 			// Setup the JSTree instance.
@@ -217,7 +220,6 @@
 		
 		function activateAnnotator(submissionFileID, userID){
 			//Activate the Annotator instance for a selected file.
-			console.log("Activating annotator");
 			clearComments();
 
 			//Set annoations as read only if not a reviewer.
@@ -231,16 +233,16 @@
 			  // The endpoint of the store on your server.
 	     	prefix: '/app/annotator_api',
 
-	      // Attach the uri of the current page to all annotations to allow search.
-	      annotationData: {
-	        'uri': submissionFileID + '+' + userID,
-	      },
+		      // Attach the uri of the current page to all annotations to allow search.
+		      annotationData: {
+		        'uri': submissionFileID + '+' + userID,
+		      },
 
-	      // This will perform a "search" action when the plugin loads. Will
-	      // request all notations for the given ID.
-	      loadFromSearch: {
-	        'uri': submissionFileID + '+' + userID,
-      	}
+		      // This will perform a "search" action when the plugin loads. Will
+		      // request all notations for the given ID.
+		      loadFromSearch: {
+		        'uri': submissionFileID + '+' + userID,
+	      		}
 			});
 		}
 
@@ -248,7 +250,6 @@
 			// Load comments for the selected file.
 			var review = reviews[parseInt(activeTab)-1];
 			if(currentSubmissionFile){
-				console.log(review.user_id);
 				activateAnnotator(currentSubmissionFile, review.user_id);
 			}
 		}
@@ -263,7 +264,6 @@
 
 	function loadTreeIcons(){
 		// Load the icons for files and folders in JSTree
-		console.log("go");
 		$('.jstree-themeicon-hidden').each(function() {
 			// console.log($(this).parent().parent());
 			if($(this).parent().parent().hasClass("jstree-leaf")){
@@ -283,8 +283,12 @@
 		// TODO: work out how to run this when a comment is saved.
 		$('#save-notification').text('Saving comments...');
 		setTimeout(function () {
-        $('#save-notification').text('All comments saved.');
-    }, 2000);
+        	$('#save-notification').text('All comments saved.');
+    	}, 2000);
+	}
+
+	function resetComments(){
+		var confirmation = confirm("Are you sure you want to reset all your comments?");
 	}
 
 	</script>
