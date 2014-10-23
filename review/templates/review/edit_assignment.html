@@ -1,4 +1,11 @@
 {% extends "review/base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+	<link rel="stylesheet" href="{% static 'review/css/DateTimePicker.css' %}" />  
+{% endblock %}
+
+
 {% block content %}
 	<p><a class="btn btn-default" href="{% url 'staff' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
 
@@ -29,4 +36,32 @@
 </div>
 		</div>
 	</section>
+{% endblock %}
+{% block jsEnd %}
+	<script src="{% static 'review/js/DateTimePicker.js' %}"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var due_date = $("#id_due_date");
+			var open_date = $("#id_open_date");
+			var review_due_date = $("#id_review_due_date");
+			var review_open_date = $("#id_review_open_date");
+			due_date.attr('data-field', 'datetime');
+			due_date.attr('readonly', true);
+			open_date.attr('data-field', 'datetime');
+			open_date.attr('readonly', true);
+			review_due_date.attr('data-field', 'datetime');
+			review_due_date.attr('readonly', true);
+			review_open_date.attr('data-field', 'datetime');
+			review_open_date.attr('readonly', true);
+			due_date.after("<div id='dtbox1'></div>");
+			open_date.after("<div id='dtbox2'></div>");
+			review_due_date.after("<div id='dtbox3'></div>");
+			review_open_date.after("<div id='dtbox4'></div>");
+
+			$("#dtbox1").DateTimePicker();
+			$("#dtbox2").DateTimePicker();
+			$("#dtbox3").DateTimePicker();
+			$("#dtbox4").DateTimePicker();
+		});
+	</script>
 {% endblock %}

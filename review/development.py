@@ -154,9 +154,9 @@ def reset_test_database(request): # pragma: no cover
 		review_open_date=long_after,
 		review_due_date=long_after,
 		weighting=20,
-		test_zip="",
-		dockerfile="",
-		docker_command="",
+		test_zip="testing/test.zip",
+		dockerfile="testing/Dockerfile",
+		docker_command="python /opt/testing/test.py",
 		test_required=False
 	)
 	a3.save()

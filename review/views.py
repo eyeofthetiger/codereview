@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import os.path
 import json
 
@@ -364,12 +364,12 @@ def edit_assignment(request, assignment_pk):
 			'assignment_id': assignment.assignment_id,
 			'name': assignment.name,
 			'description_raw': assignment.description_raw,
-			'open_date': assignment.open_date,
-			'due_date': assignment.due_date,
+			'open_date': assignment.open_date.strftime("%d-%m-%Y %H:%M"),
+			'due_date': assignment.due_date.strftime("%d-%m-%Y %H:%M"),
 			'allow_multiple_uploads': assignment.allow_multiple_uploads,
 			'allow_help_centre': assignment.allow_help_centre,
-			'review_open_date': assignment.review_open_date,
-			'review_due_date': assignment.review_due_date,
+			'review_open_date': assignment.review_open_date.strftime("%d-%m-%Y %H:%M"),
+			'review_due_date': assignment.review_due_date.strftime("%d-%m-%Y %H:%M"),
 			'number_of_peer_reviews': assignment.number_of_peer_reviews,
 			'weighting': assignment.weighting,
 			'test_required': assignment.test_required,
