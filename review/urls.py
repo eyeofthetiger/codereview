@@ -53,6 +53,7 @@ urlpatterns = patterns('',
     url(r'^annotator_api/annotations/(?P<comment_pk>\d+)$', annotator.api_read, 
         name='api_read'),
     url(r'^annotator_api/search$', annotator.api_search, name='api_search'),
+    url(r'^annotator_api/delete/(?P<user_pk>\d+)/(?P<submission_file_pk>\d+)$', annotator.api_delete_all, name='api_delete_all'),
 
     # Development/Testing URLs
     url(r'^reset/$', development.reset_test_database, name='reset_test_database'),

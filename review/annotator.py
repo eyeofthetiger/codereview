@@ -63,6 +63,21 @@ def api_search(request):
 	return HttpResponse(json.dumps(response), content_type="application/json")
 
 @csrf_exempt
+def api_delete_all(request, submission_file_pk, user_pk):
+	""" Receives SubmissionFile and User primary keys and deletes all comments
+		made by that user on that file.
+	"""
+	submission_file = get_object_or_404(SubmissionFile, pk=submission_file_pk)
+	user = get_object_or_404(User, pk = user_pk)
+	comments = Comment.objects.filter(
+		commenter=user, commented_file=submission_file)
+	for comment in comments:
+		comment_ranges = CommentRange.objects.filter(comment=comment).delete()
+		comment.delete()
+	return HttpResponse(status=204)
+
+
+@csrf_exempt
 def api_read(request, comment_pk):
 	""" Receives the id of a Comment. It will then deal with that comment 
 		according to the HTTP request type. PUT will update the comment,

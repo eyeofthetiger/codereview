@@ -290,7 +290,10 @@
 	function resetComments(){
 		var confirmed = confirm("Are you sure you want to reset all your comments?");
 		if(confirmed){
-			
+			var url = "/app/annotator_api/delete/" + currentUserID + "/" + currentSubmissionFile;
+			$.get(url ,function(data,status){
+    			activateAnnotator(currentSubmissionFile, currentUserID);	
+ 			});
 		}
 	}
 
