@@ -66,6 +66,10 @@ class Assignment(models.Model):
 		""" Returns true if due date has passed, false otherwise. """
 		return self.due_date < timezone.now()
 
+	def is_before_open_date(self):
+		""" Returns true if before open date, false otherwise. """
+		return self.open_date > timezone.now()
+
 	def get_submission(self, user):
 		""" Returns the latest Submission for this assignment by a given 
 			User. 

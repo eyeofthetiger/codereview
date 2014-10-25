@@ -135,13 +135,18 @@ def email_preferences(request):
 def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp_path=None, test_output=None):
 	""" Displays an assignment upload form."""
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
+	user = request.user
+	#Redirect if staff or not within submission times.
+	if user.is_staff:
+		return redirect('staff')
+	if assignment.due_date_passed() or assignment.is_before_open_date():
+		return redirect('index')
 
 	if request.method == 'POST':
 		if not 'test' in request.POST.keys():
 			# Upload button clicked
 			upload_form = UploadForm(request.POST, request.FILES)
 			if upload_form.is_valid():
-				user = request.user
 				submission = Submission(
 					user=user,
 					assignment=assignment,
@@ -182,7 +187,6 @@ def assignment(request, assignment_pk, submission=None, uploaded_file=None, temp
 		else:
 			# Test button clicked
 			# Build context
-			print request.POST
 			temp_path = request.POST['temp_path']
 			abs_temp_path = os.path.join(os.getcwd(), temp_path)
 			uploaded_file = request.POST['upload']
