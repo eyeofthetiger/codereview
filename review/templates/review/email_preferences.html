@@ -16,14 +16,14 @@
 
 		<div class="container container-md">
 			<div class="tab-content">
-<h3>Email Preferences</h3>
+<h3>When to receive email notifications</h3>
 
-	<form method="post" enctype="multipart/form-data">
+	<form method="post" class="email-pref" enctype="multipart/form-data">
 		<div class="form-group">
 		    {% csrf_token %}
 		    {{ form.non_field_errors }}
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-lg-6 col-md-6 col-sm-6">
 				    <div class="fieldWrapper">
 					    {{ form.on_upload.errors }}
 					    {{ form.on_upload }}
@@ -48,7 +48,7 @@
 					    <label for="id_on_open_date">On Assignment Open Date</label>
 					</div>
 				</div>
-				<div class="col-md-6">   
+				<div class="col-lg-6 col-md-6 col-sm-6">   
 				    <div class="fieldWrapper">
 					    {{ form.on_review_received.errors }}
 					    {{ form.on_review_received }}
