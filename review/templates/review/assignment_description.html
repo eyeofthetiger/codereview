@@ -1,7 +1,6 @@
 {% extends "review/base.html" %}
 {% block content %}
 	<p><a class="btn btn-default" href="{% url 'index' %}"><span class="glyphicon glyphicon-chevron-left"></span>back</a></p>
-	<!--<h1>{{ assignment.name }}</h1>-->
 	<section class="card">
 		<div class="heading i-details">
 			<h2>Assignment Details</h2>
@@ -10,29 +9,51 @@
 		<div class="container container-md">
 			<div class="tab-content">
 				<h3>{{ assignment.name }}</h3>
-				<table class="content table">
-					<thead>
-						<tr>
-							<th>STATUS</th>
-							<th>DUE DATE</th>
-							<th>SUBMISSION</th>
-							<th>LAST FILE SUBMITTED</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<p class="status positive"></p>
-								<!-- *** LUKE *** //// FOR 'CLOSED' STATUS
- 								<p class="status negative"></p>
-								-->
-							</td>
-							<td>{{ assignment.due_date }}</td>
-							<td><a class="btn btn-primary" href="{% url 'assignment' assignment.id %}">Submit now</a></td>
-							<td><a class="text" href="#">Sept. 20, 2014, 10:57 p.m.</a></td>
-						</tr>	
-					</tbody>
-				</table>
+				{% if not user.is_staff %}
+					<table class="content table">
+						<thead>
+							<tr>
+								<th>STATUS</th>
+								<th>DUE DATE</th>
+								<th>SUBMISSION</th>
+								<th>LAST FILE SUBMITTED</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									{% if assignment.due_date_passed %}
+										<p class="status negative"></p>
+									{% else %}
+	 									<p class="status positive"></p>
+	 								{% endif %}
+								</td>
+								<td>{{ assignment.due_date }}</td>
+								<td>
+									{% if assignment.due_date_passed %}
+										{% if submission %}
+											<a class="btn btn-primary" href="{% url 'submission' submission.id %}">Submitted</a>
+										{% else %}
+											<button type="button" class="btn btn-default" disabled="disabled">Not submitted</button>
+										{% endif %}
+									{% else %}
+	 									<a class="btn btn-primary" href="{% url 'assignment' assignment.id %}">Submit now</a>
+	 								{% endif %}
+	 							</td>
+								<td>
+									{% if submission %}
+										<a class="text" href="#">{{ submission.upload_date }}</a>
+									{% else %}
+										<a class="text" href="#">-</a>
+									{% endif %}
+								</td>
+							</tr>	
+						</tbody>
+					</table>
+				{% else %}
+					<h4>DUE DATE</h4>
+					<p>{{ assignment.due_date }}</p>
+				{% endif %}
 				<h4>DESCRIPTION</h4>
 				<p>
 					{{ assignment.description|safe }}

@@ -246,9 +246,14 @@ def submit_assignment(request, submission_pk):
 @login_required
 def assignment_description(request, assignment_pk):
 	""" Display the description of an assignment. """
+	user = request.user
 	assignment = get_object_or_404(Assignment, pk=assignment_pk)
+	submission = assignment.get_submission(user)
+	#Redirect if not within submission times.
+	if assignment.is_before_open_date():
+		return redirect('index')
 	return render(request, 'review/assignment_description.html', 
-		{'title': assignment, 'assignment': assignment})
+		{'title': assignment, 'assignment': assignment, 'submission': submission})
 
 @login_required
 @ensure_csrf_cookie
