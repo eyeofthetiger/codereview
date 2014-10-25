@@ -24,14 +24,18 @@
 					<tr>
 						
 						
-						{% if assignment.due_date_passed == True %}
+						{% if assignment.due_date_passed %}
 						<td><p class="status negative"></p></td>
 						<td><span class="ass-title">{{ assignment }} </span> </td>
 						<td>
 							<a class="info" href="{% url 'assignment_description' assignment.id %}"> i </a>
 						</td>
+							{% if assignment.id in submissions.keys %}
+								<td><button type="button" class="btn btn-default" disabled="disabled">Submitted</button></td>
+							{% else %}
+								<td><button type="button" class="btn btn-default" disabled="disabled">Not submitted</button></td>
+							{% endif %}
 
-						<td><button type="button" class="btn btn-default" disabled="disabled">Submitted</button></td>
 						<td>{{ assignment.due_date }}</td>
 
 					  	{% else %}

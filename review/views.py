@@ -42,8 +42,6 @@ def index(request):
 			submissions[assignment.id] = submission
 	# Get all assigned reviews for the user
 	assigned_reviews = AssignedReview.objects.filter(assigned_user=user)
-	# Get all questions for forum
-	# questions = Question.objects.order_by('create_date')
 
 	context = {
 		"title": course,
@@ -52,7 +50,6 @@ def index(request):
 		"assignments": assignments,
 		"submissions": submissions,
 		"assigned_reviews": assigned_reviews,
-		# "questions": questions
 	}
 
 	return render(request, 'review/index.html', context)

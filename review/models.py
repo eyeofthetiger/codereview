@@ -53,6 +53,15 @@ class Assignment(models.Model):
 			return False
 		return True
 
+	def was_submitted(self, user):
+		""" Returns true if the given user had a submission for this assignment.
+		"""
+		submissions = Submission.objects.filter(user=user, assignment=self,
+		 has_been_submitted=True)
+		if len(submissions) > 0:
+			return True
+		return False
+
 	def due_date_passed(self):
 		""" Returns true if due date has passed, false otherwise. """
 		return self.due_date < timezone.now()
