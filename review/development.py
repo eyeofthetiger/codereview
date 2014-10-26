@@ -198,16 +198,16 @@ def reset_test_database(request): # pragma: no cover
 	assigned_review2 = AssignedReview(assigned_user=user1, assigned_submission=submission0b, has_been_reviewed=False)
 	assigned_review2.save()
 
-	comment = Comment(commenter=user2, commented_file=sf0, comment="Wow, much deep!", selected_text="print")
+	comment = Comment(commenter=user2, commented_file=sf0, comment="You probably shouldn't hard code the IP address.", selected_text='mpd_client.connect("192.168.1.4", 6600)')
 	comment.save()
-	comment_range = CommentRange(comment=comment, start='', end='',startOffset=0, endOffset=5)
+	comment_range = CommentRange(comment=comment, start='', end='',startOffset=195, endOffset=234)
 	comment_range.save()
 
 	assigned_review3 = AssignedReview(assigned_user=user3, assigned_submission=submission0, has_been_reviewed=True)
 	assigned_review3.save()
-	comment2 = Comment(commenter=user3, commented_file=sf0, comment="Comment two", selected_text="print")
+	comment2 = Comment(commenter=user3, commented_file=sf0, comment="This function doesn't cover all possibilities and will return None. You should probably find a better way to implement it.", selected_text='def parse_command(text):')
 	comment2.save()
-	comment_range2 = CommentRange(comment=comment2, start='', end='',startOffset=0, endOffset=5)
+	comment_range2 = CommentRange(comment=comment2, start='', end='',startOffset=521, endOffset=725)
 	comment_range2.save()
 
 	submission1 = Submission(
