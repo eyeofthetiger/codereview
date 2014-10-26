@@ -73,34 +73,37 @@
 		</div>
 		
 		<div class="container container-md">
-			<p class="alert bg-danger"><strong>There are no assignments yet to be reviewed.</strong></p>
-			<table class="table table-hover">
-				<thead>
-					<th width="70"></th>
-					<th>Assignment</th>
-					<th></th>
-					<th>Review</th>
-					<th>Due date</th>
-				</thead>
-				<tbody>
-					{% for review in assigned_reviews %}
-					<tr>
-						<td><p class="status code"></p></td>
-						<td><span class="ass-title">
-							{{ review.assigned_submission.assignment }}
-						</span>
-						</td>
-						<td>
-							<a class="info" href="{% url 'assignment_description' review.assigned_submission.assignment.id %}"> i </a>
-						</td>
-						<td><a class="btn btn-primary" href="{% url 'submission' review.assigned_submission.id %}">Review now</a></td>
-					  	
-						<td>{{ review.assigned_submission.assignment.review_due_date }}</td>
-					</tr>
+			{% if not assigned_reviews %}
+				<p class="alert bg-danger"><strong>You have no assignments that need to be reviewed.</strong></p>
+			{% else %}
+				<table class="table table-hover">
+					<thead>
+						<th width="70"></th>
+						<th>Assignment</th>
+						<th></th>
+						<th>Review</th>
+						<th>Due date</th>
+					</thead>
+					<tbody>
+						{% for review in assigned_reviews %}
+						<tr>
+							<td><p class="status code"></p></td>
+							<td><span class="ass-title">
+								{{ review.assigned_submission.assignment }}
+							</span>
+							</td>
+							<td>
+								<a class="info" href="{% url 'assignment_description' review.assigned_submission.assignment.id %}"> i </a>
+							</td>
+							<td><a class="btn btn-primary" href="{% url 'submission' review.assigned_submission.id %}">Review now</a></td>
+						  	
+							<td>{{ review.assigned_submission.assignment.review_due_date }}</td>
+						</tr>
 
-					{% endfor %}
-				</tbody>
-			</table>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% endif %}
 		</div>
 	</section>
 
