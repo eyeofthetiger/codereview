@@ -119,7 +119,7 @@ def submit_review(request, user_pk, submission_pk):
 	# Send email
 	email_prefs = EmailPreferences.objects.filter(user=submission.user)[0]
 	if email_prefs.on_review_received:
-		message = "You've received a review for " + assignment
+		message = "You've received a review for the assignmen: " + submission.assignment.name
 		send_email("Review received for assignment", message, [user.email])
 	return HttpResponse(status=204)
 

@@ -8,8 +8,6 @@ from review.email import send_email
 from review.allocation import allocation
 import review.models
 
-# TODO: remove old tasks when adding new ones - http://stackoverflow.com/questions/15575826/how-to-inspect-and-cancel-celery-tasks-by-task-name
-
 @shared_task
 def due_date_reached(assignment):
 	# Send email to students who have selected to receive an email when an assigment is due.
