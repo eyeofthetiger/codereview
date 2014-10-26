@@ -59,8 +59,8 @@ urlpatterns = patterns('',
         annotator.api_delete_all, name='api_delete_all'),
 
     # Review URLs
-    url(r'^submit_review/(?P<user_pk>\d+)/(?P<submission_pk>\d+)$', annotator.submit_review, 
-        name='submit_review'),
+    url(r'^submit_review/(?P<user_pk>\d+)/(?P<submission_pk>\d+)$', 
+        annotator.submit_review, name='submit_review'),
 
     # Development/Testing URLs
     url(r'^reset/$', development.reset_test_database, 

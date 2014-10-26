@@ -52,7 +52,8 @@ class AssignmentForm(forms.Form):
 	name = forms.CharField(max_length=140)
 	open_date = forms.CharField()
 	due_date = forms.CharField()
-	description_raw = forms.CharField(label='Description', widget=forms.Textarea)
+	description_raw = forms.CharField(
+		label='Description', widget=forms.Textarea)
 	allow_multiple_uploads = forms.BooleanField(required=False)
 	allow_help_centre = forms.BooleanField(required=False)
 	number_of_peer_reviews = forms.IntegerField()

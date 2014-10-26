@@ -9,13 +9,18 @@ from django.core.files import File
 
 from codereview.wsgi import *
 from review.allocation import swap_with_other_student
-from review.annotator import api_root, api_index, api_search, api_read, format_annotation
+from review.annotator import api_root, api_index, api_search, api_read,\
+	format_annotation
 from review.email import send_email
-from review.models import Course, Assignment, Submission, SubmissionFile, Question, Comment, CommentRange
+from review.models import Course, Assignment, Submission, SubmissionFile, \
+	Question, Comment, CommentRange
 from review.markdown import markdown_to_html, markdown_api
-from review.templatetags.template_tags import get_item, get_range, get_submission_date, get_submission_id
-from review.forms import UploadForm, QuestionForm, ResponseForm, EmailPreferencesForm, AssignmentForm
-from review.submission import is_valid_file, get_file_contents, get_directory_contents
+from review.templatetags.template_tags import get_item, get_range, \
+	get_submission_date, get_submission_id
+from review.forms import UploadForm, QuestionForm, ResponseForm, \
+	EmailPreferencesForm, AssignmentForm
+from review.submission import is_valid_file, get_file_contents, \
+	get_directory_contents
 
 ############################
 # ALLOCATION TESTS
@@ -111,7 +116,8 @@ class AnnotatorTest(TestCase):
 			'text': 'test',
 			'ranges':[]
 		}
-		resp = self.client.post(url, content_type='application/json', data=json.dumps(post))
+		resp = self.client.post(url, content_type='application/json', 
+			data=json.dumps(post))
 		self.assertEquals(resp.status_code, 303)
 		self.assertEquals(resp.content, '')
 		expected = "http://testserver/app/annotator_api/annotations/2"
@@ -341,8 +347,18 @@ class SubmissionTest(TestCase):
 
 	def test_get_directory_contents(self):
 		self.assertEquals(get_directory_contents("review/templatetags"), [
-		 {'icon': False, 'id': '__init__.py', 'parent': '#', 'text': '__init__.py'},
-		 {'icon': False, 'id': 'template_tags.py', 'parent': '#', 'text': 'template_tags.py'}
+			{
+				'icon': False, 
+				'id': '__init__.py', 
+				'parent': '#', 
+				'text': '__init__.py'
+			}, 
+			{
+				'icon': False, 
+				'id': 'template_tags.py', 
+				'parent': '#', 
+				'text': 'template_tags.py'
+			}
 		])
 
 ############################

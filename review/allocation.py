@@ -155,8 +155,8 @@ def allocation(assignment_authors, students, assignments, nbr_reviews):
     for j in students:
         individual_allocations = []
             
-        alloc_mapping[j] = generate_individual_list(assignment_authors, individual_allocations,
-                             assignments, students_allocated, reviews_per_assn,
-                             nbr_reviews, alloc_mapping, j)  
+        alloc_mapping[j] = generate_individual_list(assignment_authors, 
+            individual_allocations, assignments, students_allocated, 
+            reviews_per_assn, nbr_reviews, alloc_mapping, j)  
 
     return alloc_mapping

@@ -10,7 +10,8 @@ import review.models
 
 @shared_task
 def due_date_reached(assignment):
-	# Send email to students who have selected to receive an email when an assigment is due.
+	# Send email to students who have selected to receive an email when an 
+	# assigment is due.
 	subject = assignment.name + " is due"
 	message = assignment.name + " is now due. Make sure you've submitted it!"
 	recipients = assignment.get_due_date_email_recipients()
@@ -30,7 +31,8 @@ def due_date_reached(assignment):
 			assignment_authors[student.id] = submission.id
 
 	num_reviews = assignment.number_of_peer_reviews
-	allocations = allocation(assignment_authors, students_with_submissions, submissions, num_reviews)
+	allocations = allocation(assignment_authors, students_with_submissions, 
+		submissions, num_reviews)
 
 	#Assign reviews
 	for user_id in allocations.keys():
@@ -56,9 +58,11 @@ def open_date_reached(assignment):
 	""" Runs when an assignment becomes available. Notifies all students with 
 		the appropriate settings about the new assignment.
 	"""
-	# Send email to students who have selected to receive an email when an assigment becomes available.
+	# Send email to students who have selected to receive an email when an 
+	# assigment becomes available.
 	subject = assignment.name + " released"
-	message = assignment.name + " has been released. Head over to Enkidu to check it out!"
+	message = assignment.name + \
+		" has been released. Head over to Enkidu to check it out!"
 	recipients = assignment.get_open_date_email_recipients()
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)
@@ -68,9 +72,11 @@ def due_date_tomorrow(assignment):
 	""" Runs 24 hours before an assignment is due. Notifies all students with 
 		the appropriate settings about the upcoming due date.
 	"""
-	# Send email to students who have selected to receive an email the day before a due date.
+	# Send email to students who have selected to receive an email the day 
+	# before a due date.
 	subject = assignment.name + " due tomorrow"
-	message = "The due date for " + assignment.name + " is in 24 hours. Don't forget to submit it!"
+	message = "The due date for " + assignment.name + \
+		" is in 24 hours. Don't forget to submit it!"
 	recipients = assignment.get_before_due_date_email_recipients()
 	if len(recipients) > 0:
 		send_email(subject, message, recipients)

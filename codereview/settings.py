@@ -83,15 +83,14 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/home/django/codereview/static/'
 MEDIA_ROOT = '/home/django/codereview/'
 
-# Email Settings - TODO: This is just a local email server for testing.
-
+# Email Settings - This is just a local email server for development.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = ''
 EMAIL_PORT = None
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
-FROM_EMAIL = 'admin@enkidu.edu.au' #TODO: Make this legit email address
+FROM_EMAIL = 'admin@enkidu.edu.au'
 
 # Login settings
 LOGIN_URL = '/app/choose_user'

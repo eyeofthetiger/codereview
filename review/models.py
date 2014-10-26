@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 import tasks
-# from review.tasks import due_date_reached, open_date_reached, due_date_tomorrow
 
 """ This file contains Model descriptions for database tables. """
 
@@ -49,7 +48,8 @@ class Assignment(models.Model):
 		return str(self.name)
 
 	def has_tests(self):
-		if len(self.test_zip) == 0 or len(self.dockerfile) == 0 or len(self.docker_command) == 0:
+		if len(self.test_zip) == 0 or len(self.dockerfile) == 0 \
+			or len(self.docker_command) == 0:
 			return False
 		return True
 
@@ -87,7 +87,8 @@ class Assignment(models.Model):
 		if self.open_date >= now:
 			tasks.open_date_reached.apply_async(args=(self,), eta=self.open_date)
 		if self.get_before_due_date() >= now:
-			tasks.due_date_tomorrow.apply_async(args=(self,), eta=self.get_before_due_date())
+			tasks.due_date_tomorrow.apply_async(args=(self,), 
+				eta=self.get_before_due_date())
 		if self.due_date >= now:
 			tasks.due_date_reached.apply_async(args=(self,), eta=self.due_date)
 
@@ -101,7 +102,8 @@ class Assignment(models.Model):
 			function, but due to a bug when using Django and Celery, it's the
 			only place I could put it and get it to work.
 		"""
-		return [pref.user.email for pref in EmailPreferences.objects.filter(on_open_date=True) if not pref.user.is_staff]
+		return [pref.user.email for pref in EmailPreferences.objects.filter(
+			on_open_date=True) if not pref.user.is_staff]
 
 	def get_before_due_date_email_recipients(self):
 		""" Returns a list of users who will receive an email 24 hours before 
@@ -109,7 +111,9 @@ class Assignment(models.Model):
 			this function, but due to a bug when using Django and Celery, it's 
 			the only place I could put it and get it to work.
 		"""
-		return [pref.user.email for pref in review.models.EmailPreferences.objects.filter(on_day_before_due=True) if not pref.user.is_staff]
+		return [pref.user.email for pref in \
+			review.models.EmailPreferences.objects.filter(
+				on_day_before_due=True) if not pref.user.is_staff]
 
 	def get_due_date_email_recipients(self):
 		""" Returns a list of users who will receive an email when the due date
@@ -117,7 +121,9 @@ class Assignment(models.Model):
 			function, but due to a bug when using Django and Celery, it's the
 			only place I could put it and get it to work.
 		"""
-		return [pref.user.email for pref in EmailPreferences.objects.filter(on_due_date=True) if not pref.user.is_staff]
+		return [pref.user.email for pref in \
+			EmailPreferences.objects.filter(
+				on_due_date=True) if not pref.user.is_staff]
 
 class Submission(models.Model):
 	""" An assignment submitted by a user. """
@@ -219,7 +225,8 @@ class Question(models.Model):
 		""" Returns true if the question has a response that has been selected 
 			as a definitive answer.
 		"""
-		if(len(Response.objects.filter(question=self, selected_answer=True)) > 0):
+		responses = Response.objects.filter(question=self, selected_answer=True)
+		if(len(responses) > 0):
 			return True
 		return False
 

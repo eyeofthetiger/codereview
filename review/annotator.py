@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
-from review.models import Comment, CommentRange, SubmissionFile, Submission, AssignedReview, EmailPreferences
+from review.models import Comment, CommentRange, SubmissionFile, Submission, \
+	AssignedReview, EmailPreferences
 from review.email import send_email
 
 """ Functions related to annotation. """
@@ -91,7 +92,8 @@ def api_read(request, comment_pk):
 		comment.comment = comment_data['text']
 		comment.save()
 		response = HttpResponse(content="", status=303)
-		response["Location"] = "/app/annotator_api/annotations/" + str(comment.id)
+		response["Location"] = "/app/annotator_api/annotations/" + \
+			str(comment.id)
 		return response
 	elif request.method == "DELETE":
 		comment_ranges = CommentRange.objects.filter(comment=comment).delete()
@@ -119,7 +121,8 @@ def submit_review(request, user_pk, submission_pk):
 	# Send email
 	email_prefs = EmailPreferences.objects.filter(user=submission.user)[0]
 	if email_prefs.on_review_received:
-		message = "You've received a review for the assignmen: " + submission.assignment.name
+		message = "You've received a review for the assignmen: " + \
+			submission.assignment.name
 		send_email("Review received for assignment", message, [user.email])
 	return HttpResponse(status=204)
 
