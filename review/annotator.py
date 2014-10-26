@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
-from review.models import Comment, CommentRange, SubmissionFile
+from review.models import Comment, CommentRange, SubmissionFile, Submission, AssignedReview
 
 """ Functions related to annotation. """
 
@@ -101,6 +101,22 @@ def api_read(request, comment_pk):
 		response = format_annotation(user, comment)
 		return HttpResponse(json.dumps(response),
 			content_type="application/json")
+
+@csrf_exempt
+def submit_review(request, user_pk, submission_pk):
+	""" Sets the given AssignedReview as complete and notifies the reviewed 
+		user if necesssary.
+	"""
+
+	submission = get_object_or_404(Submission, pk=submission_pk)
+	user = get_object_or_404(User, pk=user_pk)
+	# Get review. There should only ever be one matching this input.
+	review = AssignedReview.objects.filter(
+		assigned_user=user, assigned_submission=submission)[0]
+	review.has_been_reviewed = True
+	review.save()
+	print review
+	return HttpResponse(status=204)
 
 def format_annotation(user, comment):
 	""" Returns a comment in a format acceptable form AnnotatorJS. """

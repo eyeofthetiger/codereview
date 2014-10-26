@@ -130,7 +130,7 @@
 				<!--<div id="save-notification">All comments saved</div>
 			   <button type="button" class="btn btn-default">Save</button> -->
 			  <button id="reset-button" type="button" class="btn btn-primary">Reset</button>
-			  <button type="button" class="btn btn-primary" onClick='alert("Your review has been submitted")'>Submit</button>
+			  <button id="submit-button" type="button" class="btn btn-primary">Submit</button>
 			</div>
 		</div>
 	{% endif %}
@@ -152,6 +152,7 @@
 
 		var activeTab = "0"; //0 represents original, other numbers represent the reviews
 		var reviews = {{ reviews|safe }};
+		var submissionID = {{ submission.id }};
 		var fileStructure = {{ file_structure|safe }};
 		var isReviewer = ! {{ is_owner|yesno:"true,false" }};
 		var isStaff = {{ user.is_staff|yesno:"true,false" }};
@@ -171,6 +172,8 @@
 
 		// Click listener for reset
 		$('#reset-button').click(resetComments);
+		// Click listener for submit
+		$('#submit-button').click(submitReview);
 
 		$(document).ready( function() {
 			// Setup the JSTree instance.
@@ -288,11 +291,24 @@
 	}
 
 	function resetComments(){
+		// Deletes all comments for the current user/submission file combo.
 		var confirmed = confirm("Are you sure you want to reset all your comments?");
 		if(confirmed){
 			var url = "/app/annotator_api/delete/" + currentUserID + "/" + currentSubmissionFile;
 			$.get(url ,function(data,status){
     			activateAnnotator(currentSubmissionFile, currentUserID);	
+ 			});
+		}
+	}
+
+	function submitReview(){
+		// Submits the review.
+		var confirmed = confirm("Are you sure you want to submit your review? Once submitted, you will no longer be able to view or change your comments.");
+		if(confirmed){
+			var url = "/app/submit_review/" + currentUserID + '/' + submissionID;
+			$.get(url ,function(data,status){
+    			alert('Your review has been submitted');
+    			window.location.replace("{% url 'index' %}");
  			});
 		}
 	}

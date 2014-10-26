@@ -32,10 +32,12 @@ urlpatterns = patterns('',
     # Forum URLs
     url(r'^forum/$', views.forum, name='forum'),
     url(r'^add_question/$', views.add_question, name='add_question'),
-    url(r'^edit_question/(?P<question_pk>\d+)/$', views.edit_question, name='edit_question'),
+    url(r'^edit_question/(?P<question_pk>\d+)/$', views.edit_question, 
+        name='edit_question'),
     url(r'^question/(?P<question_pk>\d+)/$', views.question, name='question'),
     url(r'^sticky/(?P<question_pk>\d+)/$', views.sticky, name='sticky'),
-    url(r'^set_as_answer/(?P<response_pk>\d+)/$', views.set_as_answer, name='set_as_answer'),
+    url(r'^set_as_answer/(?P<response_pk>\d+)/$', views.set_as_answer, 
+        name='set_as_answer'),
 
     # Submission URLs
     url(r'^submit/(?P<submission_pk>\d+)/$', views.submit_assignment, 
@@ -53,8 +55,14 @@ urlpatterns = patterns('',
     url(r'^annotator_api/annotations/(?P<comment_pk>\d+)$', annotator.api_read, 
         name='api_read'),
     url(r'^annotator_api/search$', annotator.api_search, name='api_search'),
-    url(r'^annotator_api/delete/(?P<user_pk>\d+)/(?P<submission_file_pk>\d+)$', annotator.api_delete_all, name='api_delete_all'),
+    url(r'^annotator_api/delete/(?P<user_pk>\d+)/(?P<submission_file_pk>\d+)$',
+        annotator.api_delete_all, name='api_delete_all'),
+
+    # Review URLs
+    url(r'^submit_review/(?P<user_pk>\d+)/(?P<submission_pk>\d+)$', annotator.submit_review, 
+        name='submit_review'),
 
     # Development/Testing URLs
-    url(r'^reset/$', development.reset_test_database, name='reset_test_database'),
+    url(r'^reset/$', development.reset_test_database, 
+        name='reset_test_database'),
 )

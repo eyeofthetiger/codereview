@@ -41,7 +41,7 @@ def index(request):
 		if submission:
 			submissions[assignment.id] = submission
 	# Get all assigned reviews for the user
-	assigned_reviews = AssignedReview.objects.filter(assigned_user=user)
+	assigned_reviews = AssignedReview.objects.filter(assigned_user=user, has_been_reviewed=False)
 
 	context = {
 		"title": course,
