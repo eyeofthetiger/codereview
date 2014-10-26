@@ -3,6 +3,8 @@ import datetime
 import os
 import shutil
 
+from celery.task.control import discard_all
+
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -32,13 +34,15 @@ def load_student(request): # pragma: no cover
 def reset_test_database(request): # pragma: no cover
 	""" Loads a database with fake data for testing. """
 
+	# Clear Celery tasks
+	discard_all()
+
 	# Delete Submissions
 	for root, dirs, files in os.walk('submissions'):
 		for f in files:
 			os.unlink(os.path.join(root, f))
 		for d in dirs:
 			shutil.rmtree(os.path.join(root, d))
-
 
 	# Delete current database
 	Submission.objects.all().delete()

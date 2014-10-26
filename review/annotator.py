@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
-from review.models import Comment, CommentRange, SubmissionFile, Submission, AssignedReview
+from review.models import Comment, CommentRange, SubmissionFile, Submission, AssignedReview, EmailPreferences
+from review.email import send_email
 
 """ Functions related to annotation. """
 
@@ -115,7 +116,11 @@ def submit_review(request, user_pk, submission_pk):
 		assigned_user=user, assigned_submission=submission)[0]
 	review.has_been_reviewed = True
 	review.save()
-	print review
+	# Send email
+	email_prefs = EmailPreferences.objects.filter(user=submission.user)[0]
+	if email_prefs.on_review_received:
+		message = "You've received a review for " + assignment
+		send_email("Review received for assignment", message, [user.email])
 	return HttpResponse(status=204)
 
 def format_annotation(user, comment):
