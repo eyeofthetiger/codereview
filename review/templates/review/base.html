@@ -47,15 +47,16 @@
 
                        {% if not user.is_staff %}
 
-                            <a class="header-icon" href="{% url 'email_preferences' %}"><img src="{% static 'review/images/icon-settings.jpg' %}" title="Settings"></a>
+                            <a class="header-icon nav-tooltip" href="{% url 'email_preferences' %}" data-original-title="Settings" data-placement="bottom" data-toggle="tooltip"><img src="{% static 'review/images/icon-settings.jpg' %}" title="Settings"></a>
 
-                            <!-- THE BELOW LINK HAS TO BE LINKED TO THE 'HELP FORUM' SECTION -->
-                            <a class="header-icon" href="{% url 'forum' %}"><img src="{% static 'review/images/icon-forum.jpg' %}" title="Help Forum"></a>
+                            <a class="header-icon nav-tooltip" href="{% url 'forum' %}" data-original-title="Help Forum" data-placement="bottom" data-toggle="tooltip"><img src="{% static 'review/images/icon-forum.jpg' %}" ></a>
 
                        {% endif %}
 
                         <!-- THE BELOW LINK IS JUST FOR TESTING -->
-                       <a class="temporal header-icon" href="{% url 'choose_user' %}"><span class="glyphicon glyphicon-user"></span></a>
+                       <a class="temporal header-icon nav-tooltip" href="{% url 'choose_user' %}"><span class="glyphicon glyphicon-user"></span></a>
+
+                        
                        
                     </div>
                 </div>
@@ -78,6 +79,13 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Bootstrap JS: After jQuery because it depends on jQuery -->
         <script src="{% static 'review/js/bootstrap.min.js' %}"></script> 
+        <!-- Tooltip JS: Tooltip trigger -->
+        <script id="bsJs" type="text/javascript">
+            $(document).ready(function() {
+                $('.nav-tooltip').tooltip();
+            });
+        </script> 
+
         {% block jsEnd %}{% endblock %}
 
         
