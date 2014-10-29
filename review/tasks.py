@@ -10,6 +10,9 @@ import review.models
 
 @shared_task
 def due_date_reached(assignment):
+	""" Run when an assignments due date is reached. Contains a number of tasks
+		pertaining to this event.
+	"""
 	# Send email to students who have selected to receive an email when an 
 	# assigment is due.
 	subject = assignment.name + " is due"

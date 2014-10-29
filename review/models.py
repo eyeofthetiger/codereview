@@ -48,6 +48,9 @@ class Assignment(models.Model):
 		return str(self.name)
 
 	def has_tests(self):
+		""" Returns true if an assignment has tests associated with it, false
+			otherwise.
+		"""
 		if len(self.test_zip) == 0 or len(self.dockerfile) == 0 \
 			or len(self.docker_command) == 0:
 			return False

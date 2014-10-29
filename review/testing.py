@@ -14,10 +14,12 @@ def save_file(upload, directory):
 	return path
 
 def build_dockerfile(path, assignment_id):
+	""" Builds a docker instance from the given Dockerfile. """
 	call(['sudo', 'docker', 'build', '-t', 'enkidu/' + str(assignment_id), 
 		path])
 
 def run_docker(assignment_id, testpath, command):
+	""" Runs a docker instance with the given command. """
 	cmd = 'sudo docker run -t -a stdout -v ' + testpath + ":/opt/testing" + \
 		' enkidu/' + str(assignment_id) + ' ' + command
 	print cmd
@@ -41,6 +43,7 @@ def create_temp_files(assignment, submission_file):
 	""" Puts a submission and the testing files into the same directory. """
 	# Create enclosing folder
 	directory = generate_random_name()
+	# Might get stuck if run over 200 billion times
 	while os.path.isdir(os.path.join('temp', 'testing', directory)):
 		directory = generate_random_name()
 	path = os.path.join('temp', 'testing', directory)
