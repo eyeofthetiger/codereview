@@ -537,6 +537,23 @@ div.annotator-controls a.annotator-save {
   position: relative;
   top: -2px;
 }
+.dtpicker-buttonCont .dtpicker-button {
+  background: #076fb8 !important;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+.dtpicker-buttonCont .dtpicker-button:hover {
+  background-color: #2196f3 !important;
+}
+.dtpicker-value {
+  color: #434244 !important;
+  font-weight: bold;
+}
+.dtpicker-close {
+  color: #076fb8 !important;
+}
 /*
 // END: PLUGINS
 // -------------------------------------------------- */
