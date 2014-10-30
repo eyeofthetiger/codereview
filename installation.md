@@ -2,6 +2,10 @@
 
 This is a step by step guid for installing Enkidu. While Enkidu can theoretically run on any modern Unix server (and potentially Windows servers), it has only been teseted on Ubuntu. Therefore, we recommend using an Ubuntu server when using Enkidu.
 
+Enkidu is designed to work for a single course at a time. Multiple installations of Enkidu can work alongside each other to provide for multiple courses, but a few changes will be needed to made in the following instructions. These are:
+* Installing the instances of Enkidu in different locations.
+* Having a copy of the Nginx config file (i.e. the provided file `install/enkidu`) for each instace of Enkidu you plan to run.
+
 ## Installing Enkidu
 
 The first step for installing Enkidu is to download the files. Create a directory named `enkidu` (another name may be chosen, but make sure to use that in place of `enkidu` whenever it is mentioned in this installation guide) wherever is suitable for you. From this directory, run the following command `git clone https://github.com/eyeofthetiger/codereview.git`. You now have the initial files needed to run Enkidu.
@@ -25,6 +29,8 @@ For Python, the following libraries will need to be installed:
 
 In the file `enkidu/codereview/settings.py`, change the following settings:
 * Set `TIME_ZONE` and `LANGUAGE_CODE` to the appropriate values.
+ * For timezone options see [this list](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+ * For language options see [this list](http://www.i18nguy.com/unicode/language-identifiers.html)
 * Configure email settings to use your own email host.
 * Set `DEBUG` and `TEMPLATE_DEBUG` to `False`.
 
