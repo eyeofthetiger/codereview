@@ -5,7 +5,13 @@
 	<section class="card">
 		<div>
 			<h2>{{ question.title }}</h2>
-			<p class="questions-small">Created {{ question.create_date }}</p>
+			<p class="questions-small">Created {{ question.create_date }}
+				<a href="#" class="off"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+				<!-- *** LUKE: When the user has liked it the <a> element has the class 'on' and when hasn't the class 'off'
+				<a href="#" class="on"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+				-->
+				<span>13</span>
+			</p>
 			<p>{{ question.text|safe }}</p>
 
 			{% if question.edited %}
@@ -51,7 +57,13 @@
 		{% endif %}
 
 
-			{{ response.get_user }} <span class="questions-small">{{ response.modified_date }}</span>  </p>
+			{{ response.get_user }} <span class="questions-small">{{ response.modified_date }}</span>  
+				<a href="#" class="off"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+				<!-- *** LUKE: When the user has liked it the <a> element has the class 'on' and when hasn't the class 'off'
+				<a href="#" class="on"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+				-->
+				<span>13</span>
+			</p>
 		{% if response.is_staff %}
 			<p class="staff-question">{{ response.text|safe }}</p>
 		{% else %}

@@ -134,6 +134,15 @@ footer {
 .i-forum {
   background: url(../images/icons-lg-forum.png) no-repeat left bottom;
 }
+.i-rate {
+  background: url(../images/icons-lg-rate.png) no-repeat left bottom;
+}
+.i-faq {
+  background: url(../images/icons-lg-faq.png) no-repeat left bottom;
+}
+.i-report {
+  background: url(../images/icons-lg-report.png) no-repeat left bottom;
+}
 th {
   font-weight: 500;
   color: #999999;
@@ -273,6 +282,9 @@ p.status.negative {
 }
 p.status.code {
   background: url(../images/icons-md-code.png) no-repeat center top;
+}
+p.status.rate {
+  background: url(../images/icons-md-rate.png) no-repeat center top;
 }
 span.status.pin-gray {
   background: url(../images/icons-sm-pin-gray.png) no-repeat center top;
@@ -501,6 +513,26 @@ pre#filecontents {
 p span.questions-small {
   padding-left: 10px;
 }
+p.questions-small a span.glyphicon,
+p.questions-user a span.glyphicon {
+  padding-left: 5px;
+  font-size: 18px !important;
+  position: relative;
+  top: 4px;
+  left: 4px;
+}
+p.questions-user span {
+  font-size: 11px;
+  color: #999999;
+}
+p.questions-small a.off span.glyphicon,
+p.questions-user a.off span.glyphicon {
+  color: #076fb8;
+}
+p.questions-small a.on span.glyphicon,
+p.questions-user a.on span.glyphicon {
+  color: #2196f3;
+}
 span.glyphicon-ok {
   color: #75bf8e;
 }
@@ -553,6 +585,26 @@ div.annotator-controls a.annotator-save {
 }
 .dtpicker-close {
   color: #076fb8 !important;
+}
+.rate input[type="radio"] {
+  position: relative;
+  top: 2px;
+  left: 2px;
+  margin-right: 3px;
+}
+.rate a {
+  position: relative;
+  top: 30px;
+}
+.rate {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+.red {
+  color: #c75c5c !important;
+}
+.green {
+  color: #75bf8e !important;
 }
 /*
 // END: PLUGINS
