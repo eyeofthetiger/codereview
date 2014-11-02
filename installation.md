@@ -1,10 +1,10 @@
 # Installation
 
-This is a step by step guid for installing Enkidu. While Enkidu can theoretically run on any modern Unix server (and potentially Windows servers), it has only been teseted on Ubuntu. Therefore, we recommend using an Ubuntu server when using Enkidu.
+This is a step by step guide for installing Enkidu. While Enkidu can theoretically run on any modern Unix server (and potentially Windows servers), it has only been tested on Ubuntu. Therefore, we recommend using an Ubuntu server when using Enkidu.
 
 Enkidu is designed to work for a single course at a time. Multiple installations of Enkidu can work alongside each other to provide for multiple courses, but a few changes will be needed to made in the following instructions. These are:
 * Installing the instances of Enkidu in different locations.
-* Having a copy of the Nginx config file (i.e. the provided file `install/enkidu`) for each instace of Enkidu you plan to run.
+* Having a copy of the Nginx config file (i.e. the provided file `install/enkidu`) for each instance of Enkidu you plan to run.
 
 ## Installing Enkidu
 
@@ -48,7 +48,7 @@ Enkidu has only been tested on Unix servers, so this installation guide will onl
 
 The server will need a combination of Nginx and Gunicorn to run Enkidu. Within the `sites-enabled` folder of Nginx (usually located at `/etc/nginx/sites-enabled/`), place the provided file `install\enkidu`. At lines 19 and 24, replace `/path/to` with the absolute path to the install location of Enkidu.
 
-Once this is complete, run the command `service nginx restart`
+Once this is complete, run the command `service nginx restart`.
 
 The final step is to start Gunicorn with Enkidu. To do this, run the following command `gunicorn /path/to/enkidu/codereview/wsgi.py` to start Enkidu. Enkidu should now be accessible on the web.
 

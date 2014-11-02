@@ -343,7 +343,7 @@ class SubmissionTest(TestCase):
 
 	def test_get_file_contents(self):
 		self.assertEquals(get_file_contents("review/__init__.py"),
-		 "# This comment is for testing")
+		 "# This comment is for testing\n")
 
 	def test_get_directory_contents(self):
 		self.assertEquals(get_directory_contents("review/templatetags"), [

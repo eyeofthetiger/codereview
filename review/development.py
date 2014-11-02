@@ -3,7 +3,7 @@ import datetime
 import os
 import shutil
 
-from celery.task.control import discard_all
+# from celery.task.control import discard_all
 
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -35,7 +35,7 @@ def reset_test_database(request): # pragma: no cover
 	""" Loads a database with fake data for testing. """
 
 	# Clear Celery tasks
-	discard_all()
+	# discard_all()
 
 	# Delete Submissions
 	for root, dirs, files in os.walk('submissions'):
