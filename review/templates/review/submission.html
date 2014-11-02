@@ -139,88 +139,52 @@
 
 	</section>
 
-	    <div class="container">
+	{% if review_ratings %}	
+	<div class="container">
 
+		<section class="card">
 
-          
+		<div class="heading i-rate">
+			<h2>Rate the Reviews</h2>
+			<p>Assess each review as actionable, useful, specific and objective.</p>
+		</div>
 
-	<section class="card">
-
-		
-
-	<div class="heading i-rate">
-		<h2>Rate the Reviews</h2>
-		<p>Assess each review as actionable, useful, specific and objective.</p>
-	</div>
-
+		{% for rating in review_ratings %}	
 	
-	<div class="row rate">
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h3>Review 1</h3>
+		<div class="row rate">
+			<div class="col-lg-2 col-md-2 col-sm-2">
+				<h3>{{ rating.name }}</h3>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2">
+				<h4>Objective</h4>
+				<input type="radio" name="objective" value="y">Yes
+				<input type="radio" name="objective" value="n">No
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2">
+				<h4>Specific</h4>
+				<input type="radio" name="specific" value="y">Yes
+				<input type="radio" name="specific" value="n">No
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2">
+				<h4>Useful</h4>
+				<input type="radio" name="useful" value="y">Yes
+				<input type="radio" name="useful" value="n">No
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2">
+				<h4>Actionable</h4>
+				<input type="radio" name="actionable" value="y">Yes
+				<input type="radio" name="actionable" value="n">No
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2">
+				<a class="btn btn-primary" href="#">Submit</a>
+			</div>
 		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Objective</h4>
-			<input type="radio" name="objective" value="y">Yes
-			<input type="radio" name="objective" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Specific</h4>
-			<input type="radio" name="specific" value="y">Yes
-			<input type="radio" name="specific" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Useful</h4>
-			<input type="radio" name="useful" value="y">Yes
-			<input type="radio" name="useful" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Actionable</h4>
-			<input type="radio" name="actionable" value="y">Yes
-			<input type="radio" name="actionable" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<a class="btn btn-primary" href="#">Submit</a>
-		</div>
-	</div>
 
-	<div class="row rate">
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h3>Review 2</h3>
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Objective</h4>
-			<input type="radio" name="objective" value="y">Yes
-			<input type="radio" name="objective" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Specific</h4>
-			<input type="radio" name="specific" value="y">Yes
-			<input type="radio" name="specific" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Useful</h4>
-			<input type="radio" name="useful" value="y">Yes
-			<input type="radio" name="useful" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<h4>Actionable</h4>
-			<input type="radio" name="actionable" value="y">Yes
-			<input type="radio" name="actionable" value="n">No
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-2">
-			<a class="btn btn-primary" href="#">Submit</a>
-		</div>
-	</div>
-		
-
-
-
-	
-
+		{% endfor %}
 	</section>
 
   </div>
-
+  {% endif %}
 
 {% endblock %}
 

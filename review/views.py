@@ -284,8 +284,6 @@ def submission(request, submission_pk):
 	reviews = [{'id':r.id, 'user_id':r.assigned_user.id} for r in reviews]
 	comments = {}
 	is_owner = (submission.user == user)
-	if not is_owner and not is_allowed_to_review(user, submission):
-		print "TODO: deal with unauthorised access of submissions"
 	files = SubmissionFile.objects.filter(submission=submission)
 	# Builds JSON representation of the submission directory
 	dir_json = json.dumps(
@@ -294,13 +292,22 @@ def submission(request, submission_pk):
 			'data':get_directory_contents(submission.upload_path)
 		}
 	})
+
+	### THE FOLLOWING IS INCLUDED FOR MAURICIO'S INDIVIDUAL PROJECT ###
+
+	review_ratings = [ {'name': 'Review ' + str(i + 1)} for i, r in enumerate(reviews) ]
+
+	##################
+
+
 	return render(request, 'review/submission.html', {
 			'submission': submission, 
 			'files': files, 
 			'file_structure': dir_json,
 			'is_owner': is_owner,
 			'reviews': reviews,
-			'user': user
+			'user': user,
+			'review_ratings': review_ratings
 		})
 
 @login_required

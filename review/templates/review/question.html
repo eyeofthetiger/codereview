@@ -95,3 +95,37 @@
 </div>
 </section>
 {% endblock %}
+
+{% block jsEnd %}
+<script type="text/javascript">
+	// The following code is only for Mauricio's individual project.
+
+	function setListeners(){
+		$('.off').off();
+		$('.on').off();
+
+		$('.off').click(function(e){
+			$(this).removeClass('off');
+			$(this).addClass('on');
+
+			var newVal = parseInt($(this).next().text()) + 1;
+			$(this).next().text(newVal);
+
+			setListeners();
+		});
+		$('.on').click(function(e){
+			$(this).removeClass('on');
+			$(this).addClass('off');
+
+			var newVal = parseInt($(this).next().text()) - 1;
+			$(this).next().text(newVal);
+
+			setListeners();
+		});
+	}
+	
+	setListeners();
+
+
+</script>
+{% endblock %}
