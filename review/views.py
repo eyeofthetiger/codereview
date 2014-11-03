@@ -13,9 +13,10 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from review.models import Submission, SubmissionFile, Course, Assignment, \
-	AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
+	AssignedReview, Comment, CommentRange, EmailPreferences, Question, \
+	Response, Faq
 from review.forms import UploadForm, AssignmentForm, QuestionForm, \
-	ResponseForm, EmailPreferencesForm
+	ResponseForm, EmailPreferencesForm, FaqForm
 from review.email import send_email
 from review.submission import zip_submission, get_directory_contents, \
 	get_file_contents, save_zip, save_file, is_zipfile
@@ -73,12 +74,36 @@ def staff(request):
 	# Get all questions for forum
 	questions = Question.objects.order_by('create_date')
 
+
+	### THE FOLLOWING IS FOR MAURICIO'S INDIVIDUAL PROJECT ###
+
+	reports = []
+	due_assignments = [a for a in assignments if a.due_date_passed()]
+	for student in User.objects.all():
+		if not student.is_staff:
+			submitted = len([a for a in due_assignments if a.was_submitted(student)])
+			num_submitted = str(submitted) + "/" + str(len(due_assignments))
+			report = {
+				'user':student,
+				'num_submitted': num_submitted,
+				'num_questions': len(Question.objects.filter(user=student)),
+				'num_answers': len(Response.objects.filter(user=student)),
+			}
+			reports.append(report)
+
+	faqs = Faq.objects.all()
+
+
+	#######################
+
 	context = {
 		"title": course,
 		"course": course,
 		"user": user,
 		"assignments": assignments,
 		"questions": questions,
+		"reports": reports,
+		"faqs":faqs,
 	}
 
 	return render(request, 'review/staff.html', context)
@@ -87,15 +112,25 @@ def staff(request):
 def forum(request):
 	""" Displays the forum page. """
 	user = request.user
+	if user.is_staff:
+		return redirect('staff')
+
 	course = Course.objects.get(id=1)
 	# Get all questions for forum
 	questions = Question.objects.order_by('create_date')
+
+	### THE FOLLOWING IS FOR MAURICIO'S INDIVIDUAL PROJECT ###
+
+	faqs = Faq.objects.all()
+
+	#######################
 
 	context = {
 		"title": course,
 		"course": course,
 		"user": user,
 		"questions": questions,
+		"faqs": faqs,
 	}
 
 	return render(request, 'review/forum.html', context)
@@ -641,3 +676,45 @@ def is_allowed_to_review(user, submission):
 	if len(assigned_review) > 0:
 		return True
 	return False
+
+
+######### FOR MAURICIOS INDIVIDUAL PROJECT ########
+
+def faq(request, faq_pk):
+	faq = get_object_or_404(Faq, pk = faq_pk)
+
+	context = {
+		'title': faq.title,
+		'faq': faq,
+	}
+
+	return render(request, 'review/faq.html', context)
+
+@login_required
+def add_faq(request):
+	""" Displays a form for creating a new Question on the forum. """
+	user = request.user
+	if not user.is_staff:
+		redirect('index')
+
+	if request.method == 'POST':
+		form = FaqForm(request.POST)
+		if form.is_valid():
+			faq = Faq(
+				title=form.data['title'],
+				text=markdown_to_html(form.data['text_raw']),
+				text_raw=form.data['text_raw'],
+			)
+			faq.save()
+		return redirect('forum')
+	else:
+		form = FaqForm()
+
+	context = {
+		'title': 'Add a frequently asked question',
+		'form': form
+	}
+
+	return render(request, 'review/add_faq.html', context)
+
+#################

@@ -3,7 +3,7 @@ import datetime
 import os
 import shutil
 
-# from celery.task.control import discard_all
+from celery.task.control import discard_all
 
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -12,7 +12,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
 from review.models import Submission, SubmissionFile, Course, Assignment, \
-	AssignedReview, Comment, CommentRange, EmailPreferences, Question, Response
+	AssignedReview, Comment, CommentRange, EmailPreferences, Question, \
+	Response, Faq
 
 @csrf_exempt
 def choose_user(request): # pragma: no cover
@@ -35,7 +36,7 @@ def reset_test_database(request): # pragma: no cover
 	""" Loads a database with fake data for testing. """
 
 	# Clear Celery tasks
-	# discard_all()
+	discard_all()
 
 	# Delete Submissions
 	for root, dirs, files in os.walk('submissions'):
@@ -55,6 +56,10 @@ def reset_test_database(request): # pragma: no cover
 	EmailPreferences.objects.all().delete()
 	Question.objects.all().delete()
 	Response.objects.all().delete()
+
+	### FOR MAURICIOS INDIVIDUAL PROJECT
+	Faq.objects.all().delete()
+	################
 
 	now = timezone.now()
 	just_before = timezone.now() - datetime.timedelta(seconds=10)
@@ -287,5 +292,14 @@ def reset_test_database(request): # pragma: no cover
 		modified_date = before,
 	)
 	answer2.save()
+
+	## FOR MAURICIOS INDIVIDUAL PROJECT
+	faq1 = Faq(
+		title="This is a frequently asked question.", 
+		text = "Stop asking it dummy!",
+		text_raw = "Stop asking it dummy!",
+	)
+	faq1.save()
+	#######
 
 	return redirect('index')

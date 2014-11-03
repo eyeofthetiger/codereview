@@ -176,7 +176,7 @@
 				<input type="radio" name="actionable" value="n">No
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2">
-				<a class="btn btn-primary" href="#">Submit</a>
+				<a class="btn btn-primary rate-btn" href="#">Submit</a>
 			</div>
 		</div>
 
@@ -204,6 +204,12 @@
 		var fileStructure = {{ file_structure|safe }};
 		var isReviewer = ! {{ is_owner|yesno:"true,false" }};
 		var isStaff = {{ user.is_staff|yesno:"true,false" }};
+
+		// FOR MAURICIOS INDIVIDUAL PROJECT
+		$('.rate-btn').click(function(){
+			$(this).parent().parent().hide();
+		})
+		//////////////////////
 
 		// Click listeners for tabs
 		$('.submission-tab').click(function(){

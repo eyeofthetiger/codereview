@@ -1,0 +1,13 @@
+{% extends "review/base.html" %}
+{% block content %}
+	<p><a class="btn btn-default" href="{% url 'forum' %}"><span class="glyphicon glyphicon-chevron-left"></span>back to forum</a></p>
+
+	<section class="card">
+		<div>
+			<h2>{{ faq.title }}</h2>
+			<hr />
+			<p>{{ faq.text|safe }}</p>
+			
+		</div>
+</section>
+{% endblock %}

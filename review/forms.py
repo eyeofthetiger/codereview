@@ -3,7 +3,7 @@ from datetime import datetime
 from django import forms
 from django.utils import timezone
 
-from review.models import Assignment, EmailPreferences, Question
+from review.models import Assignment, EmailPreferences, Question, Faq
 
 
 """ This file contains forms to be used throughout the codereview app. """
@@ -94,3 +94,19 @@ class AssignmentForm(forms.Form):
 		"""
 		data = self.cleaned_data['review_open_date']
 		return self.format_date(data)
+
+
+###### FOR MAURICIOS INDIVIDUAL PROJECT
+class FaqForm(forms.ModelForm):
+	""" A form for the creation of Faqs in the question forum. """
+	class Meta:
+		""" Builds the form from the Faq model. """
+		model = Faq
+		fields = [
+			'title',
+			'text_raw'
+		]
+		labels = {
+            'text_raw': "Text",
+        }
+########################################

@@ -65,4 +65,9 @@ urlpatterns = patterns('',
     # Development/Testing URLs
     url(r'^reset/$', development.reset_test_database, 
         name='reset_test_database'),
+
+    ######### FOR MAURICIOS INDIVIDUAL PROJECT ########
+    url(r'^faq/(?P<faq_pk>\d+)/$', views.faq, name='faq'),
+    url(r'^add_faq/$', views.add_faq, name='add_faq'),
+
 )

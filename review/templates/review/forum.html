@@ -98,31 +98,15 @@
 					<th>Answer</th>
 				</thead>
 				<tbody>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
+					{% for faq in faqs %}
+						<tr>
+							<td><a href="{% url 'faq' faq.id %}">{{ faq.title }}</a></td>
+							<td>{{ faq.summary }}</td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			</table>
 		</div>
-
-	
-
-
-
-	
 
 	</section>
 

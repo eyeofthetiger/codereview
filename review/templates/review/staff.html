@@ -138,50 +138,40 @@
 	</div>
 	</section>
 
-	<section class="card">
+	{% if faqs %}
+		<section class="card">
 
-		
-
-	<div class="heading i-faq">
-		<h2>Frequently Asked Questions</h2>
-		<p>This is a list of questions that have been alredy solved in past courses.</p>
-	</div>
-
-	<p class="plus-button">
-		<a class="btn btn-primary" href="#">
-			<span class="glyphicon glyphicon-plus"></span> Add a question
-		</a>
-	</p>
-	
-	<div class="container container-md">
-		
-			
-			<table class="table table-hover">
-				<thead>
-					<th>Question</th>
-					<th>Answer</th>
-				</thead>
-				<tbody>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non arcu condimentum, maximus orci quis...</td>
-					</tr>
-				</tbody>
-			</table>
+		<div class="heading i-faq">
+			<h2>Frequently Asked Questions</h2>
+			<p>This is a list of questions that have been alredy solved in past courses.</p>
 		</div>
-	</section>
+
+		<p class="plus-button">
+			<a class="btn btn-primary" href="{% url 'add_faq' %}">
+				<span class="glyphicon glyphicon-plus"></span> Add a question
+			</a>
+		</p>
+		
+		<div class="container container-md">
+			
+				
+				<table class="table table-hover">
+					<thead>
+						<th>Question</th>
+						<th>Answer</th>
+					</thead>
+					<tbody>
+						{% for faq in faqs %}
+							<tr>
+								<td><a href="{% url 'faq' faq.id %}">{{ faq.title }}</a></td>
+								<td>{{ faq.summary }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	{% endif %}
 
 	<section class="card">
 
@@ -206,22 +196,17 @@
 					<th>Answers</th>
 				</thead>
 				<tbody>
+					{% for report in reports %}
 					<tr>
-						<td>Name Lastname</td>
-						<td>3/3</td>
+						<td>{{ report.user }}</td>
+						<td>{{ report.num_submitted }}</td>
 						<td>3/3</td>
 						<td>9/12</td>
-						<td>1</td>
-						<td>1</td>
+						<td>{{ report.num_questions }}</td>
+						<td>{{ report.num_answers }}</td>
 					</tr>
-					<tr>
-						<td>Name Lastname</td>
-						<td>2/3</td>
-						<td>3/3</td>
-						<td>6/12</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
+
+					{% endfor %}
 					
 				</tbody>
 			</table>
@@ -250,20 +235,23 @@
 					<th>Top voted response</th>
 				</thead>
 				<tbody>
+					{% for question in questions %}
 					<tr>
-						<td><a href="#">This is the title of the question</a></td>
+						<td><a href="{% url 'question' question.id %}">{{ question.title }}</a></td>
 						<td>25</td>
-						<td>8</td>
-						<td><span class="green">Yes</span></td>
-						<td>86</td>
+						<td>{{ question.number_of_responses }}</td>
+						{% if question.has_answer %}
+							<td><span class="green">Yes</span></td>
+						{% else %}
+							<td><span class="red">No</span></td>
+						{% endif %}
+						{% if question.number_of_responses == 0 %}
+							<td>-</td>
+						{% else %}
+							<td>86</td>
+						{% endif %}
 					</tr>
-					<tr>
-						<td><a href="#">This is the title of the question</a></td>
-						<td>25</td>
-						<td>8</td>
-						<td><span class="red">No</span></td>
-						<td>86</td>
-					</tr>
+					{% endfor %}
 				</tbody>
 			</table>
 		</div>

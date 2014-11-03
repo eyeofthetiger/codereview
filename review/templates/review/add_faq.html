@@ -1,0 +1,120 @@
+{% extends "review/base.html" %}
+{% block content %}
+	<p><a class="btn btn-default" href="{% url 'forum' %}"><span class="glyphicon glyphicon-chevron-left"></span>back to forum</a></p>
+	
+
+	<section class="card">
+		<div>
+			<h2>Add a Frequently Asked Question</h2>
+			<p>Add and format a new FAQ on the Help Forum</p>
+		</div>
+		<div class="container container-md">
+		<div class="row">
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">	
+
+	{% if error_message %}
+	<div class="alert alert-danger" role="alert">
+			<p><strong>{{ error_message }}</strong></p>
+	</div>
+	{% endif %}
+
+	<form method="post" enctype="multipart/form-data">
+		<div class="form-group">
+		    {% csrf_token %}
+		    {{ form.as_p }}
+			<input type="submit" value="Post" />
+		</div>
+	</form>
+</div>
+<div class="format col-lg-4 col-md-4 col-sm-4 col-xs-4">
+	<h3>Formatting instructions</h3>
+	<div class="set-row">
+		<div class="instruction-set">
+			<h4>Italics</h4>
+			<p>*Italicised*</p>
+		</div>
+		<div class="instruction-set">
+			<h4>Bold</h4>
+			<p>**Bold**</p>
+		</div>
+	</div>
+	<div class="set-row">
+		<div class="instruction-set">
+			<h4>Unordered Lists</h4>
+			<p> <pre>+ Gibson
++ Fender
+  + Stratocaster</pre></p>
+		</div>
+		<div class="instruction-set">
+			<h4>Ordered Lists</h4>
+			<p><pre>1. Led Zeppelin
+2. Led Zeppelin II
+  1. Side A</pre></p>
+		</div>
+	</div>
+
+	
+	<div class="set-row">
+		<div class="instruction-set">
+			<h4>Strikethrough</h4>
+			<p>~~Oh no~~</p>
+		</div>
+		<div class="instruction-set">
+			<h4>Horizontal Rules</h4>
+			<p>---</p>
+		</div>
+	</div>
+
+	<div class="set-row">
+		
+			<div class="instruction-set">
+			<h4>Code Blocks</h4>
+			<p><pre>```
+print("Fence it in.")
+```</pre></p>
+		</div>
+		<div class="instruction-set">
+			<h4>Syntax Highlighting</h4>
+			<p><pre>
+```python
+if language == 'python':
+    show_highlighting()
+```</pre></p>
+		</div>
+	</div>
+
+	<div class="set-row">
+		<div class="instruction-set">
+			<h4>Links</h4>
+			<p>[Link text](http://link.com/ "Opt. title")</p>
+		</div>
+		<div class="instruction-set">
+			<h4>Images</h4>
+			<p>![Alt text](/path/to/img.jpg "Opt. title")</p>
+		</div>
+	</div>
+
+	<div class="set-row">
+		<div class="instruction-set">
+			<h4>Code Spans</h4>
+			<p>To print Hello world, `print "Hello world"`</p>
+		</div>
+		<div class="instruction-set">
+			<h4>Blockquotes</h4>
+			<p><pre>> This is a block quote.
+>> This is a nested quote.</pre></p>
+		</div>
+	</div>
+
+	
+
+	</div>
+
+
+</div>
+</div>
+</section>
+	
+	
+
+{% endblock %}
